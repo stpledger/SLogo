@@ -114,12 +114,17 @@ public interface ModelViewable {
     /*
     * Returns a set of all ImageView objects to display on the View
     */
-    public Set<Node> turtles();
+    public Set<Turtle> getTurtles();
     
     /*
-    * Deletes a variable from the model's String -> Object HashMap
+    * Gets a list of previously executed commands
     */
-    public double deleteVariable(String toDelete);
+    public Set<Command> getPreviousCommands();
+    
+    /*
+    * Gets a map of current variables and their values
+    */
+    public Map<String, Object> getCurrentVariables();
 }
 ```
 
@@ -175,28 +180,68 @@ if(!retMessage.isValid()){
 ```
 
 ```java
-    // Inside Interpreter class
-    Command c = new xxxCommand();
-    c.execute(model);
-        // Inside Command class
-        Turtle newTurtle = new Turtle(); //with new position
-        model.deleteVariable("turtle");
-        model.addVariable("turtle", newTurtle);
+// Inside Controller class
+Command c = new xxxCommand();
+c.execute(model);
+    
+// Inside Command class
+Turtle newTurtle = new Turtle(); //with new position
+model.deleteVariable("turtle");
+model.addVariable("turtle", newTurtle);
 ```
 
 ### Individual Use Cases
 
 #### Marcus Oertle
-Case 1: ?
+Case 1: User inputs 'towards 1 1' into prompt
 
 ```java
+// Inside prompt class, in method that the button "run" calls
+public run(){
+    String s = Textfield.getText();
+    SLogoValid retMessage = controller.interpret(String s);
+    boolean isValid = retMessage.isValid();
+    if(isValid){
+        Map<String, Object> variableMap = ModelViewable.getCurrentVariables();
+        Set<turtle> turtleSet = new Set<turtle>
+        for(String s : variableMap.keys()){
+            if(variableMap.get(s) == instanceof(turtle)){
+                turtleSet.add(variableMap.get(s));
+            }
+        }
+        if(!turtleSet.isEmpty()){
+            TurtleDisplayer.draw(turtleSet);
+        }  
+    }
+    else{
+        ErrorPrinter(retMessage.toString);
+    }
+}
 
 ```
 
-Case 2: ?
+Case 2: Turtle GUI needs to be updated when ModelViewable returns
 
 ```java
+// Inside turtle display class
 
+public draw(Set<turtle> s){
+    eraseCurrentDisplay();
+    drawNewDisplay(s);
+}
+
+public eraseCurrentDisplay(){
+    
+}
+
+public drawNewDisplay(Set<turtle> s){
+    for(turtle t : s){
+        drawTurtle(t);
+        if(!t.getLinesSet.isEmpty()){
+            drawLines(t.getLinesSet);
+        }
+    }
+}
 ```
 
 #### Collin Brown
@@ -225,23 +270,51 @@ Case 2:
 
 #### Trishul Nagenalli
 
-Case 1:
+Case 1: User creates a new variable 'foo' which gets updated in database
 
 ```java
-
+ModelViewable model;
+Group sideBar;
+...
+public updateExplorer() {
+    sideBar.getChildren().clear();
+    for (String varName: model.getCurrentVariables()) {
+        Object val = model.get(varName);
+        // Class to be defined that will represent a component in the 
+        // sidebase that utislizes val's toString() method.
+        VarComponent var = new VarComponent(varname, val);
+        sideBar.getChildren().add(var);
+    }
+}
 ```
 
 Case 2:
+User wants to change turtle image
 
 ```java
-
+// Keeping the turtle's image in the Turtle Class, we define a new command to change a turtle's image which must go through the controller
+Interpreter interp;
+...
+public changeBackgroundImage (String imFilePath) {
+    interp.interpret("changeImage turtle1 " + imFilePath)
+}
+ 
 ```
 
 #### Scott Pledger
-Case 1:
+Case 1: Command "fd 50" is passed to Controller
 
 ```java
-
+private ArrayList<String> commandName = {"fd"};
+private ArrayList<ArrayList<float>> arguments = {{50}};
+for(int i = 0; i < commandName.size(); i++){
+    String command = commandName.get(i);
+    ArrayList<float> args = arguments.get(i);
+    if(isTurtleMoveCommand(command)){
+        Command c = new TurtleMoveCommand(command, args);
+        c.execute(model);
+    }
+}
 ```
 
 Case 2:
@@ -262,16 +335,33 @@ Case 2:
 ## Team Responsibilities
 * Front End
     * Marcus Oertle
-        * 
+        * Turtle displayer + error display
+            * takes in list of objects
+            * update turtle location as ImageView object
+            * draw/remove lines as specified by the turtle class
+        * Prompt
+            * take in user input
+            * pass user input as string to:
+                * `SLogoValid interpret(String command)`
     * Trishul Nagenalli
-        * 
+        * Getting information about state and display in the Explorer
+        * Displaying previously executed commands
+        * Toolbar & Loading User Defined Functions
+        * Main Class Application for Project
 
 * Back End
     * Collin Brown
-        * 
+        * Interpreter
+        * Command Superclass
+            * TurtleMoveCommand
+            * TurtleQueryCommand
+            * MathCommand
+            * BooleanCommand
     * Siyuan Chen
-        * 
+        * Model and its two APIs
+        * other Command subclasses
     * Scott Pledger 
-        * 
-
-
+        * Controller
+            * VariableCommand
+            * ControlStructureCommand
+            * UserDefinedCommand
