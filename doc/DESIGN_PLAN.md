@@ -357,6 +357,31 @@ for(int i = 0; i < commandName.size(); i++){
 }
 ```
 
+####Collin Brown
+Case 1: User inputs correctly formatted data to the interpreter such as 'fd 20'
+```java
+    String s = userInput;
+    isSlogoValid mIsSLogoValid = myInterpreter().Normalize(s);
+    if(mIsSLogoValid.isError()){
+        prompt.logErr(mIsSLogoValid.toString());
+    } else {
+       prompt.log(mIsSLogoValid.toString()); 
+    }
+    
+
+```
+
+Case 2: User inputs incorrectly formatted data to the interpreter such as '20 20'
+```java
+    String s = userInput;
+    isSlogoValid mIsSLogoValid = myInterpreter().Normalize(s);
+    if(mIsSLogoValid.isError()){
+        prompt.logErr(mIsSLogoValid.toString());
+    } else {
+       prompt.log(mIsSLogoValid.toString()); 
+    }
+```
+
 ## Design Considerations
 * At this moment, we believed we have resolved all of the major issues. We discussed at length many different cases that can occur and how we will handle them.
 
