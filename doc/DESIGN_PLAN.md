@@ -260,13 +260,37 @@ Case 2:
 ```
 
 #### Siyuan Chen
-Case 1:
+
+Case 1: User wants to declare and initialize a numeric variable "length"
+
 ```java
+    myModel.addVariable("length", 20);
     
+public class Model implements ModelViewable, ModelModifiable{
+    HashMap<String, Object> myModel;
+    
+    public SLogoValid addVariable(String s, Object value) {
+        if (!myModel.keyset().contains(s)) {
+            myModel.put(s, value);
+            return new SLogoValid(0.0.toString());
+        }
+        else {
+            return new SLogoValid("Variable already exists");
+        }
+    }
+}
 ```
-Case 2:
+
+Case 2: Turtle needs to move 50 steps
+
 ```java
+    Command c = new TurtleMoveCommand(50, "forward");
+    c.execute(model);
     
+        // Inside Command class
+        Turtle newTurtle = new Turtle(); //with new position
+        model.deleteVariable("turtle");
+        model.addVariable("turtle", newTurtle);
 ```
 
 #### Trishul Nagenalli
