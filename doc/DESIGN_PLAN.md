@@ -224,6 +224,7 @@ Case 2: Turtle GUI needs to be updated when ModelViewable returns
 
 ```java
 // Inside turtle display class
+private Group root;
 
 public draw(Set<turtle> s){
     eraseCurrentDisplay();
@@ -231,7 +232,7 @@ public draw(Set<turtle> s){
 }
 
 public eraseCurrentDisplay(){
-    
+    root.getChilldren.removeAll();
 }
 
 public drawNewDisplay(Set<turtle> s){
