@@ -330,22 +330,31 @@ public changeBackgroundImage (String imFilePath) {
 Case 1: Command "fd 50" is passed to Controller
 
 ```java
-private ArrayList<String> commandName = {"fd"};
-private ArrayList<ArrayList<float>> arguments = {{50}};
+private ArrayList<String> commandName;
+private ArrayList<ArrayList<String>> arguments;
 for(int i = 0; i < commandName.size(); i++){
     String command = commandName.get(i);
     ArrayList<float> args = arguments.get(i);
     if(isTurtleMoveCommand(command)){
         Command c = new TurtleMoveCommand(command, args);
-        c.execute(model);
     }
+    c.execute(model);
 }
 ```
 
-Case 2:
+Case 2: Command "repeat 5 left 30" is passed to Controller
 
 ```java
-
+private ArrayList<String> commandName;
+private ArrayList<ArrayList<String>> arguments;
+for(int i = 0; i < commandName.size(); i++){
+    String command = commandName.get(i);
+    ArrayList<float> args = arguments.get(i);
+    if(isUserDefCommand(command)){
+        Command c = new UserDefCommand(command, args);
+    }
+    c.execute(model);
+}
 ```
 
 ## Design Considerations
