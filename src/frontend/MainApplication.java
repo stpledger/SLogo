@@ -1,15 +1,15 @@
-package FrontEnd;
+package frontend;
 
 import javafx.application.Application;
-import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class MainApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-        primaryStage.setScene(new IDEScene(new Group()));
-        
+		SceneBuilder IDE = new IDEBuilder();
+        primaryStage.setScene(IDE.getScene());
         primaryStage.sizeToScene();
         primaryStage.show();
         
