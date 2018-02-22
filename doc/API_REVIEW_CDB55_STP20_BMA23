@@ -1,0 +1,22 @@
+Collin Brown
+Scott Pledger
+
+
+
+##Part 1
+
+1. The interpeter is being designed to be flexible both in input and in output. This means that regardless of what command a user types in, it will be converted from their language to a standard and then build a command object within the controller. Given that we're using reflection within the controller, this means that all a user of our API needs to do to add a new command is add it to the list and then create the command object they would like. This involves no code changes in the interpreter or controller. 
+2. We decided to seperate out the functions into a model, control, view model and therefore we are encapsulating this into our API by making our control section independent of our model and our view. This way, no changes to the GUI nor to the Model will actually affect the way that the control portion functions.
+3. There will be invalid inputs which we will return an sLogoValid object with an error to the prompt. There will also be invalid arguments which will be handled the same way.
+4. We think that our API design is good because it functions independently from the other sections of our code and is very flexible. Adding new commands will theoretically be very easy.
+
+##Part 2
+1. Model, Control, View is the predominant design pattern that is featured in our API, however, the controller class is a factory pattern and the interpreter pattern is obviously an interpreter pattern.
+2. The interpreter. It's the hardest thing to implement because it has to handle multiple languages and the possibility of commands within the parameters for other commands so seeing it work should be cool.
+3. Also the interpreter. If it doesn't work the whole team is let down.
+4. Use Cases
+    1. Fd Fd 50 -- This should move the turtle forward 100
+    2. repeat 2 [ fd 50 ] -- This should also move the turtle forward 100
+    3. repeat fd 50 [ fd 50 ] -- this should move the turtle forward 2500
+    4. bk sum bk 20 bk 20 -- this should move the turtle back 80
+    5. bk sum sum bk bk bk -- this should return an error for invalid input
