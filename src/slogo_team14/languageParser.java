@@ -14,6 +14,10 @@ public class languageParser {
 		e.printStackTrace();
 	}
 	}
+	
+	public Properties getProperties() {
+		return myLanguageProperties;
+	}
 
 
 	//public static void main(String[] args) {
