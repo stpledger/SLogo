@@ -1,6 +1,10 @@
 package frontend;
 
+import frontend.components.ComponentBuilder;
+import frontend.components.Console;
 import frontend.components.SideBar;
+import frontend.components.ToolBar;
+import frontend.components.TurtleDisplayer;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
@@ -9,14 +13,19 @@ public class IDEBuilder implements SceneBuilder{
 	public static final double IDE_HEIGHT = 800;
 	public static final double IDE_WIDTH = 600;
 	
-	private Scene scene;
+	
 	private BorderPane layout = new BorderPane();
 	
 	public IDEBuilder() {
-		SideBar side = new SideBar();
-		SideBar top = new SideBar();
+		ComponentBuilder side = new SideBar();
+		ComponentBuilder toolbar = new ToolBar();
+		ComponentBuilder turtleDisplay = new TurtleDisplayer();
+		ComponentBuilder console = new Console();
+		
 		layout.setRight(side.getNode());
-		layout.setTop(top.getNode());
+		layout.setTop(toolbar.getNode());
+		layout.setCenter(turtleDisplay.getNode());
+		layout.setBottom(console.getNode());
 	}
 	
 	@Override
