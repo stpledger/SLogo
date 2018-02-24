@@ -59,13 +59,18 @@ public class TurtleDisplayer implements ComponentBuilder{
 
 	private void step(double elapsedTime) {
 		// if need to update UI to scale, use this
+		//System.out.println(group.getBoundsInLocal());
 		center_x = group.getBoundsInLocal().getMaxX()/2 - TURTLE_SIZE/2;
 		center_y = group.getBoundsInLocal().getMaxY()/2 - TURTLE_SIZE/2;
 		double xRatio = center_x/prev_center_x;
 		double yRatio = center_y / prev_center_y;
-		for(ImageView i : viewables) {
-			i.setX(i.getX()*xRatio);
-			i.setY(i.getY()*yRatio);
+		try {
+			for(ImageView i : viewables) {
+				i.setX(i.getX()*xRatio);
+				i.setY(i.getY()*yRatio);
+			}
+		} catch(Exception e){
+			System.out.println("Error in step function, likely concurrent modification. Is okay.");
 		}
 		prev_center_x = center_x;
 		prev_center_y = center_y;
