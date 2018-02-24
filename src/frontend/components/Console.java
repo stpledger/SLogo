@@ -57,14 +57,14 @@ public class Console implements ComponentBuilder{
 	}
 	
 	private Button makeClearButton() {
-		Button runButton = new Button("Clear");
-		runButton.setMinWidth(BUTTON_SIZE);
+		Button clearButton = new Button("Clear");
+		clearButton.setMinWidth(BUTTON_SIZE);
 
-		runButton.setOnAction(action -> {
+		clearButton.setOnAction(action -> {
 			prompt.clear();
         });
 
-        return runButton;
+        return clearButton;
 	}
 	
 	public void run(){
