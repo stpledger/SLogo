@@ -4,12 +4,14 @@ import java.io.File;
 import java.util.Properties;
 
 public class Interpreter {
+	private String myLanguage;
 	private sLogoValid mySlogoValid;
 	private Properties myLanguageProperties;
 	
 	
 	
 	public Interpreter(String language) {
+		myLanguage = language;
 		mySlogoValid = new sLogoValid();
 		//Try to import the language properties
 		try {
@@ -35,16 +37,21 @@ public class Interpreter {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		String[] args = s.split("\\s+");
 		System.out.println(args[0]);
-		if(myLanguageProperties.containsKey("fd")) {
-			tempSlogoValid.setMyStringValue("We gots it");
+		//Check to see if the first argument is valid
+		if(!myLanguageProperties.containsKey(args[0])) {
+			tempSlogoValid.setMyStringValue("Invalid command: " + args[0]);
+			tempSlogoValid.setError(true);
+			return tempSlogoValid;
+		} else {
+			tempSlogoValid.setMyStringValue(myLanguageProperties.getProperty(args[0]));
 		}
 		
 		return tempSlogoValid;
 	}
 	
 	public static void main(String[] args) {
-		Interpreter i = new Interpreter("English");
-		sLogoValid s = i.interpret("fd"); 
+		Interpreter i = new Interpreter("French");
+		sLogoValid s = i.interpret("dev"); 
 		System.out.println(s.getMyStringValue());
 		
 	}
