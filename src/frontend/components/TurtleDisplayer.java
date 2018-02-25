@@ -43,7 +43,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private ArrayList<ImageView> turtles = new ArrayList<ImageView>();
 	private HashMap<ImageView, Set<Line>> lineMap=  new HashMap<ImageView, Set<Line>>();
 	private double center_x = DEFAULT_WINDOW_X/2-TURTLE_SIZE/2;
-	private double center_y = DEFAULT_WINDOW_Y/2-TURTLE_SIZE/2;
+	private static double center_y = DEFAULT_WINDOW_Y/2-TURTLE_SIZE/2;
 //	private double center_x;
 //	private double center_y;
 	private static Text errorMessage;
@@ -113,7 +113,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * drawNewDisplay - draws new display
 	 * @param Set<turtle>
 	 */
-	private void drawNewDisplay(Set<Turtle> s){
+	private void drawNewDisplay(Set<Turtle> s, SLogoValid v){
 	    for(Turtle t : s){
 	    	ImageView turtleView = drawTurtle(t.getX() + center_x, -1 * t.getY() + center_y, t.getAngle());
 	    	group.getChildren().add(turtleView);
@@ -188,7 +188,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * Displays given error message
 	 * @param message
 	 */
-	private void displayError(String message) {
+	public static void displayError(String message) {
 		errorMessage = new Text(message);
 		errorMessage.setX(0);
 		errorMessage.setY(2*center_y + 48);

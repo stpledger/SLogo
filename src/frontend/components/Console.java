@@ -15,6 +15,8 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import slogo_team14.Interpreter;
+import slogo_team14.sLogoValid;
 
 /**
  * Console allows user input for commands and will start the rest of the program when run is pressed
@@ -62,10 +64,10 @@ public class Console implements ComponentBuilder{
 		runButton.setMinWidth(BUTTON_SIZE);
 
 		runButton.setOnAction(action -> {
-			//run();
-			commands = prompt.getText();
-			System.out.println(commands);
-			TurtleDisplayer.clearError();
+			run();
+			//commands = prompt.getText();
+			//System.out.println(commands);
+			//TurtleDisplayer.clearError();
         });
 
         return runButton;
@@ -92,22 +94,24 @@ public class Console implements ComponentBuilder{
 	public void run(){
 		TurtleDisplayer.clearError();
 		commands = prompt.getText();
-	    SLogoValid retMessage = controller.interpret(commands);
-	    boolean isValid = retMessage.isValid();
-	    if(isValid){
-	        Map<String, Object> variableMap = ModelViewable.getCurrentVariables();
-	        Set<Turtle> turtleSet = new Set<Turtle>
-	        for(String s : variableMap.keys()){
-	            if(variableMap.get(s) instanceof Turtle){
-	                turtleSet.add(variableMap.get(s));
-	            }
-	        }
-	        if(!turtleSet.isEmpty()){
-	            TurtleDisplayer.draw(turtleSet);
-	        }  
+		// TODO: Get language from toolbar
+		Interpreter interpreter = new Interpreter("English");
+	    sLogoValid retMessage = interpreter.interpret(commands);
+	    boolean isError = retMessage.getError();
+	    if(!isError){
+//	        Map<String, Object> variableMap = ModelViewable.getCurrentVariables();
+//	        Set<Turtle> turtleSet = new Set<Turtle>;
+//	        for(String s : variableMap.keySet()){
+//	            if(variableMap.get(s) instanceof Turtle){
+//	                turtleSet.add(variableMap.get(s));
+//	            }
+//	        }
+//	        if(!turtleSet.isEmpty()){
+//	            TurtleDisplayer.draw(turtleSet);
+//	        }  
 	    }
 	    else{
-	        ErrorPrinter(retMessage.toString);
+	        TurtleDisplayer.displayError(retMessage.getMyStringValue());
 	    }
 	}
 }
