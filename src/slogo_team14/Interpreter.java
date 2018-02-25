@@ -1,6 +1,7 @@
 package slogo_team14;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class Interpreter {
@@ -50,29 +51,40 @@ public class Interpreter {
 				
 		return tempSlogoValid;
 	}
-	private sLogoValid argumentCheck(String[] args, String[] expectedArguments) {
+	private sLogoValid argumentCheck(String[] args, String[] expectedSyntax) {
 		sLogoValid tempSlogoValid = new sLogoValid();
-		int expectedArgsNum = expectedArguments.length;
+		int myExpectedSyntax = expectedSyntax.length;
+		ArrayList<String> myInputArgs = new ArrayList<String>();
+		myInputArgs.addAll(Arrays.asList(args));
 		ArrayList<String> myTempArgs = new ArrayList<String>();
+		
 			//Concatenate all the arguments needed for the primary command
-			for(int k = 0; k < expectedArgsNum+1; k++) {
+			while(myTempArgs.size() < myExpectedSyntax) {
 				//Check to make sure that there are the appropriate number of 
-				if(k >= args.length) {
+				if(myInputArgs.isEmpty()) {
 					mySlogoValid.setError(true);
-					mySlogoValid.setMyStringValue("Invalid number of Arguments for command: "+ args[0]);
+					mySlogoValid.setMyStringValue("Invalid number of Arguments for command: "+ myInputArgs.get(0));
 					return mySlogoValid;
 				}
 				//Check to make sure there isn't another command
-				if(k > 0 && myLanguageProperties.containsKey(args[k])) {
-					System.out.println("Oh no!");
+				if(!myTempArgs.isEmpty() && myLanguageProperties.containsKey(myInputArgs.get(0))) {
+					System.out.println("Internal loop: " + myInputArgs.toString());
+					String[] internalCommandSyntax = getCommandSyntax(myLanguageProperties.getProperty(myInputArgs.get(0)));
+					tempSlogoValid = argumentCheck(myInputArgs.stream().toArray(String[]::new), internalCommandSyntax);
+					for(int i = 0; i < internalCommandSyntax.length; i++) {
+						internalCommandSyntax[i] = myInputArgs.remove(0);	
+					}
+					tempSlogoValid.setMyStringValue("res");
+					myInputArgs.add(tempSlogoValid.getMyStringValue());
+					System.out.println(tempSlogoValid.getMyStringValue());
 				}
-				myTempArgs.add(args[k]);
+				myTempArgs.add(myInputArgs.remove(0));
 			}
 			//Interpret secondary arguments
-			if(args.length > expectedArgsNum+1) {
+			if(myInputArgs.size() > 0) {
 				String myConcatArgs = "";
-				for(int i = expectedArgsNum+1; i < args.length; i++) {
-					myConcatArgs += args[i] + " ";
+				while(myInputArgs.size() > 0) {
+					myConcatArgs += myInputArgs.remove(0) + " ";
 				}
 				tempSlogoValid = interpret(myConcatArgs);
 				System.out.println("Internal Loop: " + tempSlogoValid.getMyStringValue());
@@ -85,20 +97,25 @@ public class Interpreter {
 			
 		return tempSlogoValid;	
 	}
+	
+	
 	private String[] getCommandSyntax(String myCommand) {
 		for(String k : noParamCommands) {
 			if(myCommand.equals(k)) {
-				return new String[0];
+				String[] syntax = {"com"};
+				return syntax;
 			}
 		}
 		for(String k : oneParamCommands) {
 			if(myCommand.equals(k)) {
-				return new String[1];
+				String[] syntax = {"com", "arg"};
+				return syntax;
 			}
 		}
 		for(String k : twoParamCommands) {
 			if(myCommand.equals(k)) {
-				return new String[2];
+				String[] syntax = {"com", "arg", "arg"};
+				return syntax;
 			}
 		}
 		return null;
@@ -106,7 +123,7 @@ public class Interpreter {
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter("English");
-		sLogoValid s = i.interpret("sum 20 20 - 20 20");  
+		sLogoValid s = i.interpret("sum sum 30 40 20");  
 		System.out.println(s.getMyStringValue());
 		
 	}
