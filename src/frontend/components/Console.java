@@ -3,6 +3,7 @@ package frontend.components;
 import java.util.Map;
 import java.util.Set;
 
+import frontend.IDEBuilder;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -26,23 +27,24 @@ import slogo_team14.sLogoValid;
 public class Console implements ComponentBuilder{
 	private static final double BUTTON_SIZE = 50;
 	
-	private VBox box = new VBox();
+	private HBox box = new HBox();
 	private String commands;
 	private TextArea prompt = new TextArea();
 	
 	public Console () {
 		box.setStyle("-fx-background-color: #7777FF;");
-		Label label = new Label("Console");
-		label.setPrefSize(100, 5);
+		box.setPrefHeight(IDEBuilder.CONSOLE_HEIGHT);
 		
 		Button runButton = makeRunButton();
 		Button clearButton = makeClearButton();
-		HBox hbox = new HBox(clearButton, runButton);
-		hbox.setAlignment(Pos.CENTER);
+		VBox vbox = new VBox(runButton, clearButton);
+		vbox.setAlignment(Pos.CENTER);
+		vbox.setPrefWidth(clearButton.getWidth());
 		
 		prompt.setStyle("-fx-control-inner-background:#000000; -fx-text-fill: #FFFFFF;");
+		prompt.setPrefWidth(IDEBuilder.IDE_WIDTH - clearButton.getWidth());
 			    
-		box.getChildren().addAll(label, prompt, hbox);
+		box.getChildren().addAll(prompt, vbox);
 		
 	}
 	
@@ -82,6 +84,7 @@ public class Console implements ComponentBuilder{
 		clearButton.setMinWidth(BUTTON_SIZE);
 
 		clearButton.setOnAction(action -> {
+			TurtleDisplayer.clearError();
 			prompt.clear();
         });
 

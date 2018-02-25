@@ -32,24 +32,16 @@ import javafx.util.Duration;
 public class TurtleDisplayer implements ComponentBuilder{
 	private static final String TURTLE_IMAGE = "turtleScaled.png";
 	private static final double TURTLE_SIZE = 50;
-	private static final double DEFAULT_WINDOW_X = 400;
-	private static final double DEFAULT_WINDOW_Y = 560;
-//	private static final int FRAMES_PER_SECOND = 60;
-//	private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-//	private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+	private static final double DEFAULT_WINDOW_X = IDEBuilder.DISPLAY_WIDTH;
+	private static final double DEFAULT_WINDOW_Y = IDEBuilder.DISPLAY_HEIGHT;
+	private double center_x = DEFAULT_WINDOW_X/2;
+	private static double center_y = DEFAULT_WINDOW_Y/2;
 	private static final Paint ERROR_BOX_COLOR = Color.RED;
-	
 	private static Pane group = new Pane();
 	private ArrayList<ImageView> turtles = new ArrayList<ImageView>();
 	private HashMap<ImageView, Set<Line>> lineMap=  new HashMap<ImageView, Set<Line>>();
-	private double center_x = DEFAULT_WINDOW_X/2-TURTLE_SIZE/2;
-	private static double center_y = DEFAULT_WINDOW_Y/2-TURTLE_SIZE/2;
-//	private double center_x;
-//	private double center_y;
 	private static Text errorMessage;
 	private static Rectangle redBox;
-//	private double groupX;
-//	private double groupY;
 	private Boolean turtleHidden = false;
 	
 	/**
@@ -57,13 +49,8 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * sets background color, resets turtle to starting position, starts animation keyframe
 	 */
 	public TurtleDisplayer() {
-		//group.setStyle("-fx-background-color: #9999FF;");
 		setBackgroundColor("#9999FF");
 		reset();
-		
-		displayError("Test Error: Too much DogeCoin");	
-		
-		//startResizeLoop();
 	}
 
 	/**
@@ -78,10 +65,10 @@ public class TurtleDisplayer implements ComponentBuilder{
 	/**
 	 * draw - draws a new turtle from a given turtle set
 	 */
-	public void draw(Set<Turtle> s){
-	    eraseCurrentDisplay();
-	    drawNewDisplay(s);
-	}
+//	public void draw(Set<Turtle> s){
+//	    eraseCurrentDisplay();
+//	    drawNewDisplay(s);
+//	}
 	
 	/**
 	 * clearError - removes error bar and text from screen
@@ -113,16 +100,16 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * drawNewDisplay - draws new display
 	 * @param Set<turtle>
 	 */
-	private void drawNewDisplay(Set<Turtle> s, SLogoValid v){
-	    for(Turtle t : s){
-	    	ImageView turtleView = drawTurtle(t.getX() + center_x, -1 * t.getY() + center_y, t.getAngle());
-	    	group.getChildren().add(turtleView);
-	        if(!t.getLinesSet.isEmpty()){
-	        	lineMap.put(turtleView, t.getLinesSet);
-	            drawLines(t.getLinesSet);
-	        }
-	    }
-	}
+//	private void drawNewDisplay(Set<Turtle> s, SLogoValid v){
+//	    for(Turtle t : s){
+//	    	ImageView turtleView = drawTurtle(t.getX() + center_x, -1 * t.getY() + center_y, t.getAngle());
+//	    	group.getChildren().add(turtleView);
+//	        if(!t.getLinesSet.isEmpty()){
+//	        	lineMap.put(turtleView, t.getLinesSet);
+//	            drawLines(t.getLinesSet);
+//	        }
+//	    }
+//	}
 
 	/**
 	 * drawLines - adds the turtle's lines to the group
@@ -151,7 +138,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	}
 	
 	/**
-	 * 
+	 * resets turtle to default position and clears all lines
 	 */
 	private void reset() {
 		showTurtle();
@@ -191,61 +178,10 @@ public class TurtleDisplayer implements ComponentBuilder{
 	public static void displayError(String message) {
 		errorMessage = new Text(message);
 		errorMessage.setX(0);
-		errorMessage.setY(2*center_y + 48);
-		redBox = new Rectangle(0, 2*center_y+35, errorMessage.getLayoutBounds().getWidth(), errorMessage.getLayoutBounds().getHeight());
+		errorMessage.setY(DEFAULT_WINDOW_Y - 5);
+		redBox = new Rectangle(0, DEFAULT_WINDOW_Y - errorMessage.getLayoutBounds().getHeight(), errorMessage.getLayoutBounds().getWidth(), errorMessage.getLayoutBounds().getHeight());
 		redBox.setFill(ERROR_BOX_COLOR);
 		group.getChildren().add(redBox);
 		group.getChildren().add(errorMessage);	
-		
-		
-		// OPTIONAL FADE AWAY
-		//FadeTransition ft = new FadeTransition(Duration.millis(time*1000), errorMessage);
-		//ft.setFromValue(1.0);
-		//ft.setToValue(0);
-		//ft.setCycleCount(1);
-		//ft.play();
 	}
-	
-//	/**
-//	 * startResizeLoop - starts an animation loop where turtles move with window size
-//	 */
-//	private void startResizeLoop() {
-//		// animation if needed to scale UI, delete otherwise
-//		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-//				e -> step(SECOND_DELAY));
-//		Timeline animation = new Timeline();
-//		animation.setCycleCount(Timeline.INDEFINITE);
-//		animation.getKeyFrames().add(frame);
-//		animation.play();
-//	}
-//	
-//	/**
-//	 * step - updates turtle locations to attempt to scale with screen
-//	 */
-//	private void step(double elapsedTime) {
-//		// if need to update UI to scale, use this
-//		//System.out.println(group.getBoundsInLocal());
-//		if(!(groupX == group.getBoundsInLocal().getMaxX()) || !(groupY == group.getBoundsInLocal().getMaxY())) {
-//			groupX = group.getBoundsInLocal().getMaxX();
-//			groupY = group.getBoundsInLocal().getMaxY();
-//			center_x = groupX/2 - TURTLE_SIZE/2;
-//			center_y = groupY/2 - TURTLE_SIZE/2;
-//			double xRatio = center_x/prev_center_x;
-//			double yRatio = center_y / prev_center_y;
-//			try {
-//				for(ImageView i : turtles) {
-//					i.setX(i.getX()*xRatio);
-//					i.setY(i.getY()*yRatio);
-//				}
-////				errorMessage.setX(errorMessage.getX()*xRatio);
-////				errorMessage.setY(errorMessage.getY()*yRatio);
-////				redBox.setX(redBox.getX()*xRatio);
-////				redBox.setY(redBox.getY()*yRatio);
-//			} catch(Exception e){
-//				System.out.println("Error in step function, likely concurrent modification. Is okay.");
-//			}
-//			prev_center_x = center_x;
-//			prev_center_y = center_y;
-//		}	
-//	}
 }
