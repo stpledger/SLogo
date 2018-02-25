@@ -52,15 +52,25 @@ public class Interpreter {
 	private sLogoValid argumentCheck(String[] args, String[] expectedArguments) {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		int expectedArgsNum = expectedArguments.length;
+		String[] myTempArgs = new String[expectedArgsNum+1];
 			if(args.length > expectedArgsNum+1) {
 				String myConcatArgs = "";
 				for(int i = expectedArgsNum+1; i < args.length; i++) {
 					myConcatArgs += args[i] + " ";
 				}
 				tempSlogoValid = interpret(myConcatArgs);
+				System.out.println("Internal Loop: " + tempSlogoValid.getMyStringValue());
 				//TODO: find a way to pass this up a level or print it to the prompt
 			}
-			tempSlogoValid.setMyStringValue(myLanguageProperties.getProperty(args[0]));
+			//Concatenate all the arguments needed for the primary command
+			for(int k = 0; k < expectedArgsNum+1; k++) {
+				myTempArgs[k] = args[k];
+			}
+			
+			//Print the final result
+			String res = String.join(" ", myTempArgs);
+			tempSlogoValid.setMyStringValue(res);
+			
 		return tempSlogoValid;	
 	}
 	private String[] getCommandSyntax(String myCommand) {
@@ -79,9 +89,7 @@ public class Interpreter {
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter("English");
-		sLogoValid s = i.interpret("pu");  
-		System.out.println(s.getMyStringValue());
-		s = i.interpret("fd 20");  
+		sLogoValid s = i.interpret("fd 20 fd 20 bk 20");  
 		System.out.println(s.getMyStringValue());
 		
 	}
