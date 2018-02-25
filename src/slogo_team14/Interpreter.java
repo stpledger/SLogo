@@ -1,13 +1,14 @@
 package slogo_team14;
 
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class Interpreter {
 	private sLogoValid mySlogoValid;
 	private Properties myLanguageProperties;
 	private static final String[] noParamCommands = {"PenUp","PenDown","ShowTurtle","HideTurtle","Home","ClearScreen","XCoordinate","YCoordinate","Heading","IsPenDown","IsShowing","Pi"};
-	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not" };
-	
+	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not", "Minus"};
+	private static final String[] twoParamCommands = {"SetTowards", "SetPosition", "Sum", "Difference", "Product", "Quotient", "Remainder", "Power", "LessThan","GreaterThan", "Equal", "NotEqual", "And", "Or", "MakeVariable"}; 
 	
 	public Interpreter(String language) {
 		mySlogoValid = new sLogoValid();
@@ -52,7 +53,22 @@ public class Interpreter {
 	private sLogoValid argumentCheck(String[] args, String[] expectedArguments) {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		int expectedArgsNum = expectedArguments.length;
-		String[] myTempArgs = new String[expectedArgsNum+1];
+		ArrayList<String> myTempArgs = new ArrayList<String>();
+			//Concatenate all the arguments needed for the primary command
+			for(int k = 0; k < expectedArgsNum+1; k++) {
+				//Check to make sure that there are the appropriate number of 
+				if(k >= args.length) {
+					mySlogoValid.setError(true);
+					mySlogoValid.setMyStringValue("Invalid number of Arguments for command: "+ args[0]);
+					return mySlogoValid;
+				}
+				//Check to make sure there isn't another command
+				if(k > 0 && myLanguageProperties.containsKey(args[k])) {
+					System.out.println("Oh no!");
+				}
+				myTempArgs.add(args[k]);
+			}
+			//Interpret secondary arguments
 			if(args.length > expectedArgsNum+1) {
 				String myConcatArgs = "";
 				for(int i = expectedArgsNum+1; i < args.length; i++) {
@@ -61,10 +77,6 @@ public class Interpreter {
 				tempSlogoValid = interpret(myConcatArgs);
 				System.out.println("Internal Loop: " + tempSlogoValid.getMyStringValue());
 				//TODO: find a way to pass this up a level or print it to the prompt
-			}
-			//Concatenate all the arguments needed for the primary command
-			for(int k = 0; k < expectedArgsNum+1; k++) {
-				myTempArgs[k] = args[k];
 			}
 			
 			//Print the final result
@@ -84,12 +96,17 @@ public class Interpreter {
 				return new String[1];
 			}
 		}
+		for(String k : twoParamCommands) {
+			if(myCommand.equals(k)) {
+				return new String[2];
+			}
+		}
 		return null;
 	}
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter("English");
-		sLogoValid s = i.interpret("fd 20 fd 20 bk 20");  
+		sLogoValid s = i.interpret("sum 20 20 - 20 20");  
 		System.out.println(s.getMyStringValue());
 		
 	}
