@@ -5,7 +5,8 @@ import java.util.Properties;
 
 public class Interpreter {
 	private sLogoValid mySlogoValid;
-	private Properties myLanguageProperties; 
+	private Properties myLanguageProperties;
+	
 	
 	
 	public Interpreter(String language) {
@@ -25,8 +26,26 @@ public class Interpreter {
 		if(mySlogoValid.getError()) {
 			return mySlogoValid;
 		} 
+		//Check to ensure the string isn't empty
+		if(s == null || s.equals("")) {
+			mySlogoValid.setError(true);
+			mySlogoValid.setMyStringValue("User input is missing or invalid");
+			return mySlogoValid;
+		}
 		sLogoValid tempSlogoValid = new sLogoValid();
+		String[] args = s.split("\\s+");
+		System.out.println(args[0]);
+		if(myLanguageProperties.containsKey("fd")) {
+			tempSlogoValid.setMyStringValue("We gots it");
+		}
+		
 		return tempSlogoValid;
 	}
 	
+	public static void main(String[] args) {
+		Interpreter i = new Interpreter("English");
+		sLogoValid s = i.interpret("fd"); 
+		System.out.println(s.getMyStringValue());
+		
+	}
 }
