@@ -16,6 +16,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+/**
+ * Console allows user input for commands and will start the rest of the program when run is pressed
+ * @author Marcus Oertle
+ *
+ */
 public class Console implements ComponentBuilder{
 	private static final double BUTTON_SIZE = 50;
 	
@@ -28,22 +33,31 @@ public class Console implements ComponentBuilder{
 		Label label = new Label("Console");
 		label.setPrefSize(100, 5);
 		
-		Button runButton = makeGetTextButton();
+		Button runButton = makeRunButton();
 		Button clearButton = makeClearButton();
 		HBox hbox = new HBox(clearButton, runButton);
+		hbox.setAlignment(Pos.CENTER);
 		
 		prompt.setStyle("-fx-control-inner-background:#000000; -fx-text-fill: #FFFFFF;");
 			    
 		box.getChildren().addAll(label, prompt, hbox);
 		
 	}
+	
+	/**
+	 * @see ComponentBuilder:getNode()
+	 */
 	@Override
 	public Node getNode() {
 		// TODO Auto-generated method stub
 		return box;
 	}
 		
-	private Button makeGetTextButton() {
+	/**
+	 * makeRunButton - makes button to run program
+	 * @return Button
+	 */
+	private Button makeRunButton() {
 		Button runButton = new Button("Run");
 		runButton.setMinWidth(BUTTON_SIZE);
 
@@ -51,11 +65,16 @@ public class Console implements ComponentBuilder{
 			//run();
 			commands = prompt.getText();
 			System.out.println(commands);
+			TurtleDisplayer.clearError();
         });
 
         return runButton;
 	}
 	
+	/**
+	 * makeClearButton - makes button to clear console
+	 * @return Button
+	 */
 	private Button makeClearButton() {
 		Button clearButton = new Button("Clear");
 		clearButton.setMinWidth(BUTTON_SIZE);
@@ -67,7 +86,11 @@ public class Console implements ComponentBuilder{
         return clearButton;
 	}
 	
+	/**
+	 * run - Calls controller to interpret string and then calls TurtleDisplayer to update turtle display
+	 */
 	public void run(){
+		TurtleDisplayer.clearError();
 		commands = prompt.getText();
 	    SLogoValid retMessage = controller.interpret(commands);
 	    boolean isValid = retMessage.isValid();
@@ -75,7 +98,7 @@ public class Console implements ComponentBuilder{
 	        Map<String, Object> variableMap = ModelViewable.getCurrentVariables();
 	        Set<Turtle> turtleSet = new Set<Turtle>
 	        for(String s : variableMap.keys()){
-	            if(variableMap.get(s) == instanceof(Turtle)){
+	            if(variableMap.get(s) instanceof Turtle){
 	                turtleSet.add(variableMap.get(s));
 	            }
 	        }
