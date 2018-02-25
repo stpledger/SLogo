@@ -7,10 +7,10 @@ import java.util.Properties;
 public class Interpreter {
 	private sLogoValid mySlogoValid;
 	private Properties myLanguageProperties;
-	private static final String[] noParamCommands = {"PenUp","PenDown","ShowTurtle","HideTurtle","Home","ClearScreen","XCoordinate","YCoordinate","Heading","IsPenDown","IsShowing","Pi"};
-	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not", "Minus"};
+	private static final String[] noParamCommands = {"PenUp","PenDown","ShowTurtle","HideTurtle","Home","ClearScreen","XCoordinate","YCoordinate","Heading","IsPenDown","IsShowing","Pi", "GetPenColor", "GetShape", "Stamp", "ClearStamps"};
+	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not", "Minus", "SetBackground", "SetPenColor", "SetPenSize", "SetShape", "SetPalette"};
 	private static final String[] twoParamCommands = {"SetTowards", "SetPosition", "Sum", "Difference", "Product", "Quotient", "Remainder", "Power", "LessThan","GreaterThan", "Equal", "NotEqual", "And", "Or", "MakeVariable"}; 
-	
+	//TODO: Add multiple turtle commands
 	public Interpreter(String language) {
 		mySlogoValid = new sLogoValid();
 		//Try to import the language properties
@@ -98,8 +98,12 @@ public class Interpreter {
 		return tempSlogoValid;	
 	}
 	
-	
+
 	private String[] getCommandSyntax(String myCommand) {
+		//com represents the initial command
+		//arg represents an expression
+		//[] represents the brackets of a list
+		//mul represents 1 or more possible elements in a list
 		for(String k : noParamCommands) {
 			if(myCommand.equals(k)) {
 				String[] syntax = {"com"};
@@ -118,12 +122,24 @@ public class Interpreter {
 				return syntax;
 			}
 		}
+		if(myCommand.equals("Repeat") || myCommand.equals("If")) {
+			String[] syntax = {"com", "arg", "[","mul","]"};
+			return syntax;
+		}
+		if(myCommand.equals("DotTimes") || myCommand.equals("For")) {
+			String[] syntax = {"com","[","mul","]","[","mul","]" };
+			return syntax;
+		}
+		if(myCommand.equals("IfElse") || myCommand.equals("MakeUserInstruction")) {
+			String[] syntax = {"com", "arg","[","mul","]","[","mul","]"};
+			return syntax;
+		}
 		return null;
 	}
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter("English");
-		sLogoValid s = i.interpret("sum sum 30 40 20");  
+		sLogoValid s = i.interpret("sum 30 sum 40 20");  
 		System.out.println(s.getMyStringValue());
 		
 	}
