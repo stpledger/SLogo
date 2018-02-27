@@ -1,4 +1,4 @@
-package model;
+package backEnd;
 
 import java.util.Collections;
 import java.util.Set;
@@ -71,11 +71,13 @@ public class Turtle {
 	}
 	
 	protected double towards(double xpos, double ypos) {
-		
+		//TO-DO
+		return 0;
 	}
 	
 	protected double rotateTo(double deg) {
-		
+		//TO-DO
+		return 0;
 	}
 	
 	protected void rotate(double deg) {

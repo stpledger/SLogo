@@ -1,4 +1,4 @@
-package model;
+package backEnd;
 
 /**
 * API that allows controller to get and modify data from the model. 

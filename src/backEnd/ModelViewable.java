@@ -1,7 +1,9 @@
-package model;
+package backEnd;
 
 import java.util.Map;
 import java.util.Set;
+
+import backEnd.commands.CommandGroup;
 
 /**
 * API that allows the view access to data from the model
@@ -16,7 +18,7 @@ public interface ModelViewable {
     /*
     * Gets a list of previously executed commands
     */
-    public Set<Command> getPreviousCommands();
+    public Set<CommandGroup> getPreviousCommands();
     
     /*
     * Gets a map of current variables and their values
