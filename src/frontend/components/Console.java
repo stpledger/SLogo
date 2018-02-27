@@ -1,5 +1,6 @@
 package frontend.components;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,8 +17,10 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import slogo_team14.Interpreter;
-import slogo_team14.sLogoValid;
+import backEnd.Interpreter;
+import backEnd.ModelViewable;
+import backEnd.Turtle;
+import backEnd.sLogoValid;
 
 /**
  * Console allows user input for commands and will start the rest of the program when run is pressed
@@ -25,7 +28,7 @@ import slogo_team14.sLogoValid;
  *
  */
 public class Console implements ComponentBuilder{
-	private static final double BUTTON_SIZE = 50;
+	private static final double BUTTON_SIZE = 75;
 	
 	private HBox box = new HBox();
 	private String commands;
@@ -103,14 +106,14 @@ public class Console implements ComponentBuilder{
 	    boolean isError = retMessage.getError();
 	    if(!isError){
 //	        Map<String, Object> variableMap = ModelViewable.getCurrentVariables();
-//	        Set<Turtle> turtleSet = new Set<Turtle>;
+//	        Set<Turtle> turtleSet = new HashSet<Turtle>();
 //	        for(String s : variableMap.keySet()){
 //	            if(variableMap.get(s) instanceof Turtle){
-//	                turtleSet.add(variableMap.get(s));
+//	                turtleSet.add((Turtle)variableMap.get(s));
 //	            }
 //	        }
 //	        if(!turtleSet.isEmpty()){
-//	            TurtleDisplayer.draw(turtleSet);
+//	            TurtleDisplayer.draw(turtleSet, retMessage);
 //	        }  
 	    }
 	    else{

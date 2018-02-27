@@ -1,6 +1,7 @@
 package backEnd;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import javafx.scene.image.Image;
@@ -16,7 +17,7 @@ public class Turtle {
 	private double myXPos;
 	private double myYPos;
 	private double myAngle;
-	private Set<Line> myTraces;
+	private Set<Line> myTraces = new HashSet<Line>();
 	private Pen myPen;
 	private boolean isPenDown = true;
 	
