@@ -35,7 +35,7 @@ public class Interpreter {
 			return mySlogoValid;
 		}
 		sLogoValid tempSlogoValid = new sLogoValid();
-		String[] args = s.split("\\s+");
+		String[] args = s.trim().split("\\s+");
 		System.out.println(args[0]);
 		//Check to see if the first argument is valid
 		if(!myLanguageProperties.containsKey(args[0])) {
@@ -45,7 +45,6 @@ public class Interpreter {
 		} 
 		String myCommand = myLanguageProperties.getProperty(args[0]);
 		String[] mySyntax = getCommandSyntax(myCommand);
-		//Handles if there is no argument needed
 		tempSlogoValid = argumentCheck(args, mySyntax);
 		//tempSlogoValid.setMyStringValue(myCommand); //TODO: replace this with something that makes a command object
 				
@@ -57,17 +56,32 @@ public class Interpreter {
 		ArrayList<String> myInputArgs = new ArrayList<String>();
 		myInputArgs.addAll(Arrays.asList(args));
 		ArrayList<String> myTempArgs = new ArrayList<String>();
-		
-			//Concatenate all the arguments needed for the primary command
+			//Add the initial command
+			myTempArgs.add(myInputArgs.remove(0));
+			//Concatenate all the arguments needed for the primary command	
 			while(myTempArgs.size() < myExpectedSyntax) {
-				//Check to make sure that there are the appropriate number of 
+				//Check to make sure that there are the appropriate number of arguments
 				if(myInputArgs.isEmpty()) {
 					mySlogoValid.setError(true);
 					mySlogoValid.setMyStringValue("Invalid number of Arguments for command: "+ myInputArgs.get(0));
 					return mySlogoValid;
 				}
+				//Check to see if there is an internal list
+				if(myInputArgs.get(0).equals("[")) {
+					myTempArgs.add(myInputArgs.remove(0));
+					String myList  = "";
+					while(!myInputArgs.get(0).equals("]")) {
+						myList += " " + myInputArgs.remove(0);
+					}
+					tempSlogoValid = interpret(myList);
+					if(tempSlogoValid.getError()) {
+						return tempSlogoValid;
+					}
+					myTempArgs.add(tempSlogoValid.getMyStringValue());
+					myTempArgs.add(myInputArgs.remove(0));
+				}
 				//Check to make sure there isn't another command
-				if(!myTempArgs.isEmpty() && myLanguageProperties.containsKey(myInputArgs.get(0))) {
+				if(!myInputArgs.isEmpty() && myLanguageProperties.containsKey(myInputArgs.get(0))) {
 					System.out.println("Internal loop: " + myInputArgs.toString());
 					String[] internalCommandSyntax = getCommandSyntax(myLanguageProperties.getProperty(myInputArgs.get(0)));
 					tempSlogoValid = argumentCheck(myInputArgs.stream().toArray(String[]::new), internalCommandSyntax);
@@ -76,12 +90,13 @@ public class Interpreter {
 					}
 					tempSlogoValid.setMyStringValue("res");
 					myInputArgs.add(tempSlogoValid.getMyStringValue());
-					System.out.println(tempSlogoValid.getMyStringValue());
-				}
+				} else if(! myInputArgs.isEmpty()) { 
 				myTempArgs.add(myInputArgs.remove(0));
+				}
 			}
 			//Interpret secondary arguments
 			if(myInputArgs.size() > 0) {
+				System.out.println("we got here");
 				String myConcatArgs = "";
 				while(myInputArgs.size() > 0) {
 					myConcatArgs += myInputArgs.remove(0) + " ";
