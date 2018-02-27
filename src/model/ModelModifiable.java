@@ -9,7 +9,7 @@ public interface ModelModifiable {
     /*
     * Adds a variable from the model's String -> Object HashMap
     */
-    public double addVariable(String newVar);
+    public double addVariable(String newVar, Object obj);
     
     /*
     * Deletes a variable from the model's String -> Object HashMap

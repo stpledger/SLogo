@@ -34,15 +34,25 @@ public class Model implements ModelModifiable, ModelViewable {
 	}
 
 	@Override
-	public double addVariable(String newVar) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double addVariable(String newVar, Object obj) {
+		if (myModel.containsKey(newVar)) {
+			return -1;
+		}
+		else {
+			myModel.put(newVar, obj);
+			return 0;
+		}
 	}
 
 	@Override
 	public double deleteVariable(String toDelete) {
-		// TODO Auto-generated method stub
-		return 0;
+		if (myModel.containsKey(toDelete)) {
+			myModel.remove(toDelete);
+			return 0;
+		}
+		else {
+			return -1;
+		}
 	}
 
 }
