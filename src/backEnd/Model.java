@@ -1,4 +1,4 @@
-package model;
+package backEnd;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -6,26 +6,34 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import backEnd.commands.CommandGroup;
+
 public class Model implements ModelModifiable, ModelViewable {
 	
 	private Map<String, Object> myModel;
-	private Set<Command> myPreviousCommands;
+	private Set<CommandGroup> myPreviousCommands;
 	
 	public Model() {
 		myModel = new HashMap<>();
 		myPreviousCommands = new HashSet<>();
 	}
-
-	@Override
-	public Set<Turtle> getTurtles() {
+	
+	protected Set<Turtle> getTurtlesToModify() {
 		Set<Turtle> ret = new HashSet<>();
 		ret.add((Turtle)myModel.get("Turtle"));
 		return ret;
 	}
 
 	@Override
-	public Set<Command> getPreviousCommands() {
-		return Collections.unmodifiableSet(myPreviousCommand);
+	public Set<Turtle> getTurtles() {
+		Set<Turtle> ret = new HashSet<>();
+		ret.add((Turtle)myModel.get("Turtle"));
+		return Collections.unmodifiableSet(ret);
+	}
+
+	@Override
+	public Set<CommandGroup> getPreviousCommands() {
+		return Collections.unmodifiableSet(myPreviousCommands);
 	}
 	
 	@Override
