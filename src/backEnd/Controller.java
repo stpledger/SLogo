@@ -1,4 +1,4 @@
-package slogo_team14;
+package backEnd;
 
 import java.util.ArrayList;
 
@@ -27,9 +27,15 @@ public class Controller{
     public Controller(){
     }
 
+    /**
+     * Creates a new command object based on the type of command and arguments given
+     * @param command
+     * @param args - expression for the command to operate on
+     * @return a sLogoValid containing the return information or an error if the command didn't execute properly
+     */
     public sLogoValid create(String command, String args){
        String[] arguments = breakdown(args);
-       CommandGroup newCommand;
+       CommandGroup newCommand = null;
        if(TURTLE_MOVE_COMMANDS.contains(command)){
     	   newCommand = new TurtleMoveCommand(command, arguments);
        }
@@ -40,7 +46,7 @@ public class Controller{
     	   newCommand = new MathCommand(command, arguments);
        }
        else if(BOOLEAN_COMMANDS.contains(command)){
-    	   newCommand = new BooleanCommand(command, arguments);
+    	  // newCommand = new BooleanCommand(command, arguments);
        }
        else if(VARIABLE_COMMANDS.contains(command)){
     	   newCommand = new VariableCommand(command, arguments);
@@ -63,6 +69,4 @@ public class Controller{
         String[] result = args.split("\\s+");
         return result;
     }
-    
-    
 }
