@@ -1,6 +1,7 @@
 package backEnd;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import javafx.scene.image.Image;
@@ -50,7 +51,7 @@ public class Turtle {
 		turtle.setX(myXPos);
 		turtle.setY(myYPos);
 		turtle.setRotate(myAngle);
-
+		myTraces = new HashSet<>();
 		return turtle;
 	}
 	
@@ -64,14 +65,16 @@ public class Turtle {
 		return dist;
 	}
 	
-	protected void move(double distance) {
+	protected double move(double distance) {
+		// account for toroidal edge
 		double xpos = myXPos - Math.cos(Math.toRadians(myAngle))*distance;
 		double ypos = myYPos + Math.sin(Math.toRadians(myAngle))*distance;
 		this.moveTo(xpos, ypos);
+		return distance;
 	}
 	
-	protected double towards(double xpos, double ypos) {
-		//TO-DO
+	protected double rotateTowards(double xpos, double ypos) {
+		//double angle = Math.atan(a)
 		return 0;
 	}
 	

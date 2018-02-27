@@ -23,6 +23,13 @@ public class Model implements ModelModifiable, ModelViewable {
 		ret.add((Turtle)myModel.get("Turtle"));
 		return ret;
 	}
+	
+	protected Object getVariable(String name) throws NullPointerException {
+		if (!myModel.containsKey(name)) {
+			throw new NullPointerException("Variable does not exist.");
+		}
+		return myModel.get(name);
+	}
 
 	@Override
 	public Set<Turtle> getTurtles() {
