@@ -1,4 +1,4 @@
-package slogo_team14;
+package backEnd;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -139,7 +139,7 @@ public class Interpreter {
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter("English");
-		sLogoValid s = i.interpret("sum 30 sum 40 20");  
+		sLogoValid s = i.interpret("repeat 6 [ fd 20 ]");  
 		System.out.println(s.getMyStringValue());
 		
 	}

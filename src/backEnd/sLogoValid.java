@@ -1,4 +1,4 @@
-package slogo_team14;
+package backEnd;
 
 public class sLogoValid {
 	private boolean isError;
