@@ -34,9 +34,10 @@ public class Interpreter {
 			mySlogoValid.setMyStringValue("User input is missing or invalid");
 			return mySlogoValid;
 		}
+			//System.out.println("Initial String: " + s);
 		sLogoValid tempSlogoValid = new sLogoValid();
 		String[] args = s.trim().split("\\s+");
-		System.out.println(args[0]);
+			//System.out.println(args[0]);
 		//Check to see if the first argument is valid
 		if(!myLanguageProperties.containsKey(args[0])) {
 			tempSlogoValid.setMyStringValue("Invalid command: " + args[0]);
@@ -46,8 +47,8 @@ public class Interpreter {
 		String myCommand = myLanguageProperties.getProperty(args[0]);
 		String[] mySyntax = getCommandSyntax(myCommand);
 		tempSlogoValid = argumentCheck(args, mySyntax);
+		System.out.println("Command Created: " + tempSlogoValid.getMyStringValue());
 		//tempSlogoValid.setMyStringValue(myCommand); //TODO: replace this with something that makes a command object
-				
 		return tempSlogoValid;
 	}
 	private sLogoValid argumentCheck(String[] args, String[] expectedSyntax) {
@@ -66,6 +67,9 @@ public class Interpreter {
 					mySlogoValid.setMyStringValue("Invalid number of Arguments for command: "+ myInputArgs.get(0));
 					return mySlogoValid;
 				}
+				
+				//TODO: Add a check for after if statements
+				
 				//Check to see if there is an internal list
 				if(myInputArgs.get(0).equals("[")) {
 					myTempArgs.add(myInputArgs.remove(0));
@@ -77,9 +81,14 @@ public class Interpreter {
 					if(tempSlogoValid.getError()) {
 						return tempSlogoValid;
 					}
+						//System.out.println("MyList: " + myList);
 					myTempArgs.add(tempSlogoValid.getMyStringValue());
 					myTempArgs.add(myInputArgs.remove(0));
+						//System.out.println(myTempArgs.toString());
 				}
+				
+				//TODO: Add a check for a second list as in a dottimes
+				
 				//Check to make sure there isn't another command
 				if(!myInputArgs.isEmpty() && myLanguageProperties.containsKey(myInputArgs.get(0))) {
 					System.out.println("Internal loop: " + myInputArgs.toString());
@@ -88,7 +97,11 @@ public class Interpreter {
 					for(int i = 0; i < internalCommandSyntax.length; i++) {
 						internalCommandSyntax[i] = myInputArgs.remove(0);	
 					}
+					tempSlogoValid = interpret(tempSlogoValid.getMyStringValue());
 					tempSlogoValid.setMyStringValue("res");
+						if(tempSlogoValid.getError()) {
+							return tempSlogoValid;
+						}
 					myInputArgs.add(tempSlogoValid.getMyStringValue());
 				} else if(! myInputArgs.isEmpty()) { 
 				myTempArgs.add(myInputArgs.remove(0));
@@ -96,13 +109,13 @@ public class Interpreter {
 			}
 			//Interpret secondary arguments
 			if(myInputArgs.size() > 0) {
-				System.out.println("we got here");
+					//System.out.println("Second Argument Detected");
 				String myConcatArgs = "";
 				while(myInputArgs.size() > 0) {
 					myConcatArgs += myInputArgs.remove(0) + " ";
 				}
 				tempSlogoValid = interpret(myConcatArgs);
-				System.out.println("Internal Loop: " + tempSlogoValid.getMyStringValue());
+					//System.out.println("Internal Loop: " + tempSlogoValid.getMyStringValue());
 				//TODO: find a way to pass this up a level or print it to the prompt
 			}
 			
@@ -154,8 +167,8 @@ public class Interpreter {
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter("English");
-		sLogoValid s = i.interpret("repeat 6 [ fd 20 ]");  
-		System.out.println(s.getMyStringValue());
+		sLogoValid s = i.interpret("repeat 6 [ bk lt 50 ]");  
+		System.out.println("Final Result: " + s.getMyStringValue());
 		
 	}
 }
