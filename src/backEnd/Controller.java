@@ -2,7 +2,6 @@ package backEnd;
 
 import java.util.ArrayList;
 
-import backEnd.sLogoValid;
 import backEnd.commands.*;
 import java.util.Arrays;
 
@@ -17,19 +16,23 @@ public class Controller{
     private final ArrayList<String> MATH_COMMANDS = new ArrayList<String>(Arrays.asList("sum", "difference", "product", "quotient", "remainder", "minus", "random", "sin", "cos", "tan", "atan", "log", "pow", "pi"));
     private final ArrayList<String> BOOLEAN_COMMANDS = new ArrayList<String>(Arrays.asList("lessp", "greaterp", "equalp", "notequalp", "and", "or", "not"));
     private final ArrayList<String> VARIABLE_COMMANDS = new ArrayList<String>(Arrays.asList("make", "set"));
-    private final ArrayList<String> CONTROL_STRUCTURE_COMMANDS = new ArrayList<String>(Arrays.asList("repeat", "dotimes", "for", "if", "ifelse"));
-    private final ArrayList<String> USER_DEFINED_COMMANDS = new ArrayList<String>(Arrays.asList("to"));	
+    private final ArrayList<String> USER_DEFINED_COMMANDS = new ArrayList<String>(Arrays.asList("to"));
+
+    private ModelModifiable myModel;
     		
     /**
      * Creates a new Controller object to be given commands and their arguments to then create
      * a new command object
      */
-    public Controller(){
+    public Controller(Model model){
+        myModel = model;
     }
 
-    public sLogoValid create(String command, String[] args){
+    /*
+    public sLogoValid create(String command, String[] args,){
         return null;
     }
+    */
 
     /**
      * Creates a new command object based on the type of command and arguments given
@@ -39,30 +42,28 @@ public class Controller{
      */
     public sLogoValid create(String command, String args){
        String[] arguments = breakdown(args);
-       CommandGroup newCommand = null;
+       CommandGroup newCommand;
        if(TURTLE_MOVE_COMMANDS.contains(command)){
-    	   newCommand = new TurtleMoveCommand(command, arguments);
+    	   newCommand = new TurtleMoveCommand(command, arguments, myModel);
        }
        else if(TURTLE_QUERIES_COMMANDS.contains(command)){
-    	   newCommand = new TurtleQueryCommand(command, arguments);
+    	   newCommand = new TurtleQueryCommand(command, arguments, myModel);
        }
        else if(MATH_COMMANDS.contains(command)){
     	   newCommand = new MathCommand(command, arguments);
        }
        else if(BOOLEAN_COMMANDS.contains(command)){
-    	  // newCommand = new BooleanCommand(command, arguments);
+    	  newCommand = new BooleanCommand(command, arguments);
        }
-       else if(VARIABLE_COMMANDS.contains(command)){
-    	   newCommand = new VariableCommand(command, arguments);
-       }
-       else if(CONTROL_STRUCTURE_COMMANDS.contains(command)){
-    	   newCommand = new ControlStructureCommand(command, arguments);
+       else if(VARIABLE_COMMANDS.contains(command)) {
+           newCommand = new VariableCommand(command, arguments, myModel);
        }
        else if(USER_DEFINED_COMMANDS.contains(command)){
-    	   newCommand = new UserDefinedCommand(command, arguments);
+    	   newCommand = new UserDefinedCommand(command, arguments, myModel);
        }
        else{
     	   sLogoValid noCommand = new sLogoValid();
+    	   noCommand.setError(true);
     	   noCommand.setMyStringValue("No command executed");
     	   return noCommand;
        }
@@ -70,7 +71,6 @@ public class Controller{
     }
 
     private String[] breakdown(String args){
-        String[] result = args.split("\\s+");
-        return result;
+        return args.split("\\s+");
     }
 }

@@ -1,9 +1,13 @@
 package backEnd.commands;
 
-public class TurtleMoveCommand extends CommandGroup {
+import backEnd.ModelModifiable;
 
-	public TurtleMoveCommand(String command, String[] args) {
+public class TurtleMoveCommand extends CommandGroup {
+	private ModelModifiable myModel;
+
+	public TurtleMoveCommand(String command, String[] args, ModelModifiable model) {
 		super(command, args);
+		myModel = model;
 		// TODO Auto-generated constructor stub
 	}
 
