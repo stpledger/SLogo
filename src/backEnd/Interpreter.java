@@ -57,6 +57,7 @@ public class Interpreter {
 		ArrayList<String> myInputArgs = new ArrayList<String>();
 		myInputArgs.addAll(Arrays.asList(args));
 		ArrayList<String> myTempArgs = new ArrayList<String>();
+		System.out.println("Input: "+ myInputArgs.toString());
 			//Add the initial command
 			myTempArgs.add(myInputArgs.remove(0));
 			//Concatenate all the arguments needed for the primary command	
@@ -82,8 +83,9 @@ public class Interpreter {
 						return tempSlogoValid;
 					}
 						//System.out.println("MyList: " + myList);
-					myTempArgs.add(tempSlogoValid.getMyStringValue());
 					myTempArgs.add(myInputArgs.remove(0));
+					myTempArgs.add(tempSlogoValid.getMyStringValue());
+					
 						//System.out.println(myTempArgs.toString());
 				}
 				
@@ -97,6 +99,7 @@ public class Interpreter {
 					for(int i = 0; i < internalCommandSyntax.length; i++) {
 						internalCommandSyntax[i] = myInputArgs.remove(0);	
 					}
+					System.out.println("Send to interpreter: " + tempSlogoValid.getMyStringValue());
 					tempSlogoValid = interpret(tempSlogoValid.getMyStringValue());
 					tempSlogoValid.setMyStringValue("res");
 						if(tempSlogoValid.getError()) {
@@ -104,7 +107,7 @@ public class Interpreter {
 						}
 					myInputArgs.add(tempSlogoValid.getMyStringValue());
 				} else if(! myInputArgs.isEmpty()) { 
-				myTempArgs.add(myInputArgs.remove(0));
+					myTempArgs.add(myInputArgs.remove(0));
 				}
 			}
 			//Interpret secondary arguments
@@ -167,7 +170,7 @@ public class Interpreter {
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter("English");
-		sLogoValid s = i.interpret("repeat 6 [ bk lt 50 ]");  
+		sLogoValid s = i.interpret("repeat 6 [ fd bk lt 50 ]");  
 		System.out.println("Final Result: " + s.getMyStringValue());
 		
 	}
