@@ -115,8 +115,7 @@ public class Console implements ComponentBuilder{
 		turtleDisplayer.clearError();
 		commands = prompt.getText();
 		prompt.clear();
-		//interpreter.setLanguage(language);
-		//interpreter = new Interpreter(language);
+		interpreter.setLanguage(language);
 	    sLogoValid retMessage = interpreter.interpret(commands);
 	    if(!retMessage.getError()){
 	        Map<String, Object> variableMap = model.getCurrentVariables();
