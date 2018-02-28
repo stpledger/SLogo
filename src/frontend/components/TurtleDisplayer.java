@@ -65,7 +65,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	/**
 	 * draw - draws a new turtle from a given turtle set
 	 */
-	public static void draw(Set<Turtle> s, sLogoValid valid){
+	public void draw(Set<Turtle> s, sLogoValid valid){
 	    eraseCurrentDisplay();
 	    drawNewDisplay(s, valid);
 	}
@@ -73,7 +73,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	/**
 	 * clearError - removes error bar and text from screen
 	 */
-	public static void clearError() {
+	public void clearError() {
 		group.getChildren().remove(errorMessage);
 		group.getChildren().remove(redBox);
 	}
@@ -90,7 +90,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	/**
 	 * eraseCurrentDisplay - erases the current display completely
 	 */
-	private static void eraseCurrentDisplay(){
+	private void eraseCurrentDisplay(){
 		turtles.clear();
 		lineMap.clear();
 	    group.getChildren().clear();
@@ -110,7 +110,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 //	        }
 //	    }
 //	}
-	private static void drawNewDisplay(Set<Turtle> s, sLogoValid v){
+	private void drawNewDisplay(Set<Turtle> s, sLogoValid v){
 		if(v.getError()){
 			displayError(v.getMyStringValue());
 		}
@@ -131,7 +131,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * drawLines - adds the turtle's lines to the group
 	 * @param Set<Line>
 	 */
-	private static void drawLines(Set<Line> lines) {
+	private void drawLines(Set<Line> lines) {
 		for(Line l : lines) {
 			Line tempLine = new Line();
 			tempLine.setStartX(l.getStartX() + center_x);
@@ -172,7 +172,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	/**
 	 * showTurtle - shows the turtle if hidden
 	 */
-	private static void showTurtle() {
+	private void showTurtle() {
 		if(turtleHidden) {
 			for(ImageView i : turtles) {
 				group.getChildren().add(i);
@@ -184,7 +184,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	/**
 	 * hideTurtle - hides the turtle if visible
 	 */
-	private static void hideTurtle() {
+	private void hideTurtle() {
 		if(!turtleHidden) {
 			for(ImageView i : turtles) {
 				group.getChildren().remove(i);
@@ -197,7 +197,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * Displays given error message
 	 * @param message
 	 */
-	public static void displayError(String message) {
+	public void displayError(String message) {
 		errorMessage = new Text(message);
 		errorMessage.setX(0);
 		errorMessage.setY(DEFAULT_WINDOW_Y - ERROR_MESSAGE_OFFSET);
@@ -212,7 +212,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * Tests the program with other part's components
 	 */
 	private void testTurtleDisplayer(){
-		Turtle testTurtle = new Turtle(0,0,0);
+		Turtle testTurtle = new Turtle(50,50,0);
 		Set<Turtle> testTurtleSet = new HashSet<Turtle>();
 		testTurtleSet.add(testTurtle);
 		sLogoValid valid = new sLogoValid();

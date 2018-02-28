@@ -18,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import backEnd.Interpreter;
+import backEnd.Model;
 import backEnd.ModelViewable;
 import backEnd.Turtle;
 import backEnd.sLogoValid;
@@ -33,8 +34,14 @@ public class Console implements ComponentBuilder{
 	private HBox box = new HBox();
 	private String commands;
 	private TextArea prompt = new TextArea();
+	private TurtleDisplayer turtleDisplayer;
+	private Model model;
+	private Interpreter interpreter;
 	
-	public Console () {
+	public Console (TurtleDisplayer t, Model m, Interpreter i) {
+		turtleDisplayer = t;
+		model = m;
+		interpreter = i;
 		box.setStyle("-fx-background-color: #7777FF;");
 		box.setPrefHeight(IDEBuilder.CONSOLE_HEIGHT);
 		
@@ -72,7 +79,6 @@ public class Console implements ComponentBuilder{
 			run();
 			//commands = prompt.getText();
 			//System.out.println(commands);
-			//TurtleDisplayer.clearError();
         });
 
         return runButton;
@@ -87,7 +93,7 @@ public class Console implements ComponentBuilder{
 		clearButton.setMinWidth(BUTTON_SIZE);
 
 		clearButton.setOnAction(action -> {
-			TurtleDisplayer.clearError();
+			turtleDisplayer.clearError();
 			prompt.clear();
         });
 
@@ -98,14 +104,14 @@ public class Console implements ComponentBuilder{
 	 * run - Calls controller to interpret string and then calls TurtleDisplayer to update turtle display
 	 */
 	public void run(){
-		TurtleDisplayer.clearError();
+		turtleDisplayer.clearError();
 		commands = prompt.getText();
 		// TODO: Get language from toolbar
-		Interpreter interpreter = new Interpreter("English");
+		interpreter = new Interpreter("English");
 	    sLogoValid retMessage = interpreter.interpret(commands);
 	    boolean isError = retMessage.getError();
 	    if(!isError){
-//	        Map<String, Object> variableMap = ModelViewable.getCurrentVariables();
+//	        Map<String, Object> variableMap = model.getCurrentVariables();
 //	        Set<Turtle> turtleSet = new HashSet<Turtle>();
 //	        for(String s : variableMap.keySet()){
 //	            if(variableMap.get(s) instanceof Turtle){
@@ -113,11 +119,11 @@ public class Console implements ComponentBuilder{
 //	            }
 //	        }
 //	        if(!turtleSet.isEmpty()){
-//	            TurtleDisplayer.draw(turtleSet, retMessage);
+//	            turtleDisplayer.draw(turtleSet, retMessage);
 //	        }  
 	    }
 	    else{
-	        TurtleDisplayer.displayError(retMessage.getMyStringValue());
+	        turtleDisplayer.displayError(retMessage.getMyStringValue());
 	    }
 	}
 }
