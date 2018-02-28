@@ -11,6 +11,7 @@ public class MainApplication extends Application {
 		SceneBuilder IDE = new IDEBuilder();
         primaryStage.setScene(IDE.getScene());
         primaryStage.sizeToScene();
+        primaryStage.setResizable(false);
         primaryStage.show();
         
     }

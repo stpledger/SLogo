@@ -1,5 +1,6 @@
 package frontend.components;
 
+import frontend.IDEBuilder;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
@@ -16,6 +17,7 @@ public class SideBar implements ComponentBuilder {
 	public SideBar() {
 		host.setStyle("-fx-background-color: #99FF99;");
 		host.getChildren().add(new Label("Side Bar"));
+		host.setPrefWidth(IDEBuilder.SIDEBAR_WIDTH);
 		host.setMaxWidth(200);
 		host.setBorder(new Border(new BorderStroke(Color.BLACK, 
 	            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
