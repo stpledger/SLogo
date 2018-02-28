@@ -3,6 +3,8 @@ package frontend.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import backEnd.ModelViewable;
+import backEnd.Turtle;
 import frontend.IDEBuilder;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -20,7 +22,11 @@ public class ToolBar implements ComponentBuilder{
 	
 	String[] languages = {"English", "German", "French", "Spanish"};
 	private Color turtleColor = Color.ALICEBLUE;
+	
 	private ComboBox<String> languagePicker = new ComboBox<String>();
+	private ComboBox<String> turtleImagePicker = new ComboBox<String>();
+	private String imageFilePath = "";
+	
 	private Button updateEnvButton = new Button("Update");
 	private Button selectColor = new Button("Select Color");
 	
@@ -44,7 +50,7 @@ public class ToolBar implements ComponentBuilder{
 	
 	private void setStyle() {
 		bar.setSpacing(10);
-		bar.setStyle("-fx-background-color: #FF9999;");
+		bar.setStyle("-fx-background-color: #FFAAAA;");
 		bar.setPrefHeight(IDEBuilder.TOOLBAR_HEIGHT);
 	}
 	
@@ -57,6 +63,8 @@ public class ToolBar implements ComponentBuilder{
 		
 		selectColor.setOnAction(this::createColorPickerWindow);
 		toAdd.add(selectColor);
+		
+		toAdd.add(turtleImagePicker);
 		
 		updateEnvButton.setOnAction(e -> builder.update());
 		toAdd.add(updateEnvButton);
@@ -73,5 +81,13 @@ public class ToolBar implements ComponentBuilder{
 		picker.setOnAction(pe -> {turtleColor = picker.getValue(); pickerStage.close(); System.out.println(turtleColor); builder.update();});
 	}
 	
+	public void update(ModelViewable m) {
+		turtleImagePicker.getItems().clear();
+		for (String s: m.getCurrentVariables().keySet()) {
+			if (m.getCurrentVariables().get(s) instanceof Turtle) {
+				turtleImagePicker.getItems().add(s);
+			}
+		}
+	}
 	
 }
