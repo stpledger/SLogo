@@ -20,17 +20,21 @@ public class IDEBuilder implements SceneBuilder{
 	public static final double DISPLAY_HEIGHT = IDE_HEIGHT - TOOLBAR_HEIGHT - CONSOLE_HEIGHT;
 	public static final double DISPLAY_WIDTH = IDE_WIDTH - SIDEBAR_WIDTH;
 	
-	private Model m = new Model();
-	private Interpreter interpreter = new Interpreter(m, language_string);
-	
+	private ToolBar toolbar;
+	private SideBar side;
+	private TurtleDisplayer turtleDisplay;
+	private Console console;
 	
 	private BorderPane layout = new BorderPane();
 	
 	public IDEBuilder() {
-		ComponentBuilder side = new SideBar(m);
-		ComponentBuilder toolbar = new ToolBar();
-		ComponentBuilder turtleDisplay = new TurtleDisplayer();
-		ComponentBuilder console = new Console((TurtleDisplayer)turtleDisplay, m, interpreter);
+		
+		toolbar = new ToolBar(this);
+		Model m = new Model();
+		Interpreter interpreter = new Interpreter(toolbar.getLanguage());
+		side = new SideBar(m);
+		turtleDisplay = new TurtleDisplayer();
+		console = new Console(turtleDisplay, m, interpreter);
 		
 		layout.setRight(side.getNode());
 		layout.setTop(toolbar.getNode());
@@ -41,6 +45,10 @@ public class IDEBuilder implements SceneBuilder{
 	@Override
 	public Scene getScene() {
 		return new Scene(layout, IDE_WIDTH, IDE_HEIGHT);
+	}
+	
+	public void update() {
+		console.updateConsoleLanguage(toolbar.getLanguage());
 	}
 
 }
