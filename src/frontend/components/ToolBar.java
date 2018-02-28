@@ -120,6 +120,7 @@ public class ToolBar implements ComponentBuilder{
 			command += imagePath.getText();
 		}
 		System.out.println(command);
+		imagePath.setText("");
 		return command;
 	}
 }

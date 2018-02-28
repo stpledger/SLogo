@@ -40,7 +40,7 @@ public class IDEBuilder implements SceneBuilder{
 		layout.setTop(toolbar.getNode());
 		layout.setCenter(turtleDisplay.getNode());
 		layout.setBottom(console.getNode());
-//		update();
+		update();
 	}
 	
 	@Override

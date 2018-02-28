@@ -9,8 +9,11 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class SideBar implements ComponentBuilder {
 	private VBox host = new VBox();
@@ -34,6 +37,7 @@ public class SideBar implements ComponentBuilder {
 	
 	public void update() {
 		host.getChildren().clear();
+		addHeader();
 		for (String key: displayableModel.getCurrentVariables().keySet()) {
 			addElement(key, displayableModel.getCurrentVariables().get(key).toString());
 		}
@@ -41,6 +45,21 @@ public class SideBar implements ComponentBuilder {
 	
 	public Node getNode() {
 		return host;
+	}
+	
+	private void addHeader() {
+		HBox header = new HBox();
+		header.getChildren().add(formatHeaderCell (new Label("Var Name")));
+		header.getChildren().add(formatHeaderCell (new Label("Description")));
+		host.getChildren().add(header);
+
+	}
+	
+	private Label formatHeaderCell (Label l) {
+		l.setMinHeight(40);
+		l.setMinWidth(100);
+		l.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+		return l;
 	}
 	
 	public ModelViewable getModel() {
