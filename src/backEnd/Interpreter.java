@@ -61,7 +61,7 @@ public class Interpreter {
 		String[] mySyntax = getCommandSyntax(myCommand);
 		tempSlogoValid = argumentCheck(args, mySyntax);
 		System.out.println("Command Created: " + tempSlogoValid.getMyStringValue());
-		//tempSlogoValid.setMyStringValue(myCommand); //TODO: replace this with something that makes a command object
+		tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
 		return tempSlogoValid;
 	}
 	private sLogoValid argumentCheck(String[] args, String[] expectedSyntax) {
@@ -102,7 +102,7 @@ public class Interpreter {
 					myTempArgs.add(myInputArgs.remove(0));
 					String myList  = "";
 					while(!myInputArgs.get(0).equals("]")) {
-						myList += " " + myInputArgs.remove(0);
+						myList += myInputArgs.remove(0) + " ";
 					}
 					tempSlogoValid = interpret(myList);
 					if(tempSlogoValid.getError()) {
@@ -196,14 +196,17 @@ public class Interpreter {
 	}
 	
 	private sLogoValid passToController(String s) {
-		String[] args = s.split("//s+", 2);
-		mySlogoValid = myController.create(args[0], args[1]);
-		return mySlogoValid;
+		if(s.split(" ").length > 1) {		
+		String[] args = s.split(" ", 2);
+		return myController.create(args[0], args[1]);
+		} else {
+			return myController.create(s, "");
+		}
 	}
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter(new Model());
-		sLogoValid s = i.interpret("if 50 == 50 [ fd 50 ]");  
+		sLogoValid s = i.interpret("fd 50");  
 		System.out.println("Final Result: " + s.getMyStringValue());
 		
 	}
