@@ -24,17 +24,18 @@ public class ToolBar implements ComponentBuilder{
 	private IDEBuilder builder;
 	
 	String[] languages = {"English", "German", "French", "Spanish"};
-	private Color turtleColor = Color.ALICEBLUE;
+	private Color turtleColor = Color.SLATEBLUE;
 	
 	private ComboBox<String> languagePicker = new ComboBox<String>();
 	private ComboBox<String> turtleImagePicker = new ComboBox<String>();
 	private Button selectImage = new Button("Select Image");
-	private TextField imagePath = new TextField("Selected Image Filepath");
+	private TextField imagePath = new TextField();
 	
 	private Button updateEnvButton = new Button("Update");
 	private Button selectColor = new Button("Select Color");
 	
 	public ToolBar(IDEBuilder b) {
+		imagePath.setPromptText("Selected Image Filepath");
 		builder = b;
 		setStyle();
 		addComponents();

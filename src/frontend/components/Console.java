@@ -77,7 +77,8 @@ public class Console implements ComponentBuilder{
 		runButton.setMinWidth(BUTTON_SIZE);
 
 		runButton.setOnAction(action -> {
-			run();
+			commands = prompt.getText();
+			run(commands);
 			//commands = prompt.getText();
 			//System.out.println(commands);
         });
@@ -109,14 +110,21 @@ public class Console implements ComponentBuilder{
 	}
 	
 	/**
+	 * Custom command entered from elsewhere in program
+	 * @param com
+	 */
+	public void enterCommand(String com) {
+		run(com);
+	}
+	
+	/**
 	 * run - Calls controller to interpret string and then calls TurtleDisplayer to update turtle display
 	 */
-	public void run(){
+	public void run(String com){
 		turtleDisplayer.clearError();
-		commands = prompt.getText();
 		prompt.clear();
 		interpreter.setLanguage(language);
-	    sLogoValid retMessage = interpreter.interpret(commands);
+	    sLogoValid retMessage = interpreter.interpret(com);
 	    if(!retMessage.getError()){
 	        Map<String, Object> variableMap = model.getCurrentVariables();
 	        Set<Turtle> turtleSet = new HashSet<Turtle>();
