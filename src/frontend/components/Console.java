@@ -37,6 +37,7 @@ public class Console implements ComponentBuilder{
 	private TurtleDisplayer turtleDisplayer;
 	private Model model;
 	private Interpreter interpreter;
+	private String language = "English";
 	
 	public Console (TurtleDisplayer t, Model m, Interpreter i) {
 		turtleDisplayer = t;
@@ -101,13 +102,20 @@ public class Console implements ComponentBuilder{
 	}
 	
 	/**
+	 * updates the language that the interpreter will use to interpret commands
+	 */
+	public void updateConsoleLanguage(String lang){
+		language = lang;
+	}
+	
+	/**
 	 * run - Calls controller to interpret string and then calls TurtleDisplayer to update turtle display
 	 */
 	public void run(){
 		turtleDisplayer.clearError();
 		commands = prompt.getText();
 		// TODO: Get language from toolbar
-		interpreter = new Interpreter("English");
+		interpreter.setLanguage(language);
 	    sLogoValid retMessage = interpreter.interpret(commands);
 	    boolean isError = retMessage.getError();
 	    if(!isError){
