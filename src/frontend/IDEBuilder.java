@@ -14,7 +14,7 @@ public class IDEBuilder implements SceneBuilder{
 	
 	public static final double IDE_HEIGHT = 600;
 	public static final double IDE_WIDTH = 1200;
-	public static final double TOOLBAR_HEIGHT = 15;
+	public static final double TOOLBAR_HEIGHT = 30;
 	public static final double CONSOLE_HEIGHT = 150;
 	public static final double SIDEBAR_WIDTH = 200;
 	public static final double DISPLAY_HEIGHT = IDE_HEIGHT - TOOLBAR_HEIGHT - CONSOLE_HEIGHT;
