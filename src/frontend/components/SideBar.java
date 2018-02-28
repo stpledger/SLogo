@@ -34,6 +34,7 @@ public class SideBar implements ComponentBuilder {
 	
 	public void update() {
 		addElement("Trishul", "Var Description");
+		for 
 	}
 	
 	public Node getNode() {

@@ -21,7 +21,7 @@ public class IDEBuilder implements SceneBuilder{
 	public static final double DISPLAY_WIDTH = IDE_WIDTH - SIDEBAR_WIDTH;
 	
 	private Model m = new Model();
-	private Interpreter interpreter;
+	private Interpreter interpreter = new Interpreter(m, language_string);
 	
 	
 	private BorderPane layout = new BorderPane();
