@@ -15,7 +15,6 @@ public class SideBarComponent {
 	private HBox container = new HBox();
 	
 	
-	
 	public SideBarComponent(String varName, String desc) {
 		name = varName;
 		description = desc;

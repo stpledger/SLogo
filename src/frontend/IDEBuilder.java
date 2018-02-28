@@ -1,5 +1,7 @@
 package frontend;
 
+import backEnd.Interpreter;
+import backEnd.Model;
 import frontend.components.ComponentBuilder;
 import frontend.components.Console;
 import frontend.components.SideBar;
@@ -18,14 +20,17 @@ public class IDEBuilder implements SceneBuilder{
 	public static final double DISPLAY_HEIGHT = IDE_HEIGHT - TOOLBAR_HEIGHT - CONSOLE_HEIGHT;
 	public static final double DISPLAY_WIDTH = IDE_WIDTH - SIDEBAR_WIDTH;
 	
+	private Model m = new Model();
+	private Interpreter interpreter;
+	
 	
 	private BorderPane layout = new BorderPane();
 	
 	public IDEBuilder() {
-		ComponentBuilder side = new SideBar();
+		ComponentBuilder side = new SideBar(m);
 		ComponentBuilder toolbar = new ToolBar();
 		ComponentBuilder turtleDisplay = new TurtleDisplayer();
-		ComponentBuilder console = new Console();
+		ComponentBuilder console = new Console(turtleDisplay, m, interpreter);
 		
 		layout.setRight(side.getNode());
 		layout.setTop(toolbar.getNode());

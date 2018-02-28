@@ -1,5 +1,6 @@
 package frontend.components;
 
+import backEnd.ModelViewable;
 import frontend.IDEBuilder;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -13,8 +14,10 @@ import javafx.scene.paint.Color;
 
 public class SideBar implements ComponentBuilder {
 	private VBox host = new VBox();
+	private ModelViewable displayableModel;
 	
-	public SideBar() {
+	public SideBar(ModelViewable incoming) {
+		displayableModel = incoming;
 		host.setStyle("-fx-background-color: #99FF99;");
 		host.getChildren().add(new Label("Side Bar"));
 		host.setPrefWidth(IDEBuilder.SIDEBAR_WIDTH);
