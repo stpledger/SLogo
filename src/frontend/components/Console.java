@@ -1,8 +1,10 @@
 package frontend.components;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import frontend.IDEBuilder;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -15,6 +17,10 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import backEnd.Interpreter;
+import backEnd.ModelViewable;
+import backEnd.Turtle;
+import backEnd.sLogoValid;
 
 /**
  * Console allows user input for commands and will start the rest of the program when run is pressed
@@ -22,25 +28,26 @@ import javafx.scene.paint.Color;
  *
  */
 public class Console implements ComponentBuilder{
-	private static final double BUTTON_SIZE = 50;
+	private static final double BUTTON_SIZE = 75;
 	
-	private VBox box = new VBox();
+	private HBox box = new HBox();
 	private String commands;
 	private TextArea prompt = new TextArea();
 	
 	public Console () {
 		box.setStyle("-fx-background-color: #7777FF;");
-		Label label = new Label("Console");
-		label.setPrefSize(100, 5);
+		box.setPrefHeight(IDEBuilder.CONSOLE_HEIGHT);
 		
 		Button runButton = makeRunButton();
 		Button clearButton = makeClearButton();
-		HBox hbox = new HBox(clearButton, runButton);
-		hbox.setAlignment(Pos.CENTER);
+		VBox vbox = new VBox(runButton, clearButton);
+		vbox.setAlignment(Pos.CENTER);
+		vbox.setPrefWidth(clearButton.getWidth());
 		
 		prompt.setStyle("-fx-control-inner-background:#000000; -fx-text-fill: #FFFFFF;");
+		prompt.setPrefWidth(IDEBuilder.IDE_WIDTH - clearButton.getWidth());
 			    
-		box.getChildren().addAll(label, prompt, hbox);
+		box.getChildren().addAll(prompt, vbox);
 		
 	}
 	
@@ -62,10 +69,10 @@ public class Console implements ComponentBuilder{
 		runButton.setMinWidth(BUTTON_SIZE);
 
 		runButton.setOnAction(action -> {
-			//run();
-			commands = prompt.getText();
-			System.out.println(commands);
-			TurtleDisplayer.clearError();
+			run();
+			//commands = prompt.getText();
+			//System.out.println(commands);
+			//TurtleDisplayer.clearError();
         });
 
         return runButton;
@@ -80,6 +87,7 @@ public class Console implements ComponentBuilder{
 		clearButton.setMinWidth(BUTTON_SIZE);
 
 		clearButton.setOnAction(action -> {
+			TurtleDisplayer.clearError();
 			prompt.clear();
         });
 
@@ -92,22 +100,24 @@ public class Console implements ComponentBuilder{
 	public void run(){
 		TurtleDisplayer.clearError();
 		commands = prompt.getText();
-	    SLogoValid retMessage = controller.interpret(commands);
-	    boolean isValid = retMessage.isValid();
-	    if(isValid){
-	        Map<String, Object> variableMap = ModelViewable.getCurrentVariables();
-	        Set<Turtle> turtleSet = new Set<Turtle>
-	        for(String s : variableMap.keys()){
-	            if(variableMap.get(s) instanceof Turtle){
-	                turtleSet.add(variableMap.get(s));
-	            }
-	        }
-	        if(!turtleSet.isEmpty()){
-	            TurtleDisplayer.draw(turtleSet);
-	        }  
+		// TODO: Get language from toolbar
+		Interpreter interpreter = new Interpreter("English");
+	    sLogoValid retMessage = interpreter.interpret(commands);
+	    boolean isError = retMessage.getError();
+	    if(!isError){
+//	        Map<String, Object> variableMap = ModelViewable.getCurrentVariables();
+//	        Set<Turtle> turtleSet = new HashSet<Turtle>();
+//	        for(String s : variableMap.keySet()){
+//	            if(variableMap.get(s) instanceof Turtle){
+//	                turtleSet.add((Turtle)variableMap.get(s));
+//	            }
+//	        }
+//	        if(!turtleSet.isEmpty()){
+//	            TurtleDisplayer.draw(turtleSet, retMessage);
+//	        }  
 	    }
 	    else{
-	        ErrorPrinter(retMessage.toString);
+	        TurtleDisplayer.displayError(retMessage.getMyStringValue());
 	    }
 	}
 }
