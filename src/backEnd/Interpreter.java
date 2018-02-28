@@ -5,22 +5,35 @@ import java.util.Arrays;
 import java.util.Properties;
 
 public class Interpreter {
+	private String myLanguage = "English";
 	private sLogoValid mySlogoValid;
 	private Properties myLanguageProperties;
+	//private Controller myController;
 	private static final String[] noParamCommands = {"PenUp","PenDown","ShowTurtle","HideTurtle","Home","ClearScreen","XCoordinate","YCoordinate","Heading","IsPenDown","IsShowing","Pi", "GetPenColor", "GetShape", "Stamp", "ClearStamps"};
 	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not", "Minus", "SetBackground", "SetPenColor", "SetPenSize", "SetShape", "SetPalette"};
 	private static final String[] twoParamCommands = {"SetTowards", "SetPosition", "Sum", "Difference", "Product", "Quotient", "Remainder", "Power", "LessThan","GreaterThan", "Equal", "NotEqual", "And", "Or", "MakeVariable"}; 
 	//TODO: Add multiple turtle commands
-	public Interpreter(String language) {
+	public Interpreter( ModelModifiable m) {
 		mySlogoValid = new sLogoValid();
 		//Try to import the language properties
 		try {
-			myLanguageProperties = new languageParser(language).getProperties();
+			myLanguageProperties = new languageParser(myLanguage).getProperties();
 		} catch(Exception e) {
 			mySlogoValid.setError(true);
-			mySlogoValid.setMyStringValue("Error: Can not find " + language + ".properties");
+			mySlogoValid.setMyStringValue("Error: Can not find " + myLanguage + ".properties");
 		}
 		
+	}
+	
+	public void setLanguage(String s) {
+		myLanguage = s;
+		//Try to import the language properties
+				try {
+					myLanguageProperties = new languageParser(myLanguage).getProperties();
+				} catch(Exception e) {
+					mySlogoValid.setError(true);
+					mySlogoValid.setMyStringValue("Error: Can not find " + myLanguage + ".properties");
+				}
 	}
 	
 	public sLogoValid interpret(String s) {
@@ -65,11 +78,22 @@ public class Interpreter {
 				//Check to make sure that there are the appropriate number of arguments
 				if(myInputArgs.isEmpty()) {
 					mySlogoValid.setError(true);
-					mySlogoValid.setMyStringValue("Invalid number of Arguments for command: "+ myInputArgs.get(0));
+					mySlogoValid.setMyStringValue("Invalid number of Arguments for command: "+ myTempArgs.get(0));
 					return mySlogoValid;
 				}
 				
-				//TODO: Add a check for after if statements
+				//Check to see if there is an if statement
+					if(myInputArgs.get(0).equals("If")) {
+						myTempArgs.add(myInputArgs.remove(0));
+						while(!myInputArgs.isEmpty() && !myInputArgs.get(0).equals("[")) {
+							
+						}
+						if(myInputArgs.isEmpty()) {
+							mySlogoValid.setError(true);
+							mySlogoValid.setMyStringValue("No list included in If statement");
+							return mySlogoValid;
+						}
+					}
 				
 				//Check to see if there is an internal list
 				if(myInputArgs.get(0).equals("[")) {
@@ -170,8 +194,8 @@ public class Interpreter {
 	}
 
 	public static void main(String[] args) {
-		Interpreter i = new Interpreter("English");
-		sLogoValid s = i.interpret("repeat 6 [ fd lt 50 ]");  
+		Interpreter i = new Interpreter(new Model());
+		sLogoValid s = i.interpret("if [ fd 50 ]");  
 		System.out.println("Final Result: " + s.getMyStringValue());
 		
 	}
