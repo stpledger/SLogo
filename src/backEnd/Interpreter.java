@@ -8,7 +8,7 @@ public class Interpreter {
 	private String myLanguage = "English";
 	private sLogoValid mySlogoValid;
 	private Properties myLanguageProperties;
-	//private Controller myController;
+	private Controller myController = new Controller();
 	private static final String[] noParamCommands = {"PenUp","PenDown","ShowTurtle","HideTurtle","Home","ClearScreen","XCoordinate","YCoordinate","Heading","IsPenDown","IsShowing","Pi", "GetPenColor", "GetShape", "Stamp", "ClearStamps"};
 	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not", "Minus", "SetBackground", "SetPenColor", "SetPenSize", "SetShape", "SetPalette"};
 	private static final String[] twoParamCommands = {"SetTowards", "SetPosition", "Sum", "Difference", "Product", "Quotient", "Remainder", "Power", "LessThan","GreaterThan", "Equal", "NotEqual", "And", "Or", "MakeVariable"}; 
@@ -193,6 +193,12 @@ public class Interpreter {
 			return syntax;
 		}
 		return null;
+	}
+	
+	private sLogoValid passToController(String s) {
+		String[] args = s.split("//s+", 2);
+		mySlogoValid = myController.create(args[0], args[1]);
+		return mySlogoValid;
 	}
 
 	public static void main(String[] args) {
