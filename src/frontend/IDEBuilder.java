@@ -40,7 +40,7 @@ public class IDEBuilder implements SceneBuilder{
 		layout.setTop(toolbar.getNode());
 		layout.setCenter(turtleDisplay.getNode());
 		layout.setBottom(console.getNode());
-		update();
+//		update();
 	}
 	
 	@Override
@@ -53,6 +53,8 @@ public class IDEBuilder implements SceneBuilder{
 		turtleDisplay.setBackgroundColor(toolbar.getColor());
 		side.update();
 		toolbar.update(side.getModel());
+//		Uncomment once command to write to console is completed.
+//		console.enterCommand(toolbar.getTurtleNameChangeCommand()); 
 	}
 
 }

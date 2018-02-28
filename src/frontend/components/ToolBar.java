@@ -1,5 +1,6 @@
 package frontend.components;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class ToolBar implements ComponentBuilder{
@@ -25,7 +28,8 @@ public class ToolBar implements ComponentBuilder{
 	
 	private ComboBox<String> languagePicker = new ComboBox<String>();
 	private ComboBox<String> turtleImagePicker = new ComboBox<String>();
-	private String imageFilePath = "";
+	private Button selectImage = new Button("Select Image");
+	private TextField imagePath = new TextField("Selected Image Filepath");
 	
 	private Button updateEnvButton = new Button("Update");
 	private Button selectColor = new Button("Select Color");
@@ -64,7 +68,13 @@ public class ToolBar implements ComponentBuilder{
 		selectColor.setOnAction(this::createColorPickerWindow);
 		toAdd.add(selectColor);
 		
+		turtleImagePicker.setValue("Select Turtle Name");
 		toAdd.add(turtleImagePicker);
+		
+		selectImage.setOnAction(this::updateImagePath);
+		toAdd.add(selectImage);
+		
+		toAdd.add(imagePath);
 		
 		updateEnvButton.setOnAction(e -> builder.update());
 		toAdd.add(updateEnvButton);
@@ -81,6 +91,15 @@ public class ToolBar implements ComponentBuilder{
 		picker.setOnAction(pe -> {turtleColor = picker.getValue(); pickerStage.close(); System.out.println(turtleColor); builder.update();});
 	}
 	
+	private void updateImagePath(ActionEvent e) {
+		FileChooser fileChooser = new FileChooser();
+		File f = fileChooser.showOpenDialog(new Stage());
+		imagePath.setText(f.getPath());
+	}
+	
+	/*
+	 * Update the toolbar to show possible turtles. Should receive modelViewable that is used by the sidebar
+	 */
 	public void update(ModelViewable m) {
 		turtleImagePicker.getItems().clear();
 		for (String s: m.getCurrentVariables().keySet()) {
@@ -90,4 +109,17 @@ public class ToolBar implements ComponentBuilder{
 		}
 	}
 	
+	/*
+	 * Returns the name of the currently selected turtle to change update 
+	 */
+	public String getTurtleNameChangeCommand() {
+		String command = "None ";
+		if (imagePath.getText().length() > 1) {
+			command = "changeTurtlePicture ";
+			command += turtleImagePicker.getValue() + " ";
+			command += imagePath.getText();
+		}
+		System.out.println(command);
+		return command;
+	}
 }
