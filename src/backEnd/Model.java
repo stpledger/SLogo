@@ -15,6 +15,7 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	public Model() {
 		myModel = new HashMap<>();
+		myModel.put("Turtle", new Turtle(0,0,0));
 		myPreviousCommands = new HashSet<>();
 	}
 	
@@ -23,7 +24,19 @@ public class Model implements ModelModifiable, ModelViewable {
 		ret.add((Turtle)myModel.get("Turtle"));
 		return ret;
 	}
-
+	
+	protected sLogoValid getVariable(String name) {
+		if (!myModel.containsKey(name)) {
+			sLogoValid ret = new sLogoValid();
+			ret.setError(true);
+			ret.setMyStringValue("This object does not exist.");
+			return ret;
+		}
+		else{
+			return (sLogoValid)myModel.get(name);
+		}
+	}
+	
 	@Override
 	public Set<Turtle> getTurtles() {
 		Set<Turtle> ret = new HashSet<>();
