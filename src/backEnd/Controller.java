@@ -27,6 +27,10 @@ public class Controller{
     public Controller(){
     }
 
+    public sLogoValid create(String command, String[] args){
+        return null;
+    }
+
     /**
      * Creates a new command object based on the type of command and arguments given
      * @param command
