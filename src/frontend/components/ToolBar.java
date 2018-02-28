@@ -39,8 +39,7 @@ public class ToolBar implements ComponentBuilder{
 	}
 	
 	public String getColor() {
-		String col = turtleColor.toString();
-		return col;
+		return turtleColor.toString();
 	}
 	
 	private void setStyle() {

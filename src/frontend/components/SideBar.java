@@ -33,7 +33,7 @@ public class SideBar implements ComponentBuilder {
 	}
 	
 	public void update() {
-		host.getChildren().clear();
+//		host.getChildren().clear();
 		addElement("Trishul", "Var Description");
 		for (String key: displayableModel.getCurrentVariables().keySet()) {
 			addElement(key, displayableModel.getCurrentVariables().get(key).toString());

@@ -50,6 +50,7 @@ public class IDEBuilder implements SceneBuilder{
 	public void update() {
 		console.updateConsoleLanguage(toolbar.getLanguage());
 		turtleDisplay.setBackgroundColor(toolbar.getColor());
+		side.update();
 	}
 
 }

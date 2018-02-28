@@ -1,5 +1,6 @@
 package frontend.components;
 
+import frontend.IDEBuilder;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -7,8 +8,8 @@ import javafx.scene.layout.HBox;
 public class SideBarComponent {
 	
 	public static final double NAME_WIDTH = 100;
-	public static final double DESCRIPTION_WIDTH = 150;
-	public static final double HEIGHT = 50;
+	public static final double DESCRIPTION_WIDTH = IDEBuilder.SIDEBAR_WIDTH - NAME_WIDTH;
+	public static final double HEIGHT = 20;
 	
 	private String name;
 	private String description;
