@@ -36,7 +36,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private static double center_x = DEFAULT_WINDOW_X/2;
 	private static double center_y = DEFAULT_WINDOW_Y/2;
 	private static final Paint ERROR_BOX_COLOR = Color.RED;
-	private static Pane group = new Pane();
+	private static Pane pane = new Pane();
 	private static ArrayList<ImageView> turtles = new ArrayList<ImageView>();
 	private static HashMap<ImageView, Set<Line>> lineMap=  new HashMap<ImageView, Set<Line>>();
 	private static Text errorMessage;
@@ -59,7 +59,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * @see frontend.components.ComponentBuilder#getNode()
 	 */
 	public Node getNode() {
-		return group;
+		return pane;
 	}
 	
 	/**
@@ -74,8 +74,8 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * clearError - removes error bar and text from screen
 	 */
 	public void clearError() {
-		group.getChildren().remove(errorMessage);
-		group.getChildren().remove(redBox);
+		pane.getChildren().remove(errorMessage);
+		pane.getChildren().remove(redBox);
 	}
 	
 	/**
@@ -84,7 +84,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 */
 	public void setBackgroundColor(String hexColor) {
 		Color background_color = Color.valueOf(hexColor);
-		group.setBackground(new Background(new BackgroundFill(background_color, null, null)));
+		pane.setBackground(new Background(new BackgroundFill(background_color, null, null)));
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private void eraseCurrentDisplay(){
 		turtles.clear();
 		lineMap.clear();
-	    group.getChildren().clear();
+	    pane.getChildren().clear();
 	}
 
 	/**
@@ -103,7 +103,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 //	private void drawNewDisplay(Set<Turtle> s, sLogoValid v){
 //	    for(Turtle t : s){
 //	    	ImageView turtleView = drawTurtle(t.getX() + center_x, -1 * t.getY() + center_y, t.getAngle());
-//	    	group.getChildren().add(turtleView);
+//	    	pane.getChildren().add(turtleView);
 //	        if(!t.getLinesSet.isEmpty()){
 //	        	lineMap.put(turtleView, t.getLinesSet);
 //	            drawLines(t.getLinesSet);
@@ -118,7 +118,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 			ImageView tempTurtle = t.getTurtle();
 			tempTurtle.setX(tempTurtle.getX() + center_x - TURTLE_SIZE/2);
 			tempTurtle.setY(-1 * tempTurtle.getY() + center_y - TURTLE_SIZE/2);
-			group.getChildren().add(tempTurtle);
+			pane.getChildren().add(tempTurtle);
 			turtles.add(tempTurtle);
 			if(!t.getTraces().isEmpty()){
 	        	lineMap.put(tempTurtle, t.getTraces());
@@ -128,7 +128,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	}
 
 	/**
-	 * drawLines - adds the turtle's lines to the group
+	 * drawLines - adds the turtle's lines to the pane
 	 * @param Set<Line>
 	 */
 	private void drawLines(Set<Line> lines) {
@@ -138,8 +138,8 @@ public class TurtleDisplayer implements ComponentBuilder{
 			tempLine.setStartY(-1 * l.getStartY() + center_y);
 			tempLine.setEndX(l.getEndX() + center_x);
 			tempLine.setEndY(-1 * l.getEndY() + center_y);
-			group.getChildren().add(tempLine);
-			group.getChildren().get(group.getChildren().size()-1).toBack();
+			pane.getChildren().add(tempLine);
+			pane.getChildren().get(pane.getChildren().size()-1).toBack();
 		}		
 	}
 	
@@ -166,7 +166,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 //		showTurtle();
 //		eraseCurrentDisplay();
 //		ImageView turtleView = drawTurtle(DEFAULT_WINDOW_X/2, DEFAULT_WINDOW_Y/2, 0);
-//		group.getChildren().addAll(turtleView);	
+//		pane.getChildren().addAll(turtleView);	
 //	}
 	
 	/**
@@ -175,7 +175,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private void showTurtle() {
 		if(turtleHidden) {
 			for(ImageView i : turtles) {
-				group.getChildren().add(i);
+				pane.getChildren().add(i);
 			}
 			turtleHidden = false;
 		}
@@ -187,7 +187,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private void hideTurtle() {
 		if(!turtleHidden) {
 			for(ImageView i : turtles) {
-				group.getChildren().remove(i);
+				pane.getChildren().remove(i);
 			}
 			turtleHidden = true;
 		}
@@ -204,8 +204,8 @@ public class TurtleDisplayer implements ComponentBuilder{
 		redBox = new Rectangle(0, DEFAULT_WINDOW_Y - errorMessage.getLayoutBounds().getHeight(), 
 				errorMessage.getLayoutBounds().getWidth(), errorMessage.getLayoutBounds().getHeight());
 		redBox.setFill(ERROR_BOX_COLOR);
-		group.getChildren().add(redBox);
-		group.getChildren().add(errorMessage);	
+		pane.getChildren().add(redBox);
+		pane.getChildren().add(errorMessage);	
 	}
 	
 	/**
@@ -213,17 +213,21 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 */
 	private void testTurtleDisplayer(){
 		Turtle testTurtle = new Turtle(50,50,0);
+		Turtle testTurtle2 = new Turtle(-50,50,0);
 		Set<Turtle> testTurtleSet = new HashSet<Turtle>();
 		testTurtleSet.add(testTurtle);
+		testTurtleSet.add(testTurtle2);
 		sLogoValid valid = new sLogoValid();
 		valid.setError(true);
-		valid.setMyStringValue("test error 9001");
+		valid.setMyStringValue("Test Error: 9001 Much Error Such Wow");
 		draw(testTurtleSet, valid);
 		
 		//line drawing test
 		Set<Line> testLineSet = new HashSet<Line>();
 		Line testLine = new Line(0,0,50,50);
+		Line testLine2 = new Line(0,0,-50,50);
 		testLineSet.add(testLine);
+		testLineSet.add(testLine2);
 		drawLines(testLineSet);
 	}
 }

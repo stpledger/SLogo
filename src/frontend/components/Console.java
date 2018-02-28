@@ -114,21 +114,21 @@ public class Console implements ComponentBuilder{
 	public void run(){
 		turtleDisplayer.clearError();
 		commands = prompt.getText();
-		// TODO: Get language from toolbar
-		interpreter.setLanguage(language);
+		prompt.clear();
+		//interpreter.setLanguage(language);
+		//interpreter = new Interpreter(language);
 	    sLogoValid retMessage = interpreter.interpret(commands);
-	    boolean isError = retMessage.getError();
-	    if(!isError){
-//	        Map<String, Object> variableMap = model.getCurrentVariables();
-//	        Set<Turtle> turtleSet = new HashSet<Turtle>();
-//	        for(String s : variableMap.keySet()){
-//	            if(variableMap.get(s) instanceof Turtle){
-//	                turtleSet.add((Turtle)variableMap.get(s));
-//	            }
-//	        }
-//	        if(!turtleSet.isEmpty()){
-//	            turtleDisplayer.draw(turtleSet, retMessage);
-//	        }  
+	    if(!retMessage.getError()){
+	        Map<String, Object> variableMap = model.getCurrentVariables();
+	        Set<Turtle> turtleSet = new HashSet<Turtle>();
+	        for(String s : variableMap.keySet()){
+	            if(variableMap.get(s) instanceof Turtle){
+	                turtleSet.add((Turtle)variableMap.get(s));
+	            }
+	        }
+	        if(!turtleSet.isEmpty()){
+	            turtleDisplayer.draw(turtleSet, retMessage);
+	        }  
 	    }
 	    else{
 	        turtleDisplayer.displayError(retMessage.getMyStringValue());
