@@ -30,7 +30,7 @@ public class IDEBuilder implements SceneBuilder{
 		ComponentBuilder side = new SideBar(m);
 		ComponentBuilder toolbar = new ToolBar();
 		ComponentBuilder turtleDisplay = new TurtleDisplayer();
-		ComponentBuilder console = new Console(turtleDisplay, m, interpreter);
+		ComponentBuilder console = new Console((TurtleDisplayer)turtleDisplay, m, interpreter);
 		
 		layout.setRight(side.getNode());
 		layout.setTop(toolbar.getNode());
