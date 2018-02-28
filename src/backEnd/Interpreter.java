@@ -8,7 +8,7 @@ public class Interpreter {
 	private String myLanguage = "English";
 	private sLogoValid mySlogoValid;
 	private Properties myLanguageProperties;
-	//private Controller myController;
+	private Controller myController = new Controller();
 	private static final String[] noParamCommands = {"PenUp","PenDown","ShowTurtle","HideTurtle","Home","ClearScreen","XCoordinate","YCoordinate","Heading","IsPenDown","IsShowing","Pi", "GetPenColor", "GetShape", "Stamp", "ClearStamps"};
 	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not", "Minus", "SetBackground", "SetPenColor", "SetPenSize", "SetShape", "SetPalette"};
 	private static final String[] twoParamCommands = {"SetTowards", "SetPosition", "Sum", "Difference", "Product", "Quotient", "Remainder", "Power", "LessThan","GreaterThan", "Equal", "NotEqual", "And", "Or", "MakeVariable"}; 
@@ -61,7 +61,7 @@ public class Interpreter {
 		String[] mySyntax = getCommandSyntax(myCommand);
 		tempSlogoValid = argumentCheck(args, mySyntax);
 		System.out.println("Command Created: " + tempSlogoValid.getMyStringValue());
-		//tempSlogoValid.setMyStringValue(myCommand); //TODO: replace this with something that makes a command object
+		tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
 		return tempSlogoValid;
 	}
 	private sLogoValid argumentCheck(String[] args, String[] expectedSyntax) {
@@ -85,9 +85,11 @@ public class Interpreter {
 				//Check to see if there is an if statement
 					if(myInputArgs.get(0).equals("If")) {
 						myTempArgs.add(myInputArgs.remove(0));
+						String myConditions = "";
 						while(!myInputArgs.isEmpty() && !myInputArgs.get(0).equals("[")) {
-							
+							myConditions += myInputArgs.remove(0)+ " ";
 						}
+						
 						if(myInputArgs.isEmpty()) {
 							mySlogoValid.setError(true);
 							mySlogoValid.setMyStringValue("No list included in If statement");
@@ -100,7 +102,7 @@ public class Interpreter {
 					myTempArgs.add(myInputArgs.remove(0));
 					String myList  = "";
 					while(!myInputArgs.get(0).equals("]")) {
-						myList += " " + myInputArgs.remove(0);
+						myList += myInputArgs.remove(0) + " ";
 					}
 					tempSlogoValid = interpret(myList);
 					if(tempSlogoValid.getError()) {
@@ -192,10 +194,19 @@ public class Interpreter {
 		}
 		return null;
 	}
+	
+	private sLogoValid passToController(String s) {
+		if(s.split(" ").length > 1) {		
+		String[] args = s.split(" ", 2);
+		return myController.create(args[0], args[1]);
+		} else {
+			return myController.create(s, "");
+		}
+	}
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter(new Model());
-		sLogoValid s = i.interpret("if [ fd 50 ]");  
+		sLogoValid s = i.interpret("fd 50");  
 		System.out.println("Final Result: " + s.getMyStringValue());
 		
 	}
