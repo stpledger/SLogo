@@ -82,9 +82,10 @@ public class Interpreter {
 					if(tempSlogoValid.getError()) {
 						return tempSlogoValid;
 					}
+					
 						//System.out.println("MyList: " + myList);
-					myTempArgs.add(myInputArgs.remove(0));
 					myTempArgs.add(tempSlogoValid.getMyStringValue());
+					myTempArgs.add(myInputArgs.remove(0));
 					
 						//System.out.println(myTempArgs.toString());
 				}
@@ -170,7 +171,7 @@ public class Interpreter {
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter("English");
-		sLogoValid s = i.interpret("repeat 6 [ fd bk lt 50 ]");  
+		sLogoValid s = i.interpret("repeat 6 [ fd lt 50 ]");  
 		System.out.println("Final Result: " + s.getMyStringValue());
 		
 	}
