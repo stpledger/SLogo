@@ -1,14 +1,15 @@
 package backEnd.commands;
 
 import backEnd.sLogoValid;
-import model.*;
+import backEnd.Model;
+import backEnd.ModelModifiable;
 
 public class VariableCommand extends CommandGroup {
 	private ModelModifiable myModel;
 
-	public VariableCommand(String command, String[] args) {
+	public VariableCommand(String command, String[] args, ModelModifiable model) {
 		super(command, args);
-		myModel = new Model();
+		myModel = model;
 		this.mySlogoValid = run(command, args);
 		// TODO Auto-generated constructor stub
 	}
