@@ -85,9 +85,11 @@ public class Interpreter {
 				//Check to see if there is an if statement
 					if(myInputArgs.get(0).equals("If")) {
 						myTempArgs.add(myInputArgs.remove(0));
+						String myConditions = "";
 						while(!myInputArgs.isEmpty() && !myInputArgs.get(0).equals("[")) {
-							
+							myConditions += myInputArgs.remove(0)+ " ";
 						}
+						
 						if(myInputArgs.isEmpty()) {
 							mySlogoValid.setError(true);
 							mySlogoValid.setMyStringValue("No list included in If statement");
@@ -195,7 +197,7 @@ public class Interpreter {
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter(new Model());
-		sLogoValid s = i.interpret("if [ fd 50 ]");  
+		sLogoValid s = i.interpret("if 50 == 50 [ fd 50 ]");  
 		System.out.println("Final Result: " + s.getMyStringValue());
 		
 	}
