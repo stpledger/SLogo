@@ -118,18 +118,6 @@ public class ToolBar implements ComponentBuilder{
 		
 	}
 	
-//	private boolean isImagePath(String path) {
-//		String mimetype = "Invalid";
-//		try {
-//			mimetype = Files.probeContentType(f.toPath());
-//			if (mimetype == null) mimetype = "Invalid";
-//		} catch (IOException e1) {
-//			return false
-//		}
-//		if (mimetype.contains("image")) {
-//		    builder.update();
-//		}
-//	}
 	
 	/*
 	 * Update the toolbar to show possible turtles. Should receive modelViewable that is used by the sidebar
@@ -144,7 +132,7 @@ public class ToolBar implements ComponentBuilder{
 	}
 	
 	/*
-	 * Get the image path currently inside 
+	 * Get the image path currently inside imagePath
 	 */
 	public String getCurrentImageSelected() {
 		return imagePath.getText();

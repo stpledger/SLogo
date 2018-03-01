@@ -1,21 +1,26 @@
 package frontend.components;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
+
 import backEnd.Turtle;
 import backEnd.sLogoValid;
 import frontend.IDEBuilder;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Paint;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -176,13 +181,16 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * Change all turtle's images
 	 */
 	public void changeImage(String path) {
+
 		try {
-			Image im = new Image(getClass().getClassLoader().getResourceAsStream(path));
+			File f = new File(path);
+			BufferedImage imbuffer = ImageIO.read(f);
+			Image im = SwingFXUtils.toFXImage(imbuffer, null);
 			for(ImageView i : turtles) {
 				i.setImage(im);
 			}
 		} catch(Exception e) {
-			
+			System.out.println("Failed to change images");
 		}
 		
 	}
