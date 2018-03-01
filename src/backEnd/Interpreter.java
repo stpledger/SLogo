@@ -112,7 +112,6 @@ public class Interpreter {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		ArrayList<String> myInputArgs = new ArrayList<String>();
 		myInputArgs.addAll(Arrays.asList(args));
-		ArrayList<String> myTempArgs = new ArrayList<String>();
 		
 		//remove the command name and the 
 		myCommand = myInputArgs.remove(0);
@@ -163,8 +162,10 @@ public class Interpreter {
 				return tempSlogoValid;
 			}
 		}
+		if(!myInputArgs.isEmpty()) {
+			tempSlogoValid = leftOverCheck(myInputArgs);
+		}
 		return tempSlogoValid;
-		//TODO: Check for leftover arguments
 		
 	}
 
@@ -209,7 +210,9 @@ public class Interpreter {
 				tempSlogoValid.setMyDoubleValue(0);
 				return tempSlogoValid;
 			}
-			//TODO: Implement a check for leftover strings
+			if(!myInputArgs.isEmpty()) {
+				tempSlogoValid = leftOverCheck(myInputArgs);
+			}
 		return tempSlogoValid;
 	}
 
@@ -296,7 +299,6 @@ public class Interpreter {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		ArrayList<String> myInputArgs = new ArrayList<String>();
 		myInputArgs.addAll(Arrays.asList(args));
-		ArrayList<String> myTempArgs = new ArrayList<String>();
 		int myTimes = 0;
 		//Remove 'Repeat'
 		myInputArgs.remove(0);
@@ -335,6 +337,9 @@ public class Interpreter {
 				return tempSlogoValid;
 			}
 			System.out.println(tempSlogoValid.getMyStringValue());
+		}
+		if(!myInputArgs.isEmpty()) {
+			tempSlogoValid = leftOverCheck(myInputArgs);
 		}
 		return tempSlogoValid;
 
@@ -402,6 +407,7 @@ public class Interpreter {
 					myTempArgs.add(myInputArgs.remove(0));
 				}
 			}
+			
 			//Interpret secondary arguments
 			if(myInputArgs.size() > 0) {
 					//System.out.println("Second Argument Detected");
@@ -459,5 +465,19 @@ public class Interpreter {
 		} else {
 			return myController.create(s, "");
 		}
+	}
+	
+	private sLogoValid leftOverCheck(ArrayList<String> args) {
+		ArrayList<String> myInputArgs = args;
+		sLogoValid tempSlogoValid = new sLogoValid();
+		if(!myInputArgs.isEmpty()) {
+			String concat = "";
+			while(!myInputArgs.isEmpty()) {
+				concat += myInputArgs.remove(0) + " ";
+			}
+			tempSlogoValid = interpret(concat);
+		}
+		return mySlogoValid;
+		
 	}
 }
