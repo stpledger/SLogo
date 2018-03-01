@@ -16,7 +16,7 @@ public class Interpreter {
 	private static final String[] twoParamCommands = {"SetTowards", "SetPosition", "Sum", "Difference", "Product", "Quotient", "Remainder", "Power", "LessThan","GreaterThan", "Equal", "NotEqual", "And", "Or", "MakeVariable"}; 
 	//TODO: Add multiple turtle commands
 	
-	public Interpreter( ModelModifiable m) {
+	public Interpreter(ModelModifiable m) {
 		mySlogoValid = new sLogoValid();
 		myModelModifiable = m;
 		myController = new Controller(m);
