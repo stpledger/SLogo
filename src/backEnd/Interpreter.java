@@ -9,7 +9,7 @@ public class Interpreter {
 	private sLogoValid mySlogoValid;
 	private Properties myLanguageProperties;
 	private Properties myShortCommands;
-	private Controller myController = new Controller();
+	private Controller myController;
 	private static final String[] noParamCommands = {"PenUp","PenDown","ShowTurtle","HideTurtle","Home","ClearScreen","XCoordinate","YCoordinate","Heading","IsPenDown","IsShowing","Pi", "GetPenColor", "GetShape", "Stamp", "ClearStamps"};
 	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not", "Minus", "SetBackground", "SetPenColor", "SetPenSize", "SetShape", "SetPalette"};
 	private static final String[] twoParamCommands = {"SetTowards", "SetPosition", "Sum", "Difference", "Product", "Quotient", "Remainder", "Power", "LessThan","GreaterThan", "Equal", "NotEqual", "And", "Or", "MakeVariable"}; 
@@ -62,9 +62,13 @@ public class Interpreter {
 			tempSlogoValid.setError(true);
 			return tempSlogoValid;
 		} 
+		//Convert the command to English
 		String myCommand = myLanguageProperties.getProperty(args[0]);
+		//Convert the English command to shorthand
 		args[0] = myShortCommands.getProperty(myCommand);
+		//Get a string array with the syntax
 		String[] mySyntax = getCommandSyntax(myCommand);
+		//C
 		tempSlogoValid = argumentCheck(args, mySyntax);
 		System.out.println("Command Created: " + tempSlogoValid.getMyStringValue());
 		tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
@@ -95,7 +99,7 @@ public class Interpreter {
 						while(!myInputArgs.isEmpty() && !myInputArgs.get(0).equals("[")) {
 							myConditions += myInputArgs.remove(0)+ " ";
 						}
-						passToController("If ");
+						tempSlogoValid = passToController("If " + myConditions);
 						if(myInputArgs.isEmpty()) {
 							mySlogoValid.setError(true);
 							mySlogoValid.setMyStringValue("No list included in If statement");
@@ -139,9 +143,8 @@ public class Interpreter {
 					for(int i = 0; i < internalCommandSyntax.length; i++) {
 						internalCommandSyntax[i] = myInputArgs.remove(0);	
 					}
-					System.out.println("Send to interpreter: " + tempSlogoValid.getMyStringValue());
 					tempSlogoValid = interpret(tempSlogoValid.getMyStringValue());
-					tempSlogoValid.setMyStringValue("res");
+					//TODO: Make sure this sets the tempSlogoValid to the value of an internal command
 						if(tempSlogoValid.getError()) {
 							return tempSlogoValid;
 						}
@@ -215,12 +218,5 @@ public class Interpreter {
 		} else {
 			return myController.create(s, "");
 		}
-	}
-
-	public static void main(String[] args) {
-		Interpreter i = new Interpreter(new Model());
-		sLogoValid s = i.interpret("if 20 == 10 [ forward 50 ]");  
-		System.out.println("Final Result: " + s.getMyStringValue());
-		
 	}
 }
