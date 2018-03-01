@@ -79,14 +79,12 @@ public class Interpreter {
 							return tempSlogoValid;
 						}					
 					
-				} else if(args[0].equals("for")) {
-					tempSlogoValid = interpretFor(args);
+				} else if(args[0].equals("for") || args[0].equals("dotimes")) {
+					tempSlogoValid = interpretVarLoop(args);
 						if(tempSlogoValid.getError()) {
 							return tempSlogoValid;
 						}
-				} else if (args[0].equals("dottimes")){
-					//TODO: Implemnet DotTimes method
-				}else {
+				} else {
 		//Get a string array with the syntax
 		String[] mySyntax = getCommandSyntax(myCommand);
 		tempSlogoValid = argumentCheck(args, mySyntax);
@@ -100,9 +98,10 @@ public class Interpreter {
 				return tempSlogoValid;
 	}
 
-	private sLogoValid interpretFor(String[] args) {
+	private sLogoValid interpretVarLoop(String[] args) {
 		//Setup Instance Variables
 		String myVar;
+		String myCommand;
 		double myStart;
 		double myEnd;
 		double myIncrement;
@@ -112,14 +111,21 @@ public class Interpreter {
 		myInputArgs.addAll(Arrays.asList(args));
 		ArrayList<String> myTempArgs = new ArrayList<String>();
 		
-		//remove the command name and the [
+		//remove the command name and the 
+		myCommand = myInputArgs.remove(0);
 		myInputArgs.remove(0);
-		myInputArgs.remove(0);
-		
 		myVar = myInputArgs.remove(0);
+		
+		//Check which VarLoop type we're using
+		if(myCommand.equals("for")) {
 		myStart =  Double.parseDouble(myInputArgs.remove(0));
 		myEnd = Double.parseDouble(myInputArgs.remove(0));
 		myIncrement = Double.parseDouble(myInputArgs.remove(0));
+		} else {
+		myEnd = Double.parseDouble(myInputArgs.remove(0));
+		myStart = 0;
+		myIncrement = 1;
+		}
 		
 		//Check to make sure we're only dealing with simple info
 		if(!myInputArgs.get(0).equals("]")) {
@@ -438,7 +444,7 @@ public class Interpreter {
 				return syntax;
 			}
 		}
-		if(myCommand.equals("DotTimes") || myCommand.equals("For")) {
+		if(myCommand.equals("DoTimes") || myCommand.equals("For")) {
 			String[] syntax = {"com","[","mul","]","[","mul","]" };
 			return syntax;
 		}
