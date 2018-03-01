@@ -84,6 +84,8 @@ public class Interpreter {
 						if(tempSlogoValid.getError()) {
 							return tempSlogoValid;
 						}
+				} else if (args[0].equals("dottimes")){
+					//TODO: Implemnet DotTimes method
 				}else {
 		//Get a string array with the syntax
 		String[] mySyntax = getCommandSyntax(myCommand);
@@ -172,7 +174,6 @@ public class Interpreter {
 			}
 			myInputArgs.remove(0);
 			if(checkCondition(myCondition).getMyDoubleValue() > 0) {
-				System.out.println("yah");
 				while(!myInputArgs.get(0).equals("]")) {
 					myCommands += myInputArgs.remove(0) + " ";
 				}
@@ -373,16 +374,6 @@ public class Interpreter {
 					myTempArgs.add(tempSlogoValid.getMyStringValue());
 					myTempArgs.add(myInputArgs.remove(0));
 						//System.out.println(myTempArgs.toString());
-				}
-				
-				if(myTempArgs.get(0).equals("DotTimes") || myTempArgs.get(0).equals("For") || myTempArgs.get(0).equals("IfElse") || myTempArgs.get(0).equals("MakeUserInstruction")){
-					if(myInputArgs.equals("[")) {
-						myTempArgs.add(myInputArgs.remove(0));
-						String myList = "";
-						while(!myInputArgs.get(0).equals("]")) {
-							myList += myInputArgs.remove(0) + " ";
-						}
-					}
 				}
 				
 				
