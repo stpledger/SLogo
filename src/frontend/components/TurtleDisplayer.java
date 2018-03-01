@@ -174,10 +174,16 @@ public class TurtleDisplayer implements ComponentBuilder{
 	/**
 	 * Change all turtle's images
 	 */
-	public void changeImage(Image im) {
-		for(ImageView i : turtles) {
-			i.setImage(im);
+	public void changeImage(String path) {
+		try {
+			Image im = new Image(getClass().getClassLoader().getResourceAsStream(path));
+			for(ImageView i : turtles) {
+				i.setImage(im);
+			}
+		} catch(Exception e) {
+			
 		}
+		
 	}
 
 	/**
