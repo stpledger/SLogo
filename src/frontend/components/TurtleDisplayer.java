@@ -42,14 +42,14 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private static Text errorMessage;
 	private static Rectangle redBox;
 	private static Boolean turtleHidden = false;
-	
+
 	/**
 	 * TurtleDisplayer
 	 * sets background color, resets turtle to starting position, starts animation keyframe
 	 */
 	public TurtleDisplayer() {
 		setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
-		reset();	
+		reset();
 		//testTurtleDisplayer();
 	}
 
@@ -61,15 +61,15 @@ public class TurtleDisplayer implements ComponentBuilder{
 	public Node getNode() {
 		return pane;
 	}
-	
+
 	/**
 	 * draw - draws a new turtle from a given turtle set
 	 */
 	public void draw(Set<Turtle> s, sLogoValid valid){
-	    eraseCurrentDisplay();
-	    drawNewDisplay(s, valid);
+		eraseCurrentDisplay();
+		drawNewDisplay(s, valid);
 	}
-	
+
 	/**
 	 * clearError - removes error bar and text from screen
 	 */
@@ -77,7 +77,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 		pane.getChildren().remove(errorMessage);
 		pane.getChildren().remove(redBox);
 	}
-	
+
 	/**
 	 * setBackgroundColor - sets the background color with input string in format "#9999FF"
 	 * @param hexColor (string of format "#9999FF" for the color)
@@ -86,30 +86,30 @@ public class TurtleDisplayer implements ComponentBuilder{
 		Color background_color = Color.valueOf(hexColor);
 		pane.setBackground(new Background(new BackgroundFill(background_color, null, null)));
 	}
-	
+
 	/**
 	 * eraseCurrentDisplay - erases the current display completely
 	 */
 	private void eraseCurrentDisplay(){
 		turtles.clear();
 		lineMap.clear();
-	    pane.getChildren().clear();
+		pane.getChildren().clear();
 	}
 
 	/**
 	 * drawNewDisplay - draws new display
 	 * @param Set<turtle>
 	 */
-//	private void drawNewDisplay(Set<Turtle> s, sLogoValid v){
-//	    for(Turtle t : s){
-//	    	ImageView turtleView = drawTurtle(t.getX() + center_x, -1 * t.getY() + center_y, t.getAngle());
-//	    	pane.getChildren().add(turtleView);
-//	        if(!t.getLinesSet.isEmpty()){
-//	        	lineMap.put(turtleView, t.getLinesSet);
-//	            drawLines(t.getLinesSet);
-//	        }
-//	    }
-//	}
+	//	private void drawNewDisplay(Set<Turtle> s, sLogoValid v){
+	//	    for(Turtle t : s){
+	//	    	ImageView turtleView = drawTurtle(t.getX() + center_x, -1 * t.getY() + center_y, t.getAngle());
+	//	    	pane.getChildren().add(turtleView);
+	//	        if(!t.getLinesSet.isEmpty()){
+	//	        	lineMap.put(turtleView, t.getLinesSet);
+	//	            drawLines(t.getLinesSet);
+	//	        }
+	//	    }
+	//	}
 	private void drawNewDisplay(Set<Turtle> s, sLogoValid v){
 		if(v.getError()){
 			displayError(v.getMyStringValue());
@@ -123,9 +123,9 @@ public class TurtleDisplayer implements ComponentBuilder{
 			pane.getChildren().add(tempTurtle);
 			turtles.add(tempTurtle);
 			if(!t.getTraces().isEmpty()){
-	        	lineMap.put(tempTurtle, t.getTraces());
-	            drawLines(t.getTraces());
-	        }
+				lineMap.put(tempTurtle, t.getTraces());
+				drawLines(t.getTraces());
+			}
 		}
 	}
 
@@ -144,7 +144,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 			pane.getChildren().get(pane.getChildren().size()-1).toBack();
 		}		
 	}
-	
+
 	/**
 	 * drawTurtle - draws a single turtle at specified coordinates and angle
 	 * @param x (x location)
@@ -160,7 +160,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 		turtles.add(turtleView);
 		return turtleView;
 	}
-	
+
 	/**
 	 * resets turtle to default position and clears all lines
 	 */
@@ -170,7 +170,16 @@ public class TurtleDisplayer implements ComponentBuilder{
 		ImageView turtleView = drawTurtle(DEFAULT_WINDOW_X/2, DEFAULT_WINDOW_Y/2, 0);
 		pane.getChildren().addAll(turtleView);	
 	}
-	
+
+	/**
+	 * Change all turtle's images
+	 */
+	public void changeImage(Image im) {
+		for(ImageView i : turtles) {
+			i.setImage(im);
+		}
+	}
+
 	/**
 	 * showTurtle - shows the turtle if hidden
 	 */
@@ -182,7 +191,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 			turtleHidden = false;
 		}
 	}
-	
+
 	/**
 	 * hideTurtle - hides the turtle if visible
 	 */
@@ -194,7 +203,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 			turtleHidden = true;
 		}
 	}
-	
+
 	/**
 	 * Displays given error message
 	 * @param message
@@ -209,7 +218,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 		pane.getChildren().add(redBox);
 		pane.getChildren().add(errorMessage);	
 	}
-	
+
 	/**
 	 * Tests the program with other part's components
 	 */
@@ -223,7 +232,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 		valid.setError(true);
 		valid.setMyStringValue("Test Error: 9001 Much Error Such Wow");
 		draw(testTurtleSet, valid);
-		
+
 		//line drawing test
 		Set<Line> testLineSet = new HashSet<Line>();
 		Line testLine = new Line(0,0,50,50);
