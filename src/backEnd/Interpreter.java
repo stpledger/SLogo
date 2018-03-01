@@ -10,12 +10,15 @@ public class Interpreter {
 	private Properties myLanguageProperties;
 	private Properties myShortCommands;
 	private Controller myController;
+	private ModelModifiable myModelModifiable;
 	private static final String[] noParamCommands = {"PenUp","PenDown","ShowTurtle","HideTurtle","Home","ClearScreen","XCoordinate","YCoordinate","Heading","IsPenDown","IsShowing","Pi", "GetPenColor", "GetShape", "Stamp", "ClearStamps"};
 	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not", "Minus", "SetBackground", "SetPenColor", "SetPenSize", "SetShape", "SetPalette"};
 	private static final String[] twoParamCommands = {"SetTowards", "SetPosition", "Sum", "Difference", "Product", "Quotient", "Remainder", "Power", "LessThan","GreaterThan", "Equal", "NotEqual", "And", "Or", "MakeVariable"}; 
 	//TODO: Add multiple turtle commands
+	
 	public Interpreter( ModelModifiable m) {
 		mySlogoValid = new sLogoValid();
+		myModelModifiable = m;
 		myController = new Controller(m);
 		//Try to import the language properties
 		try {
@@ -87,7 +90,7 @@ public class Interpreter {
 				} else {
 		//Get a string array with the syntax
 		String[] mySyntax = getCommandSyntax(myCommand);
-		tempSlogoValid = argumentCheck(args, mySyntax);
+		tempSlogoValid = interpretBasicArgs(args, mySyntax);
 			if(tempSlogoValid.getError()) {
 				System.out.println("Error: " + tempSlogoValid.getMyStringValue());
 				return tempSlogoValid;
@@ -337,7 +340,7 @@ public class Interpreter {
 
 	}
 
-	private sLogoValid argumentCheck(String[] args, String[] expectedSyntax) {
+	private sLogoValid interpretBasicArgs(String[] args, String[] expectedSyntax) {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		int myExpectedSyntax = expectedSyntax.length;
 		ArrayList<String> myInputArgs = new ArrayList<String>();
@@ -387,7 +390,7 @@ public class Interpreter {
 				if(!myInputArgs.isEmpty() && myLanguageProperties.containsKey(myInputArgs.get(0))) {
 					System.out.println("Internal loop: " + myInputArgs.toString());
 					String[] internalCommandSyntax = getCommandSyntax(myLanguageProperties.getProperty(myInputArgs.get(0)));
-					tempSlogoValid = argumentCheck(myInputArgs.stream().toArray(String[]::new), internalCommandSyntax);
+					tempSlogoValid = interpretBasicArgs(myInputArgs.stream().toArray(String[]::new), internalCommandSyntax);
 					for(int i = 0; i < internalCommandSyntax.length; i++) {
 						internalCommandSyntax[i] = myInputArgs.remove(0);	
 					}
@@ -443,10 +446,6 @@ public class Interpreter {
 				String[] syntax = {"com", "arg", "arg"};
 				return syntax;
 			}
-		}
-		if(myCommand.equals("DoTimes") || myCommand.equals("For")) {
-			String[] syntax = {"com","[","mul","]","[","mul","]" };
-			return syntax;
 		}
 		if(myCommand.equals("MakeUserInstruction")) {
 			String[] syntax = {"com", "arg","[","mul","]","[","mul","]"};
