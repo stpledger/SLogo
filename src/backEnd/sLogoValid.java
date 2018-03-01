@@ -52,4 +52,8 @@ public class sLogoValid {
 		}
 	}
 	
+	public String toString() {
+		if (myDoubleValue != null) return "" + myDoubleValue;
+		return getMyStringValue();
+	}
 }
