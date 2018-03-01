@@ -55,28 +55,227 @@ public class Interpreter {
 			//System.out.println("Initial String: " + s);
 		sLogoValid tempSlogoValid = new sLogoValid();
 		String[] args = s.trim().split("\\s+");
-			//System.out.println(args[0]);
 		//Check to see if the first argument is valid
 		if(!myLanguageProperties.containsKey(args[0])) {
 			tempSlogoValid.setMyStringValue("Invalid command: " + args[0]);
 			tempSlogoValid.setError(true);
 			return tempSlogoValid;
 		} 
+		//Convert the command to English
 		String myCommand = myLanguageProperties.getProperty(args[0]);
+		//Convert the English command to shorthand
 		args[0] = myShortCommands.getProperty(myCommand);
+			//Check for advanced syntax
+				if(args[0].equals("repeat")) {
+					tempSlogoValid = interpretRepeat(args);
+						if(tempSlogoValid.getError()) {
+							return tempSlogoValid;
+						}
+					//tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
+					return tempSlogoValid;
+				} else if(args[0].equals("if") || args[0].equals("ifelse")) {
+						tempSlogoValid = interpretBoolean(args);
+						if(tempSlogoValid.getError()) {
+							return tempSlogoValid;
+						}					
+					
+				}else {
+		//Get a string array with the syntax
 		String[] mySyntax = getCommandSyntax(myCommand);
 		tempSlogoValid = argumentCheck(args, mySyntax);
-		System.out.println("Command Created: " + tempSlogoValid.getMyStringValue());
+			if(tempSlogoValid.getError()) {
+				System.out.println("Error: " + tempSlogoValid.getMyStringValue());
+				return tempSlogoValid;
+			}
 		tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
 		return tempSlogoValid;
+		}
+				return tempSlogoValid;
 	}
+	private sLogoValid interpretBoolean(String[] args) {
+		//Setup Instance Variables
+			String myCondition = "";
+			String myCommands = "";
+			sLogoValid tempSlogoValid = new sLogoValid();
+			ArrayList<String> myInputArgs = new ArrayList<String>();
+			myInputArgs.addAll(Arrays.asList(args));
+			ArrayList<String> myTempArgs = new ArrayList<String>();
+		//Determine the boolean
+			myTempArgs.add(myInputArgs.remove(0));
+			while(!myInputArgs.get(0).equals("[")) {
+				myCondition += myInputArgs.remove(0) + " ";
+			}
+			myInputArgs.remove(0);
+			if(checkCondition(myCondition).getMyDoubleValue() > 0) {
+				while(!myInputArgs.get(0).equals("]")) {
+					myCommands += myInputArgs.remove(0) + " ";
+				}
+				tempSlogoValid = interpret(myCommands);
+				
+			} else if(myTempArgs.get(0).equals("ifelse")) {
+				System.out.println("else");
+				//Skip to the second list
+				while(!myInputArgs.get(0).equals("]")) {
+					myInputArgs.remove(0);
+				}
+				myInputArgs.remove(0);
+				//Make sure there is a second list
+				if(!myInputArgs.get(0).equals("[")){
+					tempSlogoValid.setError(true);
+					tempSlogoValid.setMyStringValue("ifelse: Expected a second list of Commands");
+					return tempSlogoValid;
+				}
+				myInputArgs.remove(0);
+				while(!myInputArgs.get(0).equals("]")) {
+					myCommands += myInputArgs.remove(0) + " ";
+				}
+				tempSlogoValid = interpret(myCommands);
+			} else {
+				tempSlogoValid.setMyDoubleValue(0);
+				return tempSlogoValid;
+			}
+			//TODO: Implement a check for leftover strings
+		return tempSlogoValid;
+	}
+
+	private sLogoValid checkCondition(String myCondition) {
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = new ArrayList<String>();
+		myInputArgs.addAll(Arrays.asList(myCondition.trim().split(" ")));
+		System.out.println("BooleanInputArgs: " + myInputArgs.toString());
+		String conditionA = "";
+		String comparator = "";
+		String conditionB = "";
+		//Find all the parts of the first condition
+		while(!myInputArgs.get(0).equals("lessp") && 
+				!myInputArgs.get(0).equals("greaterp") &&
+				!myInputArgs.get(0).equals("equalp") &&
+				!myInputArgs.get(0).equals("notequalp")) {
+			conditionA += myInputArgs.remove(0) + " "; 
+		} 
+		if(conditionA.split(" ").length > 1) {
+			tempSlogoValid = interpret(conditionA);
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+			conditionA = tempSlogoValid.getMyStringValue();
+		}
+		comparator = myInputArgs.remove(0);
+		if(!myInputArgs.get(0).equals("lessp") && 
+				!myInputArgs.get(0).equals("greaterp") &&
+				!myInputArgs.get(0).equals("equalp") &&
+				!myInputArgs.get(0).equals("notequalp")) {
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("comparator " + comparator + " is invalid");
+			return tempSlogoValid;
+		}
+		while(!myInputArgs.isEmpty()) {
+			conditionB += myInputArgs.remove(0);
+		}
+		if(conditionB.split(" ").length > 1) {
+			tempSlogoValid = interpret(conditionB);
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+			conditionB = tempSlogoValid.getMyStringValue();
+		}
+		switch(comparator) {
+		case "lessp":
+			if(Double.parseDouble(conditionA) < Double.parseDouble(conditionB)) {
+				tempSlogoValid.setBoolean(true);
+				return tempSlogoValid;
+			} else {
+				tempSlogoValid.setBoolean(false);
+				return tempSlogoValid;
+			}
+		case "greaterp":
+			if(Double.parseDouble(conditionA) > Double.parseDouble(conditionB)) {
+				tempSlogoValid.setBoolean(true);
+				return tempSlogoValid;
+			} else {
+				tempSlogoValid.setBoolean(false);
+				return tempSlogoValid;
+			}
+		case "equalp":
+			if(Double.parseDouble(conditionA) == Double.parseDouble(conditionB)) {
+				tempSlogoValid.setBoolean(true);
+				return tempSlogoValid;
+			} else {
+				tempSlogoValid.setBoolean(false);
+				return tempSlogoValid;
+			}
+		case "notequalp":
+			if(Double.parseDouble(conditionA) != Double.parseDouble(conditionB)) {
+				tempSlogoValid.setBoolean(true);
+				return tempSlogoValid;
+			} else {
+				tempSlogoValid.setBoolean(false);
+				return tempSlogoValid;
+			}
+		default:
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("Could not check boolean statements");
+			return tempSlogoValid;
+		}
+		
+		
+	}
+
+	private sLogoValid interpretRepeat(String[] args) {
+		//Setup Instance Variables
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = new ArrayList<String>();
+		myInputArgs.addAll(Arrays.asList(args));
+		ArrayList<String> myTempArgs = new ArrayList<String>();
+		int myTimes = 0;
+		//Remove 'Repeat'
+		myInputArgs.remove(0);
+		//Check for valid loop number
+		String myNum = "";
+		while(!myInputArgs.get(0).equals("[")) {
+			myNum += myInputArgs.remove(0) + " ";
+		}
+		myInputArgs.remove(0);
+		//check to see if there was only one value
+		if(myNum.split(" ").length > 1) {
+			tempSlogoValid = interpret(myNum);
+			//TODO: IT's possible the line below needs to check to see if there is a double
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+		myTimes = (int) tempSlogoValid.getMyDoubleValue();
+		} else {
+			myTimes = (int) Double.parseDouble(myNum);
+		}
+		if(myTimes == 0) {
+			tempSlogoValid.setMyDoubleValue(0);
+			return tempSlogoValid;
+		}
+		//Parse out the commands
+		String myCommands = "";
+		while(!myInputArgs.get(0).equals("]")){
+			myCommands += myInputArgs.remove(0) + " "; 
+		}
+		myInputArgs.remove(0);
+		//Loop time
+		System.out.println(myTimes);
+		for(int i = 0; i < myTimes; i++) {
+			tempSlogoValid = interpret(myCommands);
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+			System.out.println(tempSlogoValid.getMyStringValue());
+		}
+		return tempSlogoValid;
+
+	}
+
 	private sLogoValid argumentCheck(String[] args, String[] expectedSyntax) {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		int myExpectedSyntax = expectedSyntax.length;
 		ArrayList<String> myInputArgs = new ArrayList<String>();
 		myInputArgs.addAll(Arrays.asList(args));
 		ArrayList<String> myTempArgs = new ArrayList<String>();
-		System.out.println("Input: "+ myInputArgs.toString());
 			//Add the initial command
 			myTempArgs.add(myInputArgs.remove(0));
 			//Concatenate all the arguments needed for the primary command	
@@ -88,20 +287,16 @@ public class Interpreter {
 					return mySlogoValid;
 				}
 				
-				//Check to see if there is an if statement
-					if(myInputArgs.get(0).equals("If")) {
-						myTempArgs.add(myInputArgs.remove(0));
-						String myConditions = "";
-						while(!myInputArgs.isEmpty() && !myInputArgs.get(0).equals("[")) {
-							myConditions += myInputArgs.remove(0)+ " ";
-						}
-						passToController("If ");
-						if(myInputArgs.isEmpty()) {
-							mySlogoValid.setError(true);
-							mySlogoValid.setMyStringValue("No list included in If statement");
-							return mySlogoValid;
-						}
+				//Check to see if we only need one more argument
+				if(myTempArgs.size() + 1 == myExpectedSyntax && myInputArgs.size() == 1) {
+					myTempArgs.add(myInputArgs.remove(0));
+					String concatArgs = "";
+					for(String k : myTempArgs) {
+						concatArgs += k + " ";
 					}
+					tempSlogoValid.setMyStringValue(concatArgs);
+					return tempSlogoValid;
+				}
 				
 				//Check to see if there is an internal list
 				if(myInputArgs.get(0).equals("[")) {
@@ -139,9 +334,8 @@ public class Interpreter {
 					for(int i = 0; i < internalCommandSyntax.length; i++) {
 						internalCommandSyntax[i] = myInputArgs.remove(0);	
 					}
-					System.out.println("Send to interpreter: " + tempSlogoValid.getMyStringValue());
 					tempSlogoValid = interpret(tempSlogoValid.getMyStringValue());
-					tempSlogoValid.setMyStringValue("res");
+					//TODO: Make sure this sets the tempSlogoValid to the value of an internal command
 						if(tempSlogoValid.getError()) {
 							return tempSlogoValid;
 						}
@@ -193,7 +387,7 @@ public class Interpreter {
 				return syntax;
 			}
 		}
-		if(myCommand.equals("Repeat") || myCommand.equals("If")) {
+		if(myCommand.equals("If")) {
 			String[] syntax = {"com", "arg", "[","mul","]"};
 			return syntax;
 		}
@@ -215,12 +409,5 @@ public class Interpreter {
 		} else {
 			return myController.create(s, "");
 		}
-	}
-
-	public static void main(String[] args) {
-		Interpreter i = new Interpreter(new Model());
-		sLogoValid s = i.interpret("if 20 == 10 [ forward 50 ]");  
-		System.out.println("Final Result: " + s.getMyStringValue());
-		
 	}
 }

@@ -25,9 +25,9 @@ public class VariableCommand extends CommandGroup {
 	private sLogoValid setVar(String[] args){
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(Double.parseDouble(args[1]));
-		/*if (myModel.getVariable(args[0]).getError()){
+		if (myModel.getVariable(args[0]).getError()){
 			myModel.deleteVariable(args[0]);
-		}*/
+		}
 		myModel.addVariable(args[0], temp);
 		return null;
 	}
