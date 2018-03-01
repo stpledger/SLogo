@@ -50,6 +50,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	public TurtleDisplayer() {
 		setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
 		reset();
+		//changeImage("POKEturtleScaled.png");
 		//testTurtleDisplayer();
 	}
 
