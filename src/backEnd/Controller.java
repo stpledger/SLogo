@@ -59,7 +59,7 @@ public class Controller{
            newCommand = new VariableCommand(command, arguments, myModel);
        }
        else if(USER_DEFINED_COMMANDS.contains(command)){
-    	   newCommand = new UserDefinedCommand(command, arguments, myModel);
+    	   newCommand = new UserDefinedCommand(command, arguments, myModel         );
        }
        else{
     	   sLogoValid noCommand = new sLogoValid();

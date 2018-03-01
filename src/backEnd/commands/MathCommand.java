@@ -13,7 +13,7 @@ public class MathCommand extends CommandGroup {
 
 	@Override
 	public sLogoValid execute(){
-		return mySlogoValid;
+		return this.mySlogoValid;
 	}
 
 	private sLogoValid run(String command, String[] args){
