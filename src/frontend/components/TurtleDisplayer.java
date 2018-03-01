@@ -27,7 +27,7 @@ import javafx.scene.text.Text;
  *
  */
 public class TurtleDisplayer implements ComponentBuilder{
-	//private static final String TURTLE_IMAGE = "turtleScaled.png";
+	private static final String TURTLE_IMAGE = "turtleScaled.png";
 	private static final String DEFAULT_BACKGROUND_COLOR = "#9999FF";
 	private static final double TURTLE_SIZE = 50;
 	private static final double DEFAULT_WINDOW_X = IDEBuilder.DISPLAY_WIDTH;
@@ -49,8 +49,8 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 */
 	public TurtleDisplayer() {
 		setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
-		//reset();	
-		testTurtleDisplayer();
+		reset();	
+		//testTurtleDisplayer();
 	}
 
 	/**
@@ -116,6 +116,8 @@ public class TurtleDisplayer implements ComponentBuilder{
 		}
 		for(Turtle t : s){
 			ImageView tempTurtle = t.getTurtle();
+			System.out.println(tempTurtle.getX());
+			System.out.println(tempTurtle.getY());
 			tempTurtle.setX(tempTurtle.getX() + center_x - TURTLE_SIZE/2);
 			tempTurtle.setY(-1 * tempTurtle.getY() + center_y - TURTLE_SIZE/2);
 			pane.getChildren().add(tempTurtle);
@@ -149,25 +151,25 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * @param y (y location)
 	 * @param angle (angle in degrees)
 	 */
-//	private ImageView drawTurtle(double x, double y, double angle) {
-//		Image turtleImage = new Image(getClass().getClassLoader().getResourceAsStream(TURTLE_IMAGE));
-//		ImageView turtleView = new ImageView(turtleImage);
-//		turtleView.setX(x-TURTLE_SIZE/2);
-//		turtleView.setY(y-TURTLE_SIZE/2);
-//		turtleView.setRotate(angle);
-//		turtles.add(turtleView);
-//		return turtleView;
-//	}
+	private ImageView drawTurtle(double x, double y, double angle) {
+		Image turtleImage = new Image(getClass().getClassLoader().getResourceAsStream(TURTLE_IMAGE));
+		ImageView turtleView = new ImageView(turtleImage);
+		turtleView.setX(x-TURTLE_SIZE/2);
+		turtleView.setY(y-TURTLE_SIZE/2);
+		turtleView.setRotate(angle);
+		turtles.add(turtleView);
+		return turtleView;
+	}
 	
 	/**
 	 * resets turtle to default position and clears all lines
 	 */
-//	private void reset() {
-//		showTurtle();
-//		eraseCurrentDisplay();
-//		ImageView turtleView = drawTurtle(DEFAULT_WINDOW_X/2, DEFAULT_WINDOW_Y/2, 0);
-//		pane.getChildren().addAll(turtleView);	
-//	}
+	private void reset() {
+		showTurtle();
+		eraseCurrentDisplay();
+		ImageView turtleView = drawTurtle(DEFAULT_WINDOW_X/2, DEFAULT_WINDOW_Y/2, 0);
+		pane.getChildren().addAll(turtleView);	
+	}
 	
 	/**
 	 * showTurtle - shows the turtle if hidden
