@@ -181,7 +181,7 @@ public class TurtleMoveCommand extends CommandGroup {
 		Set<Turtle> turtles = myModel.getTurtles();
 		sLogoValid temp = home();
 		for (Turtle t : turtles) {
-			out = t.clearTraces();
+			t.clearTraces();
 		}
 		return temp;
 	}
