@@ -61,6 +61,7 @@ public class Turtle {
 	
 	protected void setTurtleImage(String filepath) {
 		myTurtleImage = filepath;
+		makeTurtle();
 	}
 	
 	protected double moveTo(double xpos, double ypos) {
