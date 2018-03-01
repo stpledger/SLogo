@@ -149,7 +149,7 @@ public class TurtleMoveCommand extends CommandGroup {
 	private sLogoValid hideTurtle() {
 		Set<Turtle> turtles = myModel.getTurtles();
 		for (Turtle t : turtles) {
-			t.getTurtle().setImage(null);
+			t.hideTurtle();
 		}
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(0);
@@ -159,7 +159,7 @@ public class TurtleMoveCommand extends CommandGroup {
 	private sLogoValid showTurtle() {
 		Set<Turtle> turtles = myModel.getTurtles();
 		for (Turtle t : turtles) {
-			t.getTurtle().setImage(new Image("turtleScaled.png"));
+			t.showTurtle();
 		}
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(1);
