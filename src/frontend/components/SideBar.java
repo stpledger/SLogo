@@ -1,5 +1,6 @@
 package frontend.components;
 
+import backEnd.CommandGroup;
 import backEnd.ModelViewable;
 import frontend.IDEBuilder;
 import javafx.scene.Node;
@@ -41,8 +42,13 @@ public class SideBar implements ComponentBuilder {
 		for (String key: displayableModel.getCurrentVariables().keySet()) {
 			addElement(key, displayableModel.getCurrentVariables().get(key).toString());
 		}
+		host.getChildren().add(formatHeaderCell(new Label("Previous Commands")));
+		
+		for (CommandGroup com: displayableModel.getPreviousCommands()) {
+			host.getChildren().add(new SideBarComponent(com.toString()).getNode());
+		}
 	}
-	
+
 	public Node getNode() {
 		return host;
 	}
