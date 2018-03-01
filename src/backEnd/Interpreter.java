@@ -8,7 +8,8 @@ public class Interpreter {
 	private String myLanguage = "English";
 	private sLogoValid mySlogoValid;
 	private Properties myLanguageProperties;
-	private Controller myController;
+	private Properties myShortCommands;
+	private Controller myController = new Controller();
 	private static final String[] noParamCommands = {"PenUp","PenDown","ShowTurtle","HideTurtle","Home","ClearScreen","XCoordinate","YCoordinate","Heading","IsPenDown","IsShowing","Pi", "GetPenColor", "GetShape", "Stamp", "ClearStamps"};
 	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not", "Minus", "SetBackground", "SetPenColor", "SetPenSize", "SetShape", "SetPalette"};
 	private static final String[] twoParamCommands = {"SetTowards", "SetPosition", "Sum", "Difference", "Product", "Quotient", "Remainder", "Power", "LessThan","GreaterThan", "Equal", "NotEqual", "And", "Or", "MakeVariable"}; 
@@ -19,6 +20,9 @@ public class Interpreter {
 		//Try to import the language properties
 		try {
 			myLanguageProperties = new languageParser(myLanguage).getProperties();
+			//Import the short commands
+			myShortCommands = new Properties();
+			myShortCommands.load(this.getClass().getResourceAsStream("/resources/languages/shortCommands.properties"));
 		} catch(Exception e) {
 			mySlogoValid.setError(true);
 			mySlogoValid.setMyStringValue("Error: Can not find " + myLanguage + ".properties");
@@ -59,6 +63,7 @@ public class Interpreter {
 			return tempSlogoValid;
 		} 
 		String myCommand = myLanguageProperties.getProperty(args[0]);
+		args[0] = myShortCommands.getProperty(myCommand);
 		String[] mySyntax = getCommandSyntax(myCommand);
 		tempSlogoValid = argumentCheck(args, mySyntax);
 		System.out.println("Command Created: " + tempSlogoValid.getMyStringValue());
@@ -90,7 +95,7 @@ public class Interpreter {
 						while(!myInputArgs.isEmpty() && !myInputArgs.get(0).equals("[")) {
 							myConditions += myInputArgs.remove(0)+ " ";
 						}
-						
+						passToController("If ");
 						if(myInputArgs.isEmpty()) {
 							mySlogoValid.setError(true);
 							mySlogoValid.setMyStringValue("No list included in If statement");
@@ -109,15 +114,22 @@ public class Interpreter {
 					if(tempSlogoValid.getError()) {
 						return tempSlogoValid;
 					}
-					
 						//System.out.println("MyList: " + myList);
 					myTempArgs.add(tempSlogoValid.getMyStringValue());
 					myTempArgs.add(myInputArgs.remove(0));
-					
 						//System.out.println(myTempArgs.toString());
 				}
 				
-				//TODO: Add a check for a second list as in a dottimes
+				if(myTempArgs.get(0).equals("DotTimes") || myTempArgs.get(0).equals("For") || myTempArgs.get(0).equals("IfElse") || myTempArgs.get(0).equals("MakeUserInstruction")){
+					if(myInputArgs.equals("[")) {
+						myTempArgs.add(myInputArgs.remove(0));
+						String myList = "";
+						while(!myInputArgs.get(0).equals("]")) {
+							myList += myInputArgs.remove(0) + " ";
+						}
+					}
+				}
+				
 				
 				//Check to make sure there isn't another command
 				if(!myInputArgs.isEmpty() && myLanguageProperties.containsKey(myInputArgs.get(0))) {
@@ -207,7 +219,7 @@ public class Interpreter {
 
 	public static void main(String[] args) {
 		Interpreter i = new Interpreter(new Model());
-		sLogoValid s = i.interpret("fd 50");  
+		sLogoValid s = i.interpret("if 20 == 10 [ forward 50 ]");  
 		System.out.println("Final Result: " + s.getMyStringValue());
 		
 	}
