@@ -93,8 +93,39 @@ public class Interpreter {
 				return tempSlogoValid;
 	}
 	private sLogoValid interpretBoolean(String[] args) {
-		// TODO Auto-generated method stub
+		//Setup Instance Variables
+			String myCondition = "";
+			sLogoValid tempSlogoValid = new sLogoValid();
+			ArrayList<String> myInputArgs = new ArrayList<String>();
+			myInputArgs.addAll(Arrays.asList(args));
+			ArrayList<String> myTempArgs = new ArrayList<String>();
+		//Determine the boolean
+			myTempArgs.add(myInputArgs.remove(0));
+			while(!myInputArgs.get(0).equals("[")) {
+				myCondition += myInputArgs.remove(0) + " ";
+			}
+			if(checkCondition(myCondition)) {
+				
+			} else if(myInputArgs.get(0).equals("ifelse")) {
+				while(myInputArgs.get(0).equals("]")) {
+					myInputArgs.remove(0);
+				}
+				if(!myInputArgs.get(0).equals("[")){
+					tempSlogoValid.setError(true);
+					tempSlogoValid.setMyStringValue("ifelse: Expected a second list of Commands");
+				}
+			} else {
+				tempSlogoValid.setMyDoubleValue(0);
+				return tempSlogoValid;
+			}
+			
+		
 		return null;
+	}
+
+	private boolean checkCondition(String myCondition) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	private sLogoValid interpretRepeat(String[] args) {
