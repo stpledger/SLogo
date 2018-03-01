@@ -5,6 +5,8 @@ import backEnd.ModelViewable;
 import frontend.IDEBuilder;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -22,12 +24,9 @@ public class SideBar implements ComponentBuilder {
 	
 	public SideBar(ModelViewable incoming) {
 		displayableModel = incoming;
-		host.setStyle("-fx-background-color: #99FF99;");
+		host.setStyle("-fx-background-color: #FFFFFF;");
 		host.getChildren().add(new Label("Side Bar"));
 		host.setPrefWidth(IDEBuilder.SIDEBAR_WIDTH);
-		//host.setMaxWidth(200);
-		host.setBorder(new Border(new BorderStroke(Color.BLACK, 
-	            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 		update();
 	}
 	
@@ -51,7 +50,11 @@ public class SideBar implements ComponentBuilder {
 	}
 
 	public Node getNode() {
-		return host;
+		ScrollPane scroller = new ScrollPane();
+		scroller.setHbarPolicy(ScrollBarPolicy.NEVER);
+		scroller.setVbarPolicy(ScrollBarPolicy.NEVER);
+		scroller.setContent(host);
+		return scroller;
 	}
 	
 	private void addHeader() {
