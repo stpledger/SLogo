@@ -1,18 +1,20 @@
-package backEnd.commands;
-
-import backEnd.sLogoValid;
-import model.*;
+package backEnd;
 
 public class VariableCommand extends CommandGroup {
 	private ModelModifiable myModel;
 
-	public VariableCommand(String command, String[] args) {
+	public VariableCommand(String command, String[] args, ModelModifiable model) {
 		super(command, args);
-		myModel = new Model();
+		myModel = model;
 		this.mySlogoValid = run(command, args);
 		// TODO Auto-generated constructor stub
 	}
-	
+
+	@Override
+	public sLogoValid execute() {
+		return this.mySlogoValid;
+	}
+
 	private sLogoValid run(String command, String[] args){
 		if (command.equals("make") || command.equals("set")) {
 			return setVar(args);
@@ -21,7 +23,12 @@ public class VariableCommand extends CommandGroup {
 	}
 	
 	private sLogoValid setVar(String[] args){
-		myModel.addVariable(args[0], args[1]);
+		sLogoValid temp = new sLogoValid();
+		temp.setMyDoubleValue(Double.parseDouble(args[1]));
+		/*if (myModel.getVariable(args[0]).getError()){
+			myModel.deleteVariable(args[0]);
+		}*/
+		myModel.addVariable(args[0], temp);
 		return null;
 	}
 	

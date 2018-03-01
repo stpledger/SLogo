@@ -12,7 +12,10 @@ import javafx.scene.shape.Line;
 
 public class Turtle {
 	
-	public static String TURTLE_IMAGE = "turtleScaled.png";
+	public static double DISPLAY_HEIGHT = 435;
+	public static double DISPLAY_WIDTH = 1000;
+	
+	private String myTurtleImage = "turtleScaled.png";
 	private ImageView myTurtleDisplay;
 	private double myXPos;
 	private double myYPos;
@@ -27,6 +30,7 @@ public class Turtle {
 		myAngle = angle;
 		myPen = new Pen();
 		myTurtleDisplay = makeTurtle();
+		myTraces = new HashSet<>();
 	}
 	
 	public Turtle(double xpos, double ypos, double angle, Paint color) {
@@ -35,6 +39,7 @@ public class Turtle {
 		myAngle = angle;
 		myPen = new Pen(color);
 		myTurtleDisplay = makeTurtle();
+		myTraces = new HashSet<>();
 	}
 
 	public ImageView getTurtle() {
@@ -46,13 +51,17 @@ public class Turtle {
 	}
 	
 	private ImageView makeTurtle() {
-		Image img = new Image(TURTLE_IMAGE);
+		Image img = new Image(myTurtleImage);
 		ImageView turtle = new ImageView(img);
 		turtle.setX(myXPos);
 		turtle.setY(myYPos);
 		turtle.setRotate(myAngle);
-
 		return turtle;
+	}
+	
+	protected void setTurtleImage(String filepath) {
+		myTurtleImage = filepath;
+		makeTurtle();
 	}
 	
 	protected double moveTo(double xpos, double ypos) {
@@ -62,31 +71,35 @@ public class Turtle {
 		double dist = Math.pow(Math.pow(xpos - myXPos, 2) + Math.pow(ypos - myYPos, 2), 0.5);
 		myXPos = xpos;
 		myYPos = ypos;
+		myTurtleDisplay = makeTurtle();
 		return dist;
 	}
 	
-	protected void move(double distance) {
-		double xpos = myXPos - Math.cos(Math.toRadians(myAngle))*distance;
-		double ypos = myYPos + Math.sin(Math.toRadians(myAngle))*distance;
+	protected double move(double distance) {
+		// TO-DO: account for toroidal edge
+		double xpos = myXPos + Math.sin(Math.toRadians(myAngle))*distance;
+		double ypos = myYPos + Math.cos(Math.toRadians(myAngle))*distance;
 		this.moveTo(xpos, ypos);
+		return distance;
 	}
 	
-	protected double towards(double xpos, double ypos) {
-		//TO-DO
-		return 0;
+	protected double rotateTowards(double xpos, double ypos) {
+		double angle = Math.atan((ypos-myYPos)/(xpos-myXPos));
+		myAngle+=angle;
+		myTurtleDisplay.setRotate(myAngle);
+		return angle;
 	}
 	
 	protected double rotateTo(double deg) {
-		//TO-DO
-		return 0;
+		double degree = deg;
+		myAngle = degree;
+		myTurtleDisplay.setRotate(myAngle);
+		return deg;
 	}
 	
 	protected void rotate(double deg) {
 		myAngle += deg;
-		while (myAngle >= 360) {
-			myAngle -= 360;
-		}
-		myTurtleDisplay.setRotate(deg);
+		myTurtleDisplay.setRotate(myAngle);
 	}
 	
 	protected void penUp() {

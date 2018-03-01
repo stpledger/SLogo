@@ -18,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import backEnd.Interpreter;
+import backEnd.Model;
 import backEnd.ModelViewable;
 import backEnd.Turtle;
 import backEnd.sLogoValid;
@@ -33,8 +34,15 @@ public class Console implements ComponentBuilder{
 	private HBox box = new HBox();
 	private String commands;
 	private TextArea prompt = new TextArea();
+	private TurtleDisplayer turtleDisplayer;
+	private Model model;
+	private Interpreter interpreter;
+	private String language = "English";
 	
-	public Console () {
+	public Console (TurtleDisplayer t, Model m, Interpreter i) {
+		turtleDisplayer = t;
+		model = m;
+		interpreter = i;
 		box.setStyle("-fx-background-color: #7777FF;");
 		box.setPrefHeight(IDEBuilder.CONSOLE_HEIGHT);
 		
@@ -69,10 +77,10 @@ public class Console implements ComponentBuilder{
 		runButton.setMinWidth(BUTTON_SIZE);
 
 		runButton.setOnAction(action -> {
-			run();
+			commands = prompt.getText();
+			run(commands);
 			//commands = prompt.getText();
 			//System.out.println(commands);
-			//TurtleDisplayer.clearError();
         });
 
         return runButton;
@@ -87,7 +95,7 @@ public class Console implements ComponentBuilder{
 		clearButton.setMinWidth(BUTTON_SIZE);
 
 		clearButton.setOnAction(action -> {
-			TurtleDisplayer.clearError();
+			turtleDisplayer.clearError();
 			prompt.clear();
         });
 
@@ -95,29 +103,42 @@ public class Console implements ComponentBuilder{
 	}
 	
 	/**
+	 * updates the language that the interpreter will use to interpret commands
+	 */
+	public void updateConsoleLanguage(String lang){
+		language = lang;
+	}
+	
+	/**
+	 * Custom command entered from elsewhere in program
+	 * @param com
+	 */
+	public void enterCommand(String com) {
+		run(com);
+	}
+	
+	/**
 	 * run - Calls controller to interpret string and then calls TurtleDisplayer to update turtle display
 	 */
-	public void run(){
-		TurtleDisplayer.clearError();
-		commands = prompt.getText();
-		// TODO: Get language from toolbar
-		Interpreter interpreter = new Interpreter("English");
-	    sLogoValid retMessage = interpreter.interpret(commands);
-	    boolean isError = retMessage.getError();
-	    if(!isError){
-//	        Map<String, Object> variableMap = ModelViewable.getCurrentVariables();
-//	        Set<Turtle> turtleSet = new HashSet<Turtle>();
-//	        for(String s : variableMap.keySet()){
-//	            if(variableMap.get(s) instanceof Turtle){
-//	                turtleSet.add((Turtle)variableMap.get(s));
-//	            }
-//	        }
-//	        if(!turtleSet.isEmpty()){
-//	            TurtleDisplayer.draw(turtleSet, retMessage);
-//	        }  
+	public void run(String com){
+		turtleDisplayer.clearError();
+		prompt.clear();
+		interpreter.setLanguage(language);
+	    sLogoValid retMessage = interpreter.interpret(com);
+	    if(!retMessage.getError()){
+	        Map<String, Object> variableMap = model.getCurrentVariables();
+	        Set<Turtle> turtleSet = new HashSet<Turtle>();
+	        for(String s : variableMap.keySet()){
+	            if(variableMap.get(s) instanceof Turtle){
+	                turtleSet.add((Turtle)variableMap.get(s));
+	            }
+	        }
+	        if(!turtleSet.isEmpty()){
+	            turtleDisplayer.draw(turtleSet, retMessage);
+	        }  
 	    }
 	    else{
-	        TurtleDisplayer.displayError(retMessage.getMyStringValue());
+	        turtleDisplayer.displayError(retMessage.getMyStringValue());
 	    }
 	}
 }

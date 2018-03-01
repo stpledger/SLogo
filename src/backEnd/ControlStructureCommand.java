@@ -1,4 +1,4 @@
-package backEnd.commands;
+package backEnd;
 
 public class ControlStructureCommand extends CommandGroup {
 

@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import backEnd.commands.CommandGroup;
-
 public class Model implements ModelModifiable, ModelViewable {
 	
 	private Map<String, Object> myModel;
@@ -15,15 +13,30 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	public Model() {
 		myModel = new HashMap<>();
+		myModel.put("Turtle", new Turtle(0,0,0));
 		myPreviousCommands = new HashSet<>();
 	}
 	
-	protected Set<Turtle> getTurtlesToModify() {
+	@Override
+	public Set<Turtle> getTurtlesToModify() {
 		Set<Turtle> ret = new HashSet<>();
 		ret.add((Turtle)myModel.get("Turtle"));
 		return ret;
 	}
-
+	
+	@Override
+	public sLogoValid getVariable(String name) {
+		if (!myModel.containsKey(name)) {
+			sLogoValid ret = new sLogoValid();
+			ret.setError(true);
+			ret.setMyStringValue("This object does not exist.");
+			return ret;
+		}
+		else{
+			return (sLogoValid)myModel.get(name);
+		}
+	}
+	
 	@Override
 	public Set<Turtle> getTurtles() {
 		Set<Turtle> ret = new HashSet<>();

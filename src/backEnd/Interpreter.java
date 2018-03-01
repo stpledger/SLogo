@@ -16,6 +16,7 @@ public class Interpreter {
 	//TODO: Add multiple turtle commands
 	public Interpreter( ModelModifiable m) {
 		mySlogoValid = new sLogoValid();
+		myController = new Controller(m);
 		//Try to import the language properties
 		try {
 			myLanguageProperties = new languageParser(myLanguage).getProperties();
