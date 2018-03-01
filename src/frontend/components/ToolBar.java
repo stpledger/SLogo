@@ -132,6 +132,14 @@ public class ToolBar implements ComponentBuilder{
 	}
 	
 	/*
+	 * Get the image path currently inside 
+	 */
+	public String getCurrentImageSelected() {
+		return turtleImagePicker.getValue();
+	}
+	
+	
+	/*
 	 * Returns the name of the currently selected turtle to change update 
 	 */
 	public String getTurtleNameChangeCommand() {
@@ -142,7 +150,6 @@ public class ToolBar implements ComponentBuilder{
 			command += imagePath.getText();
 		}
 		System.out.println(command);
-		imagePath.setText("");
 		return command;
 	}
 }
