@@ -142,6 +142,13 @@ public class Turtle {
 			ret.setStroke(myPenColor);
 			return ret;
 		}
-		
+	}
+	
+	public String toString() {
+		String rets = "";
+		rets += "X:       " + myXPos;
+		rets += "\nY:      " + myYPos;
+		rets += "\nAngle:  " + myAngle;
+		return rets;
 	}
 }

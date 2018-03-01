@@ -13,7 +13,7 @@ public class SideBarComponent {
 	
 	public static final double NAME_WIDTH = 100;
 	public static final double DESCRIPTION_WIDTH = 200;
-	public static final double HEIGHT = 20;
+	public static final double HEIGHT = 30;
 	
 	private String name;
 	private String description;
@@ -33,7 +33,7 @@ public class SideBarComponent {
 	}
 	
 	public Node getNode() {
-		container.setPrefSize(NAME_WIDTH + DESCRIPTION_WIDTH, HEIGHT);
+		container.setPrefWidth(NAME_WIDTH + DESCRIPTION_WIDTH);
 		container.getChildren().add(getNameComponent());
 		container.getChildren().add(getDescriptionComponent());
 		scroller.setContent(container);
@@ -42,7 +42,7 @@ public class SideBarComponent {
 	
 	private Node getNameComponent() {
 		Label l = new Label(name);
-		l.setPrefSize(NAME_WIDTH, HEIGHT);
+		l.setPrefWidth(NAME_WIDTH);
 		return l;
 	}
 	
@@ -53,7 +53,7 @@ public class SideBarComponent {
 
 	private Node getDescriptionComponent() {
 		Label l = new Label(description);
-		l.setPrefSize(DESCRIPTION_WIDTH, HEIGHT);
+		l.setPrefWidth(DESCRIPTION_WIDTH);
 		return l;
 	}
 }

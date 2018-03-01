@@ -59,7 +59,7 @@ public class ToolBar implements ComponentBuilder{
 	
 	private void setStyle() {
 		bar.setSpacing(10);
-		bar.setStyle("-fx-background-color: #FFAAAA;");
+		bar.setStyle("-fx-background-color: #EEEEEE;");
 		bar.setPrefHeight(IDEBuilder.TOOLBAR_HEIGHT);
 	}
 	
@@ -81,8 +81,8 @@ public class ToolBar implements ComponentBuilder{
 		
 //		toAdd.add(imagePath);
 //		
-//		updateEnvButton.setOnAction(e -> builder.update());
-//		toAdd.add(updateEnvButton);
+		updateEnvButton.setOnAction(e -> builder.update());
+		toAdd.add(updateEnvButton);
 		
 		bar.getChildren().addAll(toAdd);
 	}
