@@ -73,7 +73,7 @@ public class Interpreter {
 						}
 					//tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
 					return tempSlogoValid;
-				} else if(args[0].equals("If") || args[0].equals("IfElse")) {
+				} else if(args[0].equals("if") || args[0].equals("ifelse")) {
 						tempSlogoValid = interpretBoolean(args);
 						if(tempSlogoValid.getError()) {
 							return tempSlogoValid;
@@ -95,6 +95,7 @@ public class Interpreter {
 	private sLogoValid interpretBoolean(String[] args) {
 		//Setup Instance Variables
 			String myCondition = "";
+			String myCommands = "";
 			sLogoValid tempSlogoValid = new sLogoValid();
 			ArrayList<String> myInputArgs = new ArrayList<String>();
 			myInputArgs.addAll(Arrays.asList(args));
@@ -104,28 +105,120 @@ public class Interpreter {
 			while(!myInputArgs.get(0).equals("[")) {
 				myCondition += myInputArgs.remove(0) + " ";
 			}
-			if(checkCondition(myCondition)) {
+			myInputArgs.remove(0);
+			if(checkCondition(myCondition).getMyDoubleValue() > 0) {
+				while(!myInputArgs.get(0).equals("]")) {
+					myCommands += myInputArgs.remove(0) + " ";
+				}
+				tempSlogoValid = interpret(myCommands);
 				
-			} else if(myInputArgs.get(0).equals("ifelse")) {
-				while(myInputArgs.get(0).equals("]")) {
+			} else if(myTempArgs.get(0).equals("ifelse")) {
+				System.out.println("else");
+				//Skip to the second list
+				while(!myInputArgs.get(0).equals("]")) {
 					myInputArgs.remove(0);
 				}
+				myInputArgs.remove(0);
+				//Make sure there is a second list
 				if(!myInputArgs.get(0).equals("[")){
 					tempSlogoValid.setError(true);
 					tempSlogoValid.setMyStringValue("ifelse: Expected a second list of Commands");
+					return tempSlogoValid;
 				}
+				myInputArgs.remove(0);
+				while(!myInputArgs.get(0).equals("]")) {
+					myCommands += myInputArgs.remove(0) + " ";
+				}
+				tempSlogoValid = interpret(myCommands);
 			} else {
 				tempSlogoValid.setMyDoubleValue(0);
 				return tempSlogoValid;
 			}
-			
-		
-		return null;
+			//TODO: Implement a check for leftover strings
+		return tempSlogoValid;
 	}
 
-	private boolean checkCondition(String myCondition) {
-		// TODO Auto-generated method stub
-		return false;
+	private sLogoValid checkCondition(String myCondition) {
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = new ArrayList<String>();
+		myInputArgs.addAll(Arrays.asList(myCondition.trim().split(" ")));
+		System.out.println("BooleanInputArgs: " + myInputArgs.toString());
+		String conditionA = "";
+		String comparator = "";
+		String conditionB = "";
+		//Find all the parts of the first condition
+		while(!myInputArgs.get(0).equals("lessp") && 
+				!myInputArgs.get(0).equals("greaterp") &&
+				!myInputArgs.get(0).equals("equalp") &&
+				!myInputArgs.get(0).equals("notequalp")) {
+			conditionA += myInputArgs.remove(0) + " "; 
+		} 
+		if(conditionA.split(" ").length > 1) {
+			tempSlogoValid = interpret(conditionA);
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+			conditionA = tempSlogoValid.getMyStringValue();
+		}
+		comparator = myInputArgs.remove(0);
+		if(!myInputArgs.get(0).equals("lessp") && 
+				!myInputArgs.get(0).equals("greaterp") &&
+				!myInputArgs.get(0).equals("equalp") &&
+				!myInputArgs.get(0).equals("notequalp")) {
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("comparator " + comparator + " is invalid");
+			return tempSlogoValid;
+		}
+		while(!myInputArgs.isEmpty()) {
+			conditionB += myInputArgs.remove(0);
+		}
+		if(conditionB.split(" ").length > 1) {
+			tempSlogoValid = interpret(conditionB);
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+			conditionB = tempSlogoValid.getMyStringValue();
+		}
+		switch(comparator) {
+		case "lessp":
+			if(Double.parseDouble(conditionA) < Double.parseDouble(conditionB)) {
+				tempSlogoValid.setBoolean(true);
+				return tempSlogoValid;
+			} else {
+				tempSlogoValid.setBoolean(false);
+				return tempSlogoValid;
+			}
+		case "greaterp":
+			if(Double.parseDouble(conditionA) > Double.parseDouble(conditionB)) {
+				tempSlogoValid.setBoolean(true);
+				return tempSlogoValid;
+			} else {
+				tempSlogoValid.setBoolean(false);
+				return tempSlogoValid;
+			}
+		case "equalp":
+			if(Double.parseDouble(conditionA) == Double.parseDouble(conditionB)) {
+				tempSlogoValid.setBoolean(true);
+				return tempSlogoValid;
+			} else {
+				tempSlogoValid.setBoolean(false);
+				return tempSlogoValid;
+			}
+		case "notequalp":
+			if(Double.parseDouble(conditionA) != Double.parseDouble(conditionB)) {
+				tempSlogoValid.setBoolean(true);
+				return tempSlogoValid;
+			} else {
+				tempSlogoValid.setBoolean(false);
+				return tempSlogoValid;
+			}
+		default:
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("Could not check boolean statements");
+			return tempSlogoValid;
+		}
+		
+		
 	}
 
 	private sLogoValid interpretRepeat(String[] args) {

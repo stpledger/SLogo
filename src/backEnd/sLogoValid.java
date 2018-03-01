@@ -42,4 +42,14 @@ public class sLogoValid {
 		this.myStringValue = myStringValue;
 	}
 	
+	public void setBoolean(Boolean myBoolean) {
+		if(myBoolean) {
+			this.setMyDoubleValue(1);
+			this.setMyStringValue("true");
+		} else {
+			this.setMyDoubleValue(0);
+			this.setMyStringValue("false");
+		}
+	}
+	
 }
