@@ -67,22 +67,36 @@ public class Interpreter {
 		args[0] = myShortCommands.getProperty(myCommand);
 			//Check for advanced syntax
 				if(args[0].equals("repeat")) {
-					System.out.println("");
 					tempSlogoValid = interpretRepeat(args);
 						if(tempSlogoValid.getError()) {
 							return tempSlogoValid;
 						}
-					tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
+					//tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
 					return tempSlogoValid;
-				} else {
+				} else if(args[0].equals("If") || args[0].equals("IfElse")) {
+						tempSlogoValid = interpretBoolean(args);
+						if(tempSlogoValid.getError()) {
+							return tempSlogoValid;
+						}					
+					
+				}else {
 		//Get a string array with the syntax
 		String[] mySyntax = getCommandSyntax(myCommand);
 		tempSlogoValid = argumentCheck(args, mySyntax);
-		//System.out.println("Command Created: " + tempSlogoValid.getMyStringValue());
+			if(tempSlogoValid.getError()) {
+				System.out.println("Error: " + tempSlogoValid.getMyStringValue());
+				return tempSlogoValid;
+			}
 		tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
 		return tempSlogoValid;
 		}
+				return tempSlogoValid;
 	}
+	private sLogoValid interpretBoolean(String[] args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private sLogoValid interpretRepeat(String[] args) {
 		//Setup Instance Variables
 		sLogoValid tempSlogoValid = new sLogoValid();
@@ -115,7 +129,7 @@ public class Interpreter {
 		}
 		//Parse out the commands
 		String myCommands = "";
-		while(!myInputArgs.isEmpty() && !myInputArgs.get(0).equals("]")){
+		while(!myInputArgs.get(0).equals("]")){
 			myCommands += myInputArgs.remove(0) + " "; 
 		}
 		myInputArgs.remove(0);
@@ -159,21 +173,6 @@ public class Interpreter {
 					tempSlogoValid.setMyStringValue(concatArgs);
 					return tempSlogoValid;
 				}
-				
-				//Check to see if there is an if statement
-					if(myInputArgs.get(0).equals("If")) {
-						myTempArgs.add(myInputArgs.remove(0));
-						String myConditions = "";
-						while(!myInputArgs.isEmpty() && !myInputArgs.get(0).equals("[")) {
-							myConditions += myInputArgs.remove(0)+ " ";
-						}
-						tempSlogoValid = passToController("If " + myConditions);
-						if(myInputArgs.isEmpty()) {
-							mySlogoValid.setError(true);
-							mySlogoValid.setMyStringValue("No list included in If statement");
-							return mySlogoValid;
-						}
-					}
 				
 				//Check to see if there is an internal list
 				if(myInputArgs.get(0).equals("[")) {
