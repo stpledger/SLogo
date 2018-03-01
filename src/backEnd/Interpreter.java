@@ -79,6 +79,13 @@ public class Interpreter {
 							return tempSlogoValid;
 						}					
 					
+				} else if(args[0].equals("for")) {
+					tempSlogoValid = interpretFor(args);
+						if(tempSlogoValid.getError()) {
+							return tempSlogoValid;
+						}
+				} else if (args[0].equals("dottimes")){
+					//TODO: Implemnet DotTimes method
 				}else {
 		//Get a string array with the syntax
 		String[] mySyntax = getCommandSyntax(myCommand);
@@ -92,6 +99,66 @@ public class Interpreter {
 		}
 				return tempSlogoValid;
 	}
+
+	private sLogoValid interpretFor(String[] args) {
+		//Setup Instance Variables
+		String myVar;
+		double myStart;
+		double myEnd;
+		double myIncrement;
+		String myCommands = "";
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = new ArrayList<String>();
+		myInputArgs.addAll(Arrays.asList(args));
+		ArrayList<String> myTempArgs = new ArrayList<String>();
+		
+		//remove the command name and the [
+		myInputArgs.remove(0);
+		myInputArgs.remove(0);
+		
+		myVar = myInputArgs.remove(0);
+		myStart =  Double.parseDouble(myInputArgs.remove(0));
+		myEnd = Double.parseDouble(myInputArgs.remove(0));
+		myIncrement = Double.parseDouble(myInputArgs.remove(0));
+		
+		//Check to make sure we're only dealing with simple info
+		if(!myInputArgs.get(0).equals("]")) {
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("Can not handle advanced arguments in for loops yet");
+			//TODO: Handle advanced arguments in for loops
+			return tempSlogoValid;
+		}
+		myInputArgs.remove(0);
+		//Check to make sure there is a second list
+		if(!myInputArgs.get(0).equals("[")) {
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("expected second list");
+			return tempSlogoValid;
+		}
+		myInputArgs.remove(0);
+		while(!myInputArgs.get(0).equals("]")) {
+			myCommands += myInputArgs.remove(0) + " ";
+		}
+		myInputArgs.remove(0);
+		
+		for(Double i = myStart; i < myEnd; i += myIncrement) {
+			String myTempCommands;
+			if(myCommands.contains(myVar)) {
+				myTempCommands = myCommands.replaceAll(myVar, i.toString());
+				System.out.println(myTempCommands);
+			} else {
+				myTempCommands = myCommands;
+			}
+			tempSlogoValid = interpret(myTempCommands);
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+		}
+		return tempSlogoValid;
+		//TODO: Check for leftover arguments
+		
+	}
+
 	private sLogoValid interpretBoolean(String[] args) {
 		//Setup Instance Variables
 			String myCondition = "";
@@ -113,7 +180,6 @@ public class Interpreter {
 				tempSlogoValid = interpret(myCommands);
 				
 			} else if(myTempArgs.get(0).equals("ifelse")) {
-				System.out.println("else");
 				//Skip to the second list
 				while(!myInputArgs.get(0).equals("]")) {
 					myInputArgs.remove(0);
@@ -142,7 +208,6 @@ public class Interpreter {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		ArrayList<String> myInputArgs = new ArrayList<String>();
 		myInputArgs.addAll(Arrays.asList(myCondition.trim().split(" ")));
-		System.out.println("BooleanInputArgs: " + myInputArgs.toString());
 		String conditionA = "";
 		String comparator = "";
 		String conditionB = "";
@@ -161,10 +226,10 @@ public class Interpreter {
 			conditionA = tempSlogoValid.getMyStringValue();
 		}
 		comparator = myInputArgs.remove(0);
-		if(!myInputArgs.get(0).equals("lessp") && 
-				!myInputArgs.get(0).equals("greaterp") &&
-				!myInputArgs.get(0).equals("equalp") &&
-				!myInputArgs.get(0).equals("notequalp")) {
+		if(!comparator.equals("lessp") && 
+				!comparator.equals("greaterp") &&
+				!comparator.equals("equalp") &&
+				!comparator.equals("notequalp")) {
 			tempSlogoValid.setError(true);
 			tempSlogoValid.setMyStringValue("comparator " + comparator + " is invalid");
 			return tempSlogoValid;
@@ -172,54 +237,50 @@ public class Interpreter {
 		while(!myInputArgs.isEmpty()) {
 			conditionB += myInputArgs.remove(0);
 		}
-		if(conditionB.split(" ").length > 1) {
+		if(conditionB.split("//s+").length > 1) {
 			tempSlogoValid = interpret(conditionB);
 			if(tempSlogoValid.getError()) {
 				return tempSlogoValid;
 			}
 			conditionB = tempSlogoValid.getMyStringValue();
 		}
-		switch(comparator) {
-		case "lessp":
+		//Check based on comparator
+		if(comparator.equals("lessp")) {
 			if(Double.parseDouble(conditionA) < Double.parseDouble(conditionB)) {
 				tempSlogoValid.setBoolean(true);
 				return tempSlogoValid;
 			} else {
 				tempSlogoValid.setBoolean(false);
 				return tempSlogoValid;
-			}
-		case "greaterp":
+			}} else if(comparator.equals("greaterp")) {
 			if(Double.parseDouble(conditionA) > Double.parseDouble(conditionB)) {
 				tempSlogoValid.setBoolean(true);
 				return tempSlogoValid;
 			} else {
 				tempSlogoValid.setBoolean(false);
 				return tempSlogoValid;
-			}
-		case "equalp":
+			}} else if(comparator.equals("equalp")) {
 			if(Double.parseDouble(conditionA) == Double.parseDouble(conditionB)) {
 				tempSlogoValid.setBoolean(true);
 				return tempSlogoValid;
 			} else {
 				tempSlogoValid.setBoolean(false);
 				return tempSlogoValid;
-			}
-		case "notequalp":
-			if(Double.parseDouble(conditionA) != Double.parseDouble(conditionB)) {
-				tempSlogoValid.setBoolean(true);
-				return tempSlogoValid;
+			}} else if (comparator.equals("notequalp")) {
+				if(Double.parseDouble(conditionA) != Double.parseDouble(conditionB)) {
+					tempSlogoValid.setBoolean(true);
+					return tempSlogoValid;
+				} else {
+					tempSlogoValid.setBoolean(false);
+					return tempSlogoValid;
+				}
 			} else {
-				tempSlogoValid.setBoolean(false);
-				return tempSlogoValid;
-			}
-		default:
 			tempSlogoValid.setError(true);
 			tempSlogoValid.setMyStringValue("Could not check boolean statements");
 			return tempSlogoValid;
+			}
 		}
 		
-		
-	}
 
 	private sLogoValid interpretRepeat(String[] args) {
 		//Setup Instance Variables
@@ -315,16 +376,6 @@ public class Interpreter {
 						//System.out.println(myTempArgs.toString());
 				}
 				
-				if(myTempArgs.get(0).equals("DotTimes") || myTempArgs.get(0).equals("For") || myTempArgs.get(0).equals("IfElse") || myTempArgs.get(0).equals("MakeUserInstruction")){
-					if(myInputArgs.equals("[")) {
-						myTempArgs.add(myInputArgs.remove(0));
-						String myList = "";
-						while(!myInputArgs.get(0).equals("]")) {
-							myList += myInputArgs.remove(0) + " ";
-						}
-					}
-				}
-				
 				
 				//Check to make sure there isn't another command
 				if(!myInputArgs.isEmpty() && myLanguageProperties.containsKey(myInputArgs.get(0))) {
@@ -387,15 +438,11 @@ public class Interpreter {
 				return syntax;
 			}
 		}
-		if(myCommand.equals("If")) {
-			String[] syntax = {"com", "arg", "[","mul","]"};
-			return syntax;
-		}
 		if(myCommand.equals("DotTimes") || myCommand.equals("For")) {
 			String[] syntax = {"com","[","mul","]","[","mul","]" };
 			return syntax;
 		}
-		if(myCommand.equals("IfElse") || myCommand.equals("MakeUserInstruction")) {
+		if(myCommand.equals("MakeUserInstruction")) {
 			String[] syntax = {"com", "arg","[","mul","]","[","mul","]"};
 			return syntax;
 		}
