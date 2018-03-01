@@ -110,6 +110,10 @@ public class Turtle {
 		isPenDown = true;
 	}
 	
+	protected void clearTraces() {
+		myTraces.clear();
+	}
+	
 	private class Pen {
 		
 		private Paint myPenColor;
