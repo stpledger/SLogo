@@ -76,4 +76,9 @@ public class Model implements ModelModifiable, ModelViewable {
 		}
 	}
 
+	@Override
+	public void addCommandHistory(CommandGroup command) {
+		myPreviousCommands.add(command);
+	}
+
 }
