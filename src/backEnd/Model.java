@@ -19,13 +19,15 @@ public class Model implements ModelModifiable, ModelViewable {
 		myPreviousCommands = new HashSet<>();
 	}
 	
-	protected Set<Turtle> getTurtlesToModify() {
+	@Override
+	public Set<Turtle> getTurtlesToModify() {
 		Set<Turtle> ret = new HashSet<>();
 		ret.add((Turtle)myModel.get("Turtle"));
 		return ret;
 	}
 	
-	protected sLogoValid getVariable(String name) {
+	@Override
+	public sLogoValid getVariable(String name) {
 		if (!myModel.containsKey(name)) {
 			sLogoValid ret = new sLogoValid();
 			ret.setError(true);

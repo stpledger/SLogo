@@ -1,5 +1,7 @@
 package backEnd;
 
+import java.util.Set;
+
 /**
 * API that allows controller to get and modify data from the model. 
 * This interface will be implemented by the model
@@ -15,5 +17,9 @@ public interface ModelModifiable {
     * Deletes a variable from the model's String -> Object HashMap
     */
     public double deleteVariable(String toDelete);
+    
+    public sLogoValid getVariable(String name);
+    	
+	public Set<Turtle> getTurtlesToModify();
 
 }
