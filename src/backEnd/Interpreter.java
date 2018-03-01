@@ -100,6 +100,7 @@ public class Interpreter {
 
 	private sLogoValid interpretFor(String[] args) {
 		//Setup Instance Variables
+		String myVar;
 		double myStart;
 		double myEnd;
 		double myIncrement;
@@ -113,6 +114,7 @@ public class Interpreter {
 		myInputArgs.remove(0);
 		myInputArgs.remove(0);
 		
+		myVar = myInputArgs.remove(0);
 		myStart =  Double.parseDouble(myInputArgs.remove(0));
 		myEnd = Double.parseDouble(myInputArgs.remove(0));
 		myIncrement = Double.parseDouble(myInputArgs.remove(0));
@@ -138,7 +140,14 @@ public class Interpreter {
 		myInputArgs.remove(0);
 		
 		for(Double i = myStart; i < myEnd; i += myIncrement) {
-			tempSlogoValid = interpret(myCommands);
+			String myTempCommands;
+			if(myCommands.contains(myVar)) {
+				myTempCommands = myCommands.replaceAll(myVar, i.toString());
+				System.out.println(myTempCommands);
+			} else {
+				myTempCommands = myCommands;
+			}
+			tempSlogoValid = interpret(myTempCommands);
 			if(tempSlogoValid.getError()) {
 				return tempSlogoValid;
 			}
