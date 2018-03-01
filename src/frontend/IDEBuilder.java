@@ -54,7 +54,7 @@ public class IDEBuilder implements SceneBuilder{
 		side.update();
 		toolbar.update(side.getModel());
 		console.enterCommand(toolbar.getTurtleNameChangeCommand()); 
-		turtleDisplay.changeImage(toolbar.getCurrentImageSelected());
+//		turtleDisplay.changeImage(toolbar.getCurrentImageSelected());
 	}
 
 }
