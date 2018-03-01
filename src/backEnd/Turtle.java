@@ -75,7 +75,7 @@ public class Turtle {
 	}
 	
 	protected double move(double distance) {
-		// account for toroidal edge
+		// TO-DO: account for toroidal edge
 		double xpos = myXPos - Math.cos(Math.toRadians(myAngle))*distance;
 		double ypos = myYPos + Math.sin(Math.toRadians(myAngle))*distance;
 		this.moveTo(xpos, ypos);
@@ -84,8 +84,10 @@ public class Turtle {
 	
 	protected double rotateTowards(double xpos, double ypos) {
 		//TO-DO
-		double angle = Math.atan(Math.abs(ypos-myYPos)/Math.abs(xpos-myXPos));
-		return 0;
+		double angle = Math.atan((ypos-myYPos)/(xpos-myXPos));
+		myAngle+=angle;
+		myTurtleDisplay.setRotate(myAngle);
+		return angle;
 	}
 	
 	protected double rotateTo(double deg) {
