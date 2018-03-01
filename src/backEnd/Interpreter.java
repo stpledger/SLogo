@@ -8,13 +8,14 @@ public class Interpreter {
 	private String myLanguage = "English";
 	private sLogoValid mySlogoValid;
 	private Properties myLanguageProperties;
-	private Controller myController = new Controller();
+	private Controller myController;
 	private static final String[] noParamCommands = {"PenUp","PenDown","ShowTurtle","HideTurtle","Home","ClearScreen","XCoordinate","YCoordinate","Heading","IsPenDown","IsShowing","Pi", "GetPenColor", "GetShape", "Stamp", "ClearStamps"};
 	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not", "Minus", "SetBackground", "SetPenColor", "SetPenSize", "SetShape", "SetPalette"};
 	private static final String[] twoParamCommands = {"SetTowards", "SetPosition", "Sum", "Difference", "Product", "Quotient", "Remainder", "Power", "LessThan","GreaterThan", "Equal", "NotEqual", "And", "Or", "MakeVariable"}; 
 	//TODO: Add multiple turtle commands
 	public Interpreter( ModelModifiable m) {
 		mySlogoValid = new sLogoValid();
+		myController = new Controller(m);
 		//Try to import the language properties
 		try {
 			myLanguageProperties = new languageParser(myLanguage).getProperties();

@@ -1,6 +1,4 @@
-package backEnd.commands;
-
-import backEnd.ModelModifiable;
+package backEnd;
 
 public class TurtleQueryCommand extends CommandGroup {
 	private ModelModifiable myModel;

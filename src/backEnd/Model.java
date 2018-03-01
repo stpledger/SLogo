@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import backEnd.commands.CommandGroup;
-
 public class Model implements ModelModifiable, ModelViewable {
 	
 	private Map<String, Object> myModel;

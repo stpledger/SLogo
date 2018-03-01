@@ -1,6 +1,4 @@
-package backEnd.commands;
-
-import backEnd.ModelModifiable;
+package backEnd;
 
 public class UserDefinedCommand extends CommandGroup{
 	private ModelModifiable myModel;

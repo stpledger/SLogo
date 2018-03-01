@@ -1,4 +1,4 @@
-package backEnd.commands;
+package backEnd;
 
 import backEnd.sLogoValid;
 

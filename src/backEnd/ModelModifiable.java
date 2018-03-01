@@ -1,5 +1,7 @@
 package backEnd;
 
+import java.util.Set;
+
 /**
 * API that allows controller to get and modify data from the model. 
 * This interface will be implemented by the model
@@ -16,4 +18,5 @@ public interface ModelModifiable {
     */
     public double deleteVariable(String toDelete);
 
+    public Set<Turtle> getTurtles();
 }

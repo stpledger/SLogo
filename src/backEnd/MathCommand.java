@@ -1,6 +1,4 @@
-package backEnd.commands;
-
-import backEnd.sLogoValid;
+package backEnd;
 
 import java.util.Random;
 
