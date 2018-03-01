@@ -389,16 +389,14 @@ public class Interpreter {
 				//Check to make sure there isn't another command
 				if(!myInputArgs.isEmpty() && myLanguageProperties.containsKey(myInputArgs.get(0))) {
 					System.out.println("Internal loop: " + myInputArgs.toString());
-					String[] internalCommandSyntax = getCommandSyntax(myLanguageProperties.getProperty(myInputArgs.get(0)));
-					tempSlogoValid = interpretBasicArgs(myInputArgs.stream().toArray(String[]::new), internalCommandSyntax);
-					for(int i = 0; i < internalCommandSyntax.length; i++) {
-						internalCommandSyntax[i] = myInputArgs.remove(0);	
+					String concat = "";
+					while(!myInputArgs.isEmpty()) {
+						concat += myInputArgs.remove(0) + " ";
 					}
-					tempSlogoValid = interpret(tempSlogoValid.getMyStringValue());
-					//TODO: Make sure this sets the tempSlogoValid to the value of an internal command
-						if(tempSlogoValid.getError()) {
-							return tempSlogoValid;
-						}
+					tempSlogoValid = interpret(concat);
+					if(tempSlogoValid.getError()) {
+						return tempSlogoValid;
+					}
 					myInputArgs.add(tempSlogoValid.getMyStringValue());
 				} else if(! myInputArgs.isEmpty()) { 
 					myTempArgs.add(myInputArgs.remove(0));
