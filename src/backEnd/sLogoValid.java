@@ -3,7 +3,7 @@ package backEnd;
 public class sLogoValid {
 	private boolean isError;
 	private String myStringValue;
-	private double myDoubleValue;
+	private Double myDoubleValue;
 	public sLogoValid() {
 		isError = false;
 		setMyStringValue("");
@@ -39,6 +39,11 @@ public class sLogoValid {
 
 	public void setMyStringValue(String myStringValue) {
 		this.myStringValue = myStringValue;
+	}
+	
+	public String toString() {
+		if (myDoubleValue != null) return "" + myDoubleValue;
+		return getMyStringValue();
 	}
 	
 }
