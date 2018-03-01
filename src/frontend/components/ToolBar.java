@@ -79,10 +79,10 @@ public class ToolBar implements ComponentBuilder{
 		selectImage.setOnAction(this::updateImagePath);
 		toAdd.add(selectImage);
 		
-		toAdd.add(imagePath);
-		
-		updateEnvButton.setOnAction(e -> builder.update());
-		toAdd.add(updateEnvButton);
+//		toAdd.add(imagePath);
+//		
+//		updateEnvButton.setOnAction(e -> builder.update());
+//		toAdd.add(updateEnvButton);
 		
 		bar.getChildren().addAll(toAdd);
 	}
@@ -107,8 +107,7 @@ public class ToolBar implements ComponentBuilder{
 			// Do nothing
 		}
 		if (mimetype.contains("image")) {
-		    System.out.println("it is an image");
-		    imagePath.setText(f.getPath());
+			imagePath.setText(f.getAbsolutePath());
 		    builder.update();
 		} else {
 			Alert alert = new Alert(AlertType.INFORMATION);
@@ -118,6 +117,19 @@ public class ToolBar implements ComponentBuilder{
 		}
 		
 	}
+	
+//	private boolean isImagePath(String path) {
+//		String mimetype = "Invalid";
+//		try {
+//			mimetype = Files.probeContentType(f.toPath());
+//			if (mimetype == null) mimetype = "Invalid";
+//		} catch (IOException e1) {
+//			return false
+//		}
+//		if (mimetype.contains("image")) {
+//		    builder.update();
+//		}
+//	}
 	
 	/*
 	 * Update the toolbar to show possible turtles. Should receive modelViewable that is used by the sidebar
@@ -135,9 +147,8 @@ public class ToolBar implements ComponentBuilder{
 	 * Get the image path currently inside 
 	 */
 	public String getCurrentImageSelected() {
-		return turtleImagePicker.getValue();
+		return imagePath.getText();
 	}
-	
 	
 	/*
 	 * Returns the name of the currently selected turtle to change update 
