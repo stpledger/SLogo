@@ -1,6 +1,8 @@
 package frontend.components;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,8 @@ import frontend.IDEBuilder;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
@@ -95,7 +99,24 @@ public class ToolBar implements ComponentBuilder{
 	private void updateImagePath(ActionEvent e) {
 		FileChooser fileChooser = new FileChooser();
 		File f = fileChooser.showOpenDialog(new Stage());
-		imagePath.setText(f.getPath());
+		String mimetype = "Invalid";
+		try {
+			mimetype = Files.probeContentType(f.toPath());
+			if (mimetype == null) mimetype = "Invalid";
+		} catch (IOException e1) {
+			// Do nothing
+		}
+		if (mimetype.contains("image")) {
+		    System.out.println("it is an image");
+		    imagePath.setText(f.getPath());
+		    builder.update();
+		} else {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Invalid Image");
+			alert.setContentText("The filepath you chose, " + f.getAbsolutePath() + " is not a valid image!");
+			alert.showAndWait();
+		}
+		
 	}
 	
 	/*
