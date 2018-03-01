@@ -23,6 +23,7 @@ public class Turtle {
 	private Set<Line> myTraces = new HashSet<Line>();
 	private Pen myPen;
 	protected boolean isPenDown = true;
+	protected boolean isVisible = true;
 	
 	public Turtle(double xpos, double ypos, double angle) {
 		myXPos = xpos;
@@ -100,6 +101,16 @@ public class Turtle {
 	protected void rotate(double deg) {
 		myAngle += deg;
 		myTurtleDisplay.setRotate(myAngle);
+	}
+
+	protected void showTurtle(){
+		myTurtleDisplay.setImage(new Image(myTurtleImage));
+		isVisible = true;
+	}
+
+	protected void hideTurtle(){
+		myTurtleDisplay.setImage(null);
+		isVisible = false;
 	}
 	
 	protected void penUp() {
