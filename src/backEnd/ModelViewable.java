@@ -3,8 +3,6 @@ package backEnd;
 import java.util.Map;
 import java.util.Set;
 
-import backEnd.commands.CommandGroup;
-
 /**
 * API that allows the view access to data from the model
 * 

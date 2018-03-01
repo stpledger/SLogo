@@ -22,4 +22,5 @@ public interface ModelModifiable {
     	
 	public Set<Turtle> getTurtlesToModify();
 
+    public Set<Turtle> getTurtles();
 }
