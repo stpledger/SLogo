@@ -31,6 +31,7 @@ public class sLogoValid {
 
 	public void setMyDoubleValue(double myDoubleValue) {
 		this.myDoubleValue = myDoubleValue;
+		this.setMyStringValue(Double.toString(this.getMyDoubleValue()));
 	}
 
 	public String getMyStringValue() {
@@ -39,6 +40,16 @@ public class sLogoValid {
 
 	public void setMyStringValue(String myStringValue) {
 		this.myStringValue = myStringValue;
+	}
+	
+	public void setBoolean(Boolean myBoolean) {
+		if(myBoolean) {
+			this.setMyDoubleValue(1);
+			this.setMyStringValue("true");
+		} else {
+			this.setMyDoubleValue(0);
+			this.setMyStringValue("false");
+		}
 	}
 	
 }
