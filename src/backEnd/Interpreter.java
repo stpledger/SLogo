@@ -55,7 +55,6 @@ public class Interpreter {
 			//System.out.println("Initial String: " + s);
 		sLogoValid tempSlogoValid = new sLogoValid();
 		String[] args = s.trim().split("\\s+");
-			//System.out.println(args[0]);
 		//Check to see if the first argument is valid
 		if(!myLanguageProperties.containsKey(args[0])) {
 			tempSlogoValid.setMyStringValue("Invalid command: " + args[0]);
@@ -66,21 +65,79 @@ public class Interpreter {
 		String myCommand = myLanguageProperties.getProperty(args[0]);
 		//Convert the English command to shorthand
 		args[0] = myShortCommands.getProperty(myCommand);
+			//Check for advanced syntax
+				if(args[0].equals("repeat")) {
+					System.out.println("");
+					tempSlogoValid = interpretRepeat(args);
+						if(tempSlogoValid.getError()) {
+							return tempSlogoValid;
+						}
+					tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
+					return tempSlogoValid;
+				} else {
 		//Get a string array with the syntax
 		String[] mySyntax = getCommandSyntax(myCommand);
-		//C
 		tempSlogoValid = argumentCheck(args, mySyntax);
-		System.out.println("Command Created: " + tempSlogoValid.getMyStringValue());
+		//System.out.println("Command Created: " + tempSlogoValid.getMyStringValue());
 		tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
 		return tempSlogoValid;
+		}
 	}
+	private sLogoValid interpretRepeat(String[] args) {
+		//Setup Instance Variables
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = new ArrayList<String>();
+		myInputArgs.addAll(Arrays.asList(args));
+		ArrayList<String> myTempArgs = new ArrayList<String>();
+		int myTimes = 0;
+		//Remove 'Repeat'
+		myInputArgs.remove(0);
+		//Check for valid loop number
+		String myNum = "";
+		while(!myInputArgs.get(0).equals("[")) {
+			myNum += myInputArgs.remove(0) + " ";
+		}
+		myInputArgs.remove(0);
+		//check to see if there was only one value
+		if(myNum.split(" ").length > 1) {
+			tempSlogoValid = interpret(myNum);
+			//TODO: IT's possible the line below needs to check to see if there is a double
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+		myTimes = (int) tempSlogoValid.getMyDoubleValue();
+		} else {
+			myTimes = (int) Double.parseDouble(myNum);
+		}
+		if(myTimes == 0) {
+			tempSlogoValid.setMyDoubleValue(0);
+			return tempSlogoValid;
+		}
+		//Parse out the commands
+		String myCommands = "";
+		while(!myInputArgs.isEmpty() && !myInputArgs.get(0).equals("]")){
+			myCommands += myInputArgs.remove(0) + " "; 
+		}
+		myInputArgs.remove(0);
+		//Loop time
+		System.out.println(myTimes);
+		for(int i = 0; i < myTimes; i++) {
+			tempSlogoValid = interpret(myCommands);
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+			System.out.println(tempSlogoValid.getMyStringValue());
+		}
+		return tempSlogoValid;
+
+	}
+
 	private sLogoValid argumentCheck(String[] args, String[] expectedSyntax) {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		int myExpectedSyntax = expectedSyntax.length;
 		ArrayList<String> myInputArgs = new ArrayList<String>();
 		myInputArgs.addAll(Arrays.asList(args));
 		ArrayList<String> myTempArgs = new ArrayList<String>();
-		System.out.println("Input: "+ myInputArgs.toString());
 			//Add the initial command
 			myTempArgs.add(myInputArgs.remove(0));
 			//Concatenate all the arguments needed for the primary command	
@@ -90,6 +147,17 @@ public class Interpreter {
 					mySlogoValid.setError(true);
 					mySlogoValid.setMyStringValue("Invalid number of Arguments for command: "+ myTempArgs.get(0));
 					return mySlogoValid;
+				}
+				
+				//Check to see if we only need one more argument
+				if(myTempArgs.size() + 1 == myExpectedSyntax && myInputArgs.size() == 1) {
+					myTempArgs.add(myInputArgs.remove(0));
+					String concatArgs = "";
+					for(String k : myTempArgs) {
+						concatArgs += k + " ";
+					}
+					tempSlogoValid.setMyStringValue(concatArgs);
+					return tempSlogoValid;
 				}
 				
 				//Check to see if there is an if statement
@@ -196,7 +264,7 @@ public class Interpreter {
 				return syntax;
 			}
 		}
-		if(myCommand.equals("Repeat") || myCommand.equals("If")) {
+		if(myCommand.equals("If")) {
 			String[] syntax = {"com", "arg", "[","mul","]"};
 			return syntax;
 		}
