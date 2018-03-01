@@ -131,6 +131,5 @@ public class Turtle {
 			ret.setStroke(myPenColor);
 			return ret;
 		}
-		
 	}
 }

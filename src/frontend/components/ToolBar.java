@@ -81,8 +81,8 @@ public class ToolBar implements ComponentBuilder{
 		
 //		toAdd.add(imagePath);
 //		
-//		updateEnvButton.setOnAction(e -> builder.update());
-//		toAdd.add(updateEnvButton);
+		updateEnvButton.setOnAction(e -> builder.update());
+		toAdd.add(updateEnvButton);
 		
 		bar.getChildren().addAll(toAdd);
 	}

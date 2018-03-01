@@ -44,6 +44,7 @@ public class SideBar implements ComponentBuilder {
 		}
 		host.getChildren().add(formatHeaderCell(new Label("Previous Commands")));
 		
+		System.out.println(displayableModel.getPreviousCommands());
 		for (CommandGroup com: displayableModel.getPreviousCommands()) {
 			host.getChildren().add(new SideBarComponent(com.toString()).getNode());
 		}
