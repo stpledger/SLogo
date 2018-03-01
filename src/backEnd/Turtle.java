@@ -17,12 +17,12 @@ public class Turtle {
 	
 	private String myTurtleImage = "turtleScaled.png";
 	private ImageView myTurtleDisplay;
-	private double myXPos;
-	private double myYPos;
-	private double myAngle;
+	protected double myXPos;
+	protected double myYPos;
+	protected double myAngle;
 	private Set<Line> myTraces = new HashSet<Line>();
 	private Pen myPen;
-	private boolean isPenDown = true;
+	protected boolean isPenDown = true;
 	
 	public Turtle(double xpos, double ypos, double angle) {
 		myXPos = xpos;
@@ -108,6 +108,10 @@ public class Turtle {
 	
 	protected void penDown() {
 		isPenDown = true;
+	}
+	
+	protected void clearTraces() {
+		myTraces.clear();
 	}
 	
 	private class Pen {

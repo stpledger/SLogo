@@ -1,5 +1,6 @@
 package backEnd;
 
+import javafx.scene.image.Image;
 import java.util.Set;
 
 public class TurtleMoveCommand extends CommandGroup {
@@ -19,31 +20,31 @@ public class TurtleMoveCommand extends CommandGroup {
 	public sLogoValid run(String command, String[] args, ModelModifiable myModel){
 		switch (command){
 			case "fd":
-				return forward(args, myModel);
+				return forward(args);
 			case "bk":
-				return back(args, myModel);
+				return back(args);
 			case "lt":
-				return left(args, myModel);
-			/*case "rt":
-				return right(args, myModel);
+				return left(args);
+			case "rt":
+				return right(args);
 			case "seth":
-				return setHeader(args, myModel);
+				return setHeading(args);
 			case "towards":
-				return towards(args, myModel);
+				return towards(args);
 			case "goto":
-				return goTo(args, myModel);
+				return goTo(args);
 			case "pd":
-				return pendown(myModel);
+				return penDown();
 			case "pu":
-				return penup(myModel);
+				return penUp();
 			case "st":
-				return showTurtle(myModel);
+				return showTurtle();
 			case "ht":
-				return hideTurtle(myModel);
+				return hideTurtle();
 			case "home":
-				return home(args, myModel);
+				return home();
 			case "cs":
-				return clearScreen(args, myModel);*/
+				return clearScreen();
 			default:
 				sLogoValid noExecute = new sLogoValid();
 				noExecute.setError(true);
@@ -52,7 +53,7 @@ public class TurtleMoveCommand extends CommandGroup {
 		}
 	}
 
-	private sLogoValid forward(String[] args, ModelModifiable model){
+	private sLogoValid forward(String[] args){
 		Set<Turtle> turtles = myModel.getTurtles();
 		for(Turtle t : turtles){
 			t.move(Double.parseDouble(args[0]));
@@ -62,7 +63,7 @@ public class TurtleMoveCommand extends CommandGroup {
 		return temp;
 	}
 
-	private sLogoValid back(String[] args, ModelModifiable model){
+	private sLogoValid back(String[] args){
 		Set<Turtle> turtles = myModel.getTurtles();
 		for(Turtle t : turtles){
 			t.move(-1 * Double.parseDouble(args[0]));
@@ -72,13 +73,116 @@ public class TurtleMoveCommand extends CommandGroup {
 		return temp;
 	}
 
-	private sLogoValid left(String[] args, ModelModifiable model){
+	private sLogoValid left(String[] args){
 		Set<Turtle> turtles = myModel.getTurtles();
 		for(Turtle t : turtles){
 			t.rotate(-1 * Double.parseDouble(args[0]));
 		}
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(Double.parseDouble(args[0]));
+		return temp;
+	}
+
+	private sLogoValid right(String[] args){
+		Set<Turtle> turtles = myModel.getTurtles();
+		for(Turtle t : turtles){
+			t.rotate(Double.parseDouble(args[0]));
+		}
+		sLogoValid temp = new sLogoValid();
+		temp.setMyDoubleValue(Double.parseDouble(args[0]));
+		return temp;
+	}
+
+	private sLogoValid setHeading(String[] args){
+		Set<Turtle> turtles = myModel.getTurtles();
+		double out = 0;
+		for(Turtle t : turtles){
+			out = t.rotateTo(Double.parseDouble(args[0]));
+		}
+		sLogoValid temp = new sLogoValid();
+		temp.setMyDoubleValue(out);
+		return temp;
+	}
+
+	private sLogoValid towards(String[] args){
+		Set<Turtle> turtles = myModel.getTurtles();
+		double out = 0;
+		for(Turtle t : turtles){
+			out = t.rotateTowards(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
+		}
+		sLogoValid temp = new sLogoValid();
+		temp.setMyDoubleValue(out);
+		return temp;
+	}
+
+	private sLogoValid goTo(String[] args) {
+		Set<Turtle> turtles = myModel.getTurtles();
+		double out = 0;
+		for (Turtle t : turtles) {
+			out = t.moveTo(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
+		}
+		sLogoValid temp = new sLogoValid();
+		temp.setMyDoubleValue(out);
+		return temp;
+	}
+
+	private sLogoValid penDown() {
+		Set<Turtle> turtles = myModel.getTurtles();
+		for (Turtle t : turtles) {
+			t.penDown();
+		}
+		sLogoValid temp = new sLogoValid();
+		temp.setMyDoubleValue(1);
+		return temp;
+	}
+
+	private sLogoValid penUp() {
+		Set<Turtle> turtles = myModel.getTurtles();
+		for (Turtle t : turtles) {
+			t.penUp();
+		}
+		sLogoValid temp = new sLogoValid();
+		temp.setMyDoubleValue(0);
+		return temp;
+	}
+
+	private sLogoValid hideTurtle() {
+		Set<Turtle> turtles = myModel.getTurtles();
+		for (Turtle t : turtles) {
+			t.getTurtle().setImage(null);
+		}
+		sLogoValid temp = new sLogoValid();
+		temp.setMyDoubleValue(0);
+		return temp;
+	}
+
+	private sLogoValid showTurtle() {
+		Set<Turtle> turtles = myModel.getTurtles();
+		for (Turtle t : turtles) {
+			t.getTurtle().setImage(new Image("turtleScaled.png"));
+		}
+		sLogoValid temp = new sLogoValid();
+		temp.setMyDoubleValue(1);
+		return temp;
+	}
+
+	private sLogoValid home() {
+		Set<Turtle> turtles = myModel.getTurtles();
+		double out = 0;
+		for (Turtle t : turtles) {
+			out = t.moveTo(0,0);
+		}
+		sLogoValid temp = new sLogoValid();
+		temp.setMyDoubleValue(out);
+		return temp;
+	}
+
+	private sLogoValid clearScreen() {
+		Set<Turtle> turtles = myModel.getTurtles();
+		sLogoValid temp = home();
+		for (Turtle t : turtles) {
+			t.clearTraces();
+		}
 		return temp;
 	}
 }
