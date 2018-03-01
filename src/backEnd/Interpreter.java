@@ -79,6 +79,11 @@ public class Interpreter {
 							return tempSlogoValid;
 						}					
 					
+				} else if(args[0].equals("for")) {
+					tempSlogoValid = interpretFor(args);
+						if(tempSlogoValid.getError()) {
+							return tempSlogoValid;
+						}
 				}else {
 		//Get a string array with the syntax
 		String[] mySyntax = getCommandSyntax(myCommand);
@@ -92,6 +97,57 @@ public class Interpreter {
 		}
 				return tempSlogoValid;
 	}
+
+	private sLogoValid interpretFor(String[] args) {
+		//Setup Instance Variables
+		double myStart;
+		double myEnd;
+		double myIncrement;
+		String myCommands = "";
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = new ArrayList<String>();
+		myInputArgs.addAll(Arrays.asList(args));
+		ArrayList<String> myTempArgs = new ArrayList<String>();
+		
+		//remove the command name and the [
+		myInputArgs.remove(0);
+		myInputArgs.remove(0);
+		
+		myStart =  Double.parseDouble(myInputArgs.remove(0));
+		myEnd = Double.parseDouble(myInputArgs.remove(0));
+		myIncrement = Double.parseDouble(myInputArgs.remove(0));
+		
+		//Check to make sure we're only dealing with simple info
+		if(!myInputArgs.get(0).equals("]")) {
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("Can not handle advanced arguments in for loops yet");
+			//TODO: Handle advanced arguments in for loops
+			return tempSlogoValid;
+		}
+		myInputArgs.remove(0);
+		//Check to make sure there is a second list
+		if(!myInputArgs.get(0).equals("[")) {
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("expected second list");
+			return tempSlogoValid;
+		}
+		myInputArgs.remove(0);
+		while(!myInputArgs.get(0).equals("]")) {
+			myCommands += myInputArgs.remove(0) + " ";
+		}
+		myInputArgs.remove(0);
+		
+		for(Double i = myStart; i < myEnd; i += myIncrement) {
+			tempSlogoValid = interpret(myCommands);
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+		}
+		return tempSlogoValid;
+		//TODO: Check for leftover arguments
+		
+	}
+
 	private sLogoValid interpretBoolean(String[] args) {
 		//Setup Instance Variables
 			String myCondition = "";
@@ -114,7 +170,6 @@ public class Interpreter {
 				tempSlogoValid = interpret(myCommands);
 				
 			} else if(myTempArgs.get(0).equals("ifelse")) {
-				System.out.println("else");
 				//Skip to the second list
 				while(!myInputArgs.get(0).equals("]")) {
 					myInputArgs.remove(0);
