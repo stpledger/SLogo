@@ -53,8 +53,8 @@ public class IDEBuilder implements SceneBuilder{
 		turtleDisplay.setBackgroundColor(toolbar.getColor());
 		side.update();
 		toolbar.update(side.getModel());
-//		Uncomment once command to write to console is completed.
-//		console.enterCommand(toolbar.getTurtleNameChangeCommand()); 
+		console.enterCommand(toolbar.getTurtleNameChangeCommand()); 
+		if (toolbar.getCurrentImageSelected().length() > 0) {turtleDisplay.changeImage(toolbar.getCurrentImageSelected());}
 	}
 
 }

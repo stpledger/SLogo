@@ -27,6 +27,11 @@ public class SideBarComponent {
 		setStyle();
 	}
 	
+	public SideBarComponent(String com) {
+		name = com;
+		description = "";
+	}
+	
 	public Node getNode() {
 		container.setPrefSize(NAME_WIDTH + DESCRIPTION_WIDTH, HEIGHT);
 		container.getChildren().add(getNameComponent());

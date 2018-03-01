@@ -1,6 +1,8 @@
 package frontend.components;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,8 @@ import frontend.IDEBuilder;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
@@ -75,10 +79,10 @@ public class ToolBar implements ComponentBuilder{
 		selectImage.setOnAction(this::updateImagePath);
 		toAdd.add(selectImage);
 		
-		toAdd.add(imagePath);
-		
-		updateEnvButton.setOnAction(e -> builder.update());
-		toAdd.add(updateEnvButton);
+//		toAdd.add(imagePath);
+//		
+//		updateEnvButton.setOnAction(e -> builder.update());
+//		toAdd.add(updateEnvButton);
 		
 		bar.getChildren().addAll(toAdd);
 	}
@@ -95,8 +99,25 @@ public class ToolBar implements ComponentBuilder{
 	private void updateImagePath(ActionEvent e) {
 		FileChooser fileChooser = new FileChooser();
 		File f = fileChooser.showOpenDialog(new Stage());
-		imagePath.setText(f.getPath());
+		String mimetype = "Invalid";
+		try {
+			mimetype = Files.probeContentType(f.toPath());
+			if (mimetype == null) mimetype = "Invalid";
+		} catch (IOException e1) {
+			// Do nothing
+		}
+		if (mimetype.contains("image")) {
+			imagePath.setText(f.getAbsolutePath());
+		    builder.update();
+		} else {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Invalid Image");
+			alert.setContentText("The filepath you chose, " + f.getAbsolutePath() + " is not a valid image!");
+			alert.showAndWait();
+		}
+		
 	}
+	
 	
 	/*
 	 * Update the toolbar to show possible turtles. Should receive modelViewable that is used by the sidebar
@@ -111,6 +132,13 @@ public class ToolBar implements ComponentBuilder{
 	}
 	
 	/*
+	 * Get the image path currently inside imagePath
+	 */
+	public String getCurrentImageSelected() {
+		return imagePath.getText();
+	}
+	
+	/*
 	 * Returns the name of the currently selected turtle to change update 
 	 */
 	public String getTurtleNameChangeCommand() {
@@ -121,7 +149,6 @@ public class ToolBar implements ComponentBuilder{
 			command += imagePath.getText();
 		}
 		System.out.println(command);
-		imagePath.setText("");
 		return command;
 	}
 }
