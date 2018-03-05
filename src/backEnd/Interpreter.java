@@ -11,7 +11,7 @@ public class Interpreter {
 	private Properties myShortCommands;
 	private Controller myController;
 	private ModelModifiable myModelModifiable;
-	private static final String[] noParamCommands = {"pu","pu","st","ht","home","cs","xcor","ycor","heading","pendownp","showingp","pi", "pc", "sh", "stamp", "clearstamps"};
+	private static final String[] noParamCommands = {"pu","pd","st","ht","home","cs","xcor","ycor","heading","pendownp","showingp","pi", "pc", "sh", "stamp", "clearstamps"};
 	private static final String[] oneParamCommands = {"fd", "bk", "lt", "rt", "seth", "random", "sin", "cos", "tan", "atan", "log", "not", "minus", "setbg", "setpc", "setps", "setsh", "setpalette"};
 	private static final String[] twoParamCommands = {"towards", "setxy", "sum", "difference", "product", "quotient", "remainder", "pow", "lessp","greaterp", "equal", "notequalp", "And", "Or", "MakeVariable"}; 
 	//TODO: Add multiple turtle commands
