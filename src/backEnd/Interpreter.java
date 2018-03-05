@@ -383,6 +383,7 @@ public class Interpreter {
 				
 				//Check to see if we only need one more argument
 				if(myTempArgs.size() + 1 == myExpectedSyntax && myInputArgs.size() == 1) {
+					//TODO: Implement a parenthesis Check
 					myTempArgs.add(myInputArgs.remove(0));
 					String concatArgs = "";
 					for(String k : myTempArgs) {
@@ -418,6 +419,7 @@ public class Interpreter {
 					while(syntax.length > myInternalTempArgs.size()) {
 						myInternalTempArgs.add(myInputArgs.remove(0));
 					}
+					//Concatonate everything to pass on
 					String concat = "";
 					for(String k: myInternalTempArgs) {
 						concat += k + " ";
@@ -496,5 +498,46 @@ public class Interpreter {
 		}
 		return tempSlogoValid;
 		
+	}
+	
+	private sLogoValid doubleCheck(String arg) {
+		sLogoValid tempSlogoValid = new sLogoValid();
+		try {
+			Double.parseDouble(arg);
+			tempSlogoValid.setMyStringValue(arg);
+			return tempSlogoValid;
+		} catch(Exception e) {
+			//Nada, it's just not a double;
+		}
+		try {
+			tempSlogoValid = myModelModifiable.getVariable(arg);
+			return tempSlogoValid;
+		} catch (Exception e) {
+			tempSlogoValid.setMyStringValue("Variable not defined: " + arg);
+		}
+		tempSlogoValid.setError(true);
+		return tempSlogoValid;
+	}
+	
+	private  sLogoValid methodCheck(String arg) {
+		sLogoValid tempSlogoValid = new sLogoValid();
+		//Check to see if the variable is defined
+		try {
+			tempSlogoValid = myModelModifiable.getVariable(arg);		
+		} catch(Exception e) {
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("Variable not defined: " + arg);
+			return tempSlogoValid;
+		} 
+		//Check to make sure it's a method and not a variable.
+		try {
+			Double.parseDouble(tempSlogoValid.getMyStringValue());
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("Method not defined: " + arg);
+			return tempSlogoValid;
+		} catch (Exception e) {
+			
+		}	
+		return tempSlogoValid;
 	}
 }
