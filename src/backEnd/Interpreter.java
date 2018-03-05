@@ -74,7 +74,6 @@ public class Interpreter {
 		//check to see if its user defined
 		if(!myModelModifiable.getVariable(args[0]).getError()) {
 			args[0] = myModelModifiable.getVariable(args[0]).getMyStringValue();
-			System.out.println("yah " + args[0]);
 		}
 		//Check to see if the first argument is valid
 		if(!myLanguageProperties.containsKey(args[0])) {
@@ -176,7 +175,6 @@ public class Interpreter {
 			if("]".equals(myInputArgs.get(0))  && internalLoopCount == 0){
 				break;
 			}
-			System.out.println(internalLoopCount + " " + myInputArgs);
 			if("[".equals(myInputArgs.get(0))) {
 				internalLoopCount += 1;
 			}
@@ -191,7 +189,6 @@ public class Interpreter {
 			String myTempCommands;
 			if(myCommands.contains(myVar)) {
 				myTempCommands = myCommands.replaceAll(myVar, i.toString());
-				System.out.println(myTempCommands);
 			} else {
 				myTempCommands = myCommands;
 			}
@@ -354,7 +351,6 @@ public class Interpreter {
 			if("]".equals(myInputArgs.get(0))  && internalLoopCount == 0){
 				break;
 			}
-			System.out.println(internalLoopCount + " " + myInputArgs);
 			if("[".equals(myInputArgs.get(0))) {
 				internalLoopCount += 1;
 			}
@@ -365,13 +361,11 @@ public class Interpreter {
 		} while (true);
 		myInputArgs.remove(0);
 		//Loop time
-		System.out.println(myTimes);
 		for(int i = 0; i < myTimes; i++) {
 			tempSlogoValid = interpret(myCommands);
 			if(tempSlogoValid.getError()) {
 				return tempSlogoValid;
 			}
-			System.out.println(tempSlogoValid.getMyStringValue());
 		}
 		if(!myInputArgs.isEmpty()) {
 			leftOverCheck(myInputArgs);
@@ -405,22 +399,28 @@ public class Interpreter {
 					tempSlogoValid.setMyStringValue(concatArgs);
 					return tempSlogoValid;
 				}
-				
+				//Check for internal variables
 				if(myInputArgs.get(0).contains(":") && !myTempArgs.contains("set")) {
+					System.out.println("yuh: " + myTempArgs + myInputArgs.toString());
 					tempSlogoValid = doubleCheck(myInputArgs.remove(0));
-					System.out.println("Why does my code hate me: " + tempSlogoValid.getMyStringValue());
 					if(tempSlogoValid.getError()) {
 						return tempSlogoValid;
 					}
 					myTempArgs.add(tempSlogoValid.getMyStringValue());
-					if(myTempArgs.size() == myExpectedSyntax) {
-						String concatArgs = "";
-						for(String k : myTempArgs) {
-							concatArgs += k + " ";
+					while(myTempArgs.size() < myExpectedSyntax) {
+						if(myTempArgs.contains(":")) {
+							myTempArgs.add(myModelModifiable.getVariable(myInputArgs.remove(0)).getMyStringValue());
+						} else {
+							myTempArgs.add(myInputArgs.remove(0));
 						}
-						tempSlogoValid.setMyStringValue(concatArgs);
-						leftOverCheck(myInputArgs);
 					}
+					String concatArgs = "";
+					for(String k : myTempArgs) {
+						concatArgs += k + " ";
+					}
+					System.out.println(concatArgs);
+					tempSlogoValid.setMyStringValue(concatArgs);
+					leftOverCheck(myInputArgs);
 					return tempSlogoValid;
 				}
 								//Check to see if there is an internal list
