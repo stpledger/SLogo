@@ -32,6 +32,7 @@ public class sLogoValid {
 	public void setMyDoubleValue(double myDoubleValue) {
 		this.myDoubleValue = myDoubleValue;
 		this.setMyStringValue(Double.toString(this.getMyDoubleValue()));
+		this.setError(false);
 	}
 
 	public String getMyStringValue() {

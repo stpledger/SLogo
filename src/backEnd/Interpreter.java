@@ -2,7 +2,9 @@ package backEnd;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.PriorityQueue;
 import java.util.Properties;
+import java.util.Queue;
 
 public class Interpreter {
 	private String myLanguage = "English";
@@ -11,6 +13,7 @@ public class Interpreter {
 	private Properties myShortCommands;
 	private Controller myController;
 	private ModelModifiable myModelModifiable;
+	private Queue<String> myQueue;
 	private static final String[] noParamCommands = {"pu","pd","st","ht","home","cs","xcor","ycor","heading","pendownp","showingp","pi", "pc", "sh", "stamp", "clearstamps", "id", "turtles"};
 	private static final String[] oneParamCommands = {"fd", "bk", "lt", "rt", "seth", "random", "sin", "cos", "tan", "atan", "log", "not", "minus", "setbg", "setpc", "setps", "setsh", "setpalette"};
 	private static final String[] twoParamCommands = {"towards", "setxy", "sum", "difference", "product", "quotient", "remainder", "pow", "lessp","greaterp", "equal", "notequalp", "And", "Or", "set"}; 
@@ -23,6 +26,7 @@ public class Interpreter {
 		mySlogoValid = new sLogoValid();
 		myModelModifiable = m;
 		myController = new Controller(m);
+		myQueue = new PriorityQueue<String>();
 		//Try to import the language properties
 		try {
 			myLanguageProperties = new languageParser(myLanguage).getProperties();
@@ -109,7 +113,14 @@ public class Interpreter {
 				System.out.println("Error: " + tempSlogoValid.getMyStringValue());
 				return tempSlogoValid;
 			}
-		return passToController(tempSlogoValid.getMyStringValue());
+		tempSlogoValid = passToController(tempSlogoValid.getMyStringValue());
+		if(tempSlogoValid.getError()) {
+			return tempSlogoValid;
+		}
+		if(myQueue.isEmpty()) {
+			return tempSlogoValid;
+		}
+		return interpret(myQueue.remove());
 		}
 				return tempSlogoValid;
 	}
@@ -190,7 +201,7 @@ public class Interpreter {
 			}
 		}
 		if(!myInputArgs.isEmpty()) {
-			tempSlogoValid = leftOverCheck(myInputArgs);
+			leftOverCheck(myInputArgs);
 		}
 		return tempSlogoValid;
 			}
@@ -235,7 +246,7 @@ public class Interpreter {
 				return tempSlogoValid;
 			}
 			if(!myInputArgs.isEmpty()) {
-				tempSlogoValid = leftOverCheck(myInputArgs);
+				leftOverCheck(myInputArgs);
 			}
 		return tempSlogoValid;
 	}
@@ -303,7 +314,7 @@ public class Interpreter {
 			return tempSlogoValid;
 			}
 		}
-			private sLogoValid interpretRepeat(String[] args) {
+		private sLogoValid interpretRepeat(String[] args) {
 		//Setup Instance Variables
 		sLogoValid tempSlogoValid = new sLogoValid();
 		ArrayList<String> myInputArgs = new ArrayList<>(Arrays.asList(args));
@@ -363,7 +374,7 @@ public class Interpreter {
 			System.out.println(tempSlogoValid.getMyStringValue());
 		}
 		if(!myInputArgs.isEmpty()) {
-			tempSlogoValid = leftOverCheck(myInputArgs);
+			leftOverCheck(myInputArgs);
 		}
 		return tempSlogoValid;
 	}
@@ -392,6 +403,24 @@ public class Interpreter {
 						concatArgs += k + " ";
 					}
 					tempSlogoValid.setMyStringValue(concatArgs);
+					return tempSlogoValid;
+				}
+				
+				if(myInputArgs.get(0).contains(":") && !myTempArgs.contains("set")) {
+					tempSlogoValid = doubleCheck(myInputArgs.remove(0));
+					System.out.println("Why does my code hate me: " + tempSlogoValid.getMyStringValue());
+					if(tempSlogoValid.getError()) {
+						return tempSlogoValid;
+					}
+					myTempArgs.add(tempSlogoValid.getMyStringValue());
+					if(myTempArgs.size() == myExpectedSyntax) {
+						String concatArgs = "";
+						for(String k : myTempArgs) {
+							concatArgs += k + " ";
+						}
+						tempSlogoValid.setMyStringValue(concatArgs);
+						leftOverCheck(myInputArgs);
+					}
 					return tempSlogoValid;
 				}
 								//Check to see if there is an internal list
@@ -435,7 +464,7 @@ public class Interpreter {
 			
 						//Check for leftOvers
 			if(!myInputArgs.isEmpty()) {
-				tempSlogoValid = leftOverCheck(myInputArgs);
+				leftOverCheck(myInputArgs);
 			}
 				//TODO: find a way to pass this up a level or print it to the prompt
 			//Print the final result
@@ -486,7 +515,12 @@ public class Interpreter {
 			return myController.create(s, "");
 		}
 	}
-		private sLogoValid leftOverCheck(ArrayList<String> args) {
+		/**
+		 * 
+		 * @param args
+		 * @return
+		 */
+		private void leftOverCheck(ArrayList<String> args) {
 		ArrayList<String> myInputArgs = args;
 		sLogoValid tempSlogoValid = new sLogoValid();
 		if(!myInputArgs.isEmpty()) {
@@ -494,10 +528,15 @@ public class Interpreter {
 			while(!myInputArgs.isEmpty()) {
 				concat += myInputArgs.remove(0) + " ";
 			}
-			tempSlogoValid = interpret(concat);
+			myQueue.add(concat);
 		}
-		return tempSlogoValid;
 			}
+		
+		/**
+		 * 
+		 * @param arg
+		 * @return
+		 */
 		private sLogoValid doubleCheck(String arg) {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		String tArg = arg.trim();
@@ -513,6 +552,7 @@ public class Interpreter {
 				return tempSlogoValid;
 			}
 			tempSlogoValid.setMyDoubleValue(tempSlogoValid.getMyDoubleValue());
+			return tempSlogoValid;
 		} catch (Exception e) {
 			tempSlogoValid.setMyStringValue("Variable not defined: " + arg);
 		}
@@ -539,4 +579,5 @@ public class Interpreter {
 					}	
 		return tempSlogoValid;
 	}
+		
 }
