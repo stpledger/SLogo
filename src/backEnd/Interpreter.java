@@ -11,11 +11,17 @@ public class Interpreter {
 	private Properties myShortCommands;
 	private Controller myController;
 	private ModelModifiable myModelModifiable;
-	private static final String[] noParamCommands = {"PenUp","PenDown","ShowTurtle","HideTurtle","Home","ClearScreen","XCoordinate","YCoordinate","Heading","IsPenDown","IsShowing","Pi", "GetPenColor", "GetShape", "Stamp", "ClearStamps"};
-	private static final String[] oneParamCommands = {"Forward", "Backward", "Left", "Right", "SetHeading", "Random", "Sine", "Cosine", "Tangent", "ArcTangent", "NaturalLog", "Not", "Minus", "SetBackground", "SetPenColor", "SetPenSize", "SetShape", "SetPalette"};
-	private static final String[] twoParamCommands = {"SetTowards", "SetPosition", "Sum", "Difference", "Product", "Quotient", "Remainder", "Power", "LessThan","GreaterThan", "Equal", "NotEqual", "And", "Or", "MakeVariable"}; 
+	private static final String[] noParamCommands = {"pu","pu","st","ht","home","cs","xcor","ycor","heading","pendownp","showingp","pi", "pc", "sh", "stamp", "clearstamps"};
+	private static final String[] oneParamCommands = {"fd", "bk", "lt", "rt", "seth", "random", "sin", "cos", "tan", "atan", "log", "not", "minus", "setbg", "setpc", "setps", "setsh", "setpalette"};
+	private static final String[] twoParamCommands = {"towards", "setxy", "sum", "difference", "product", "quotient", "remainder", "pow", "lessp","greaterp", "equal", "notequalp", "And", "Or", "MakeVariable"}; 
 	//TODO: Add multiple turtle commands
-	
+	//TODO: Add a check to make sure proper data and user variables are the arguments
+	//TODO: refactor isCommand check to include user defined commands
+	//TODO: make the interpreter work for commands like 'sum fd 50 fd 50'
+	/**
+	 * 
+	 * @param m
+	 */
 	public Interpreter(ModelModifiable m) {
 		mySlogoValid = new sLogoValid();
 		myModelModifiable = m;
@@ -33,6 +39,10 @@ public class Interpreter {
 		
 	}
 	
+	/**
+	 * Sets the language of the Interpreter
+	 * @param s String of Language to be interpreted
+	 */
 	public void setLanguage(String s) {
 		myLanguage = s;
 		//Try to import the language properties
@@ -44,6 +54,11 @@ public class Interpreter {
 				}
 	}
 	
+	/**
+	 * Takes in a string of commands, normalizes it, breaks it into simple commands, and sends them to the controller
+	 * @param s String of Commands
+	 * @return sLogoValid with either the String Result of a command or Error
+	 */
 	public sLogoValid interpret(String s) {
 		//Check to ensure there aren't prior errors
 		if(mySlogoValid.getError()) {
@@ -58,12 +73,16 @@ public class Interpreter {
 			//System.out.println("Initial String: " + s);
 		sLogoValid tempSlogoValid = new sLogoValid();
 		String[] args = s.trim().split("\\s+");
+		//check to see if its user defined
+		if(!myModelModifiable.getVariable(args[0]).getError()) {
+			args[0] = myModelModifiable.getVariable(args[0]).getMyStringValue();
+		}
 		//Check to see if the first argument is valid
 		if(!myLanguageProperties.containsKey(args[0])) {
 			tempSlogoValid.setMyStringValue("Invalid command: " + args[0]);
 			tempSlogoValid.setError(true);
 			return tempSlogoValid;
-		} 
+		} 	
 		//Convert the command to English
 		String myCommand = myLanguageProperties.getProperty(args[0]);
 		//Convert the English command to shorthand
@@ -89,7 +108,7 @@ public class Interpreter {
 						}
 				} else {
 		//Get a string array with the syntax
-		String[] mySyntax = getCommandSyntax(myCommand);
+		String[] mySyntax = getCommandSyntax(args[0]);
 		tempSlogoValid = interpretBasicArgs(args, mySyntax);
 			if(tempSlogoValid.getError()) {
 				System.out.println("Error: " + tempSlogoValid.getMyStringValue());
@@ -112,7 +131,6 @@ public class Interpreter {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		ArrayList<String> myInputArgs = new ArrayList<String>();
 		myInputArgs.addAll(Arrays.asList(args));
-		ArrayList<String> myTempArgs = new ArrayList<String>();
 		
 		//remove the command name and the 
 		myCommand = myInputArgs.remove(0);
@@ -121,11 +139,11 @@ public class Interpreter {
 		
 		//Check which VarLoop type we're using
 		if(myCommand.equals("for")) {
-		myStart =  Double.parseDouble(myInputArgs.remove(0));
-		myEnd = Double.parseDouble(myInputArgs.remove(0));
-		myIncrement = Double.parseDouble(myInputArgs.remove(0));
+		myStart =  doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();
+		myEnd = doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();
+		myIncrement = doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();
 		} else {
-		myEnd = Double.parseDouble(myInputArgs.remove(0));
+		myEnd = doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();
 		myStart = 0;
 		myIncrement = 1;
 		}
@@ -139,17 +157,20 @@ public class Interpreter {
 		}
 		myInputArgs.remove(0);
 		//Check to make sure there is a second list
+		//TODO: Refactor list getting methods and create a way to handle lists in lists
 		if(!myInputArgs.get(0).equals("[")) {
 			tempSlogoValid.setError(true);
 			tempSlogoValid.setMyStringValue("expected second list");
 			return tempSlogoValid;
 		}
+		//Collect everything within the loop.
 		myInputArgs.remove(0);
 		while(!myInputArgs.get(0).equals("]")) {
 			myCommands += myInputArgs.remove(0) + " ";
 		}
 		myInputArgs.remove(0);
 		
+		//Loop Time
 		for(Double i = myStart; i < myEnd; i += myIncrement) {
 			String myTempCommands;
 			if(myCommands.contains(myVar)) {
@@ -163,8 +184,10 @@ public class Interpreter {
 				return tempSlogoValid;
 			}
 		}
+		if(!myInputArgs.isEmpty()) {
+			tempSlogoValid = leftOverCheck(myInputArgs);
+		}
 		return tempSlogoValid;
-		//TODO: Check for leftover arguments
 		
 	}
 
@@ -209,7 +232,9 @@ public class Interpreter {
 				tempSlogoValid.setMyDoubleValue(0);
 				return tempSlogoValid;
 			}
-			//TODO: Implement a check for leftover strings
+			if(!myInputArgs.isEmpty()) {
+				tempSlogoValid = leftOverCheck(myInputArgs);
+			}
 		return tempSlogoValid;
 	}
 
@@ -296,7 +321,6 @@ public class Interpreter {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		ArrayList<String> myInputArgs = new ArrayList<String>();
 		myInputArgs.addAll(Arrays.asList(args));
-		ArrayList<String> myTempArgs = new ArrayList<String>();
 		int myTimes = 0;
 		//Remove 'Repeat'
 		myInputArgs.remove(0);
@@ -336,6 +360,9 @@ public class Interpreter {
 			}
 			System.out.println(tempSlogoValid.getMyStringValue());
 		}
+		if(!myInputArgs.isEmpty()) {
+			tempSlogoValid = leftOverCheck(myInputArgs);
+		}
 		return tempSlogoValid;
 
 	}
@@ -346,6 +373,7 @@ public class Interpreter {
 		ArrayList<String> myInputArgs = new ArrayList<String>();
 		myInputArgs.addAll(Arrays.asList(args));
 		ArrayList<String> myTempArgs = new ArrayList<String>();
+		
 			//Add the initial command
 			myTempArgs.add(myInputArgs.remove(0));
 			//Concatenate all the arguments needed for the primary command	
@@ -359,6 +387,7 @@ public class Interpreter {
 				
 				//Check to see if we only need one more argument
 				if(myTempArgs.size() + 1 == myExpectedSyntax && myInputArgs.size() == 1) {
+					//TODO: Implement a parenthesis Check
 					myTempArgs.add(myInputArgs.remove(0));
 					String concatArgs = "";
 					for(String k : myTempArgs) {
@@ -379,41 +408,41 @@ public class Interpreter {
 					if(tempSlogoValid.getError()) {
 						return tempSlogoValid;
 					}
-						//System.out.println("MyList: " + myList);
 					myTempArgs.add(tempSlogoValid.getMyStringValue());
 					myTempArgs.add(myInputArgs.remove(0));
-						//System.out.println(myTempArgs.toString());
 				}
 				
 				
 				//Check to make sure there isn't another command
 				if(!myInputArgs.isEmpty() && myLanguageProperties.containsKey(myInputArgs.get(0))) {
-					System.out.println("Internal loop: " + myInputArgs.toString());
+					//System.out.println("Internal loop: " + myInputArgs.toString());
+					ArrayList<String> myInternalTempArgs = new ArrayList<String>();
+					myInternalTempArgs.add(myInputArgs.remove(0));
+					String myCommand = myInternalTempArgs.get(0);
+					String[] syntax = getCommandSyntax(myCommand);
+					while(syntax.length > myInternalTempArgs.size()) {
+						myInternalTempArgs.add(myInputArgs.remove(0));
+					}
+					//Concatonate everything to pass on
 					String concat = "";
-					while(!myInputArgs.isEmpty()) {
-						concat += myInputArgs.remove(0) + " ";
+					for(String k: myInternalTempArgs) {
+						concat += k + " ";
 					}
 					tempSlogoValid = interpret(concat);
 					if(tempSlogoValid.getError()) {
 						return tempSlogoValid;
 					}
 					myInputArgs.add(tempSlogoValid.getMyStringValue());
-				} else if(! myInputArgs.isEmpty()) { 
+				} else if(!myInputArgs.isEmpty()) { 
 					myTempArgs.add(myInputArgs.remove(0));
 				}
 			}
-			//Interpret secondary arguments
-			if(myInputArgs.size() > 0) {
-					//System.out.println("Second Argument Detected");
-				String myConcatArgs = "";
-				while(myInputArgs.size() > 0) {
-					myConcatArgs += myInputArgs.remove(0) + " ";
-				}
-				tempSlogoValid = interpret(myConcatArgs);
-					//System.out.println("Internal Loop: " + tempSlogoValid.getMyStringValue());
-				//TODO: find a way to pass this up a level or print it to the prompt
-			}
 			
+			//Check for leftOvers
+			if(!myInputArgs.isEmpty()) {
+				tempSlogoValid = leftOverCheck(myInputArgs);
+			}
+				//TODO: find a way to pass this up a level or print it to the prompt
 			//Print the final result
 			String res = String.join(" ", myTempArgs);
 			tempSlogoValid.setMyStringValue(res);
@@ -459,5 +488,59 @@ public class Interpreter {
 		} else {
 			return myController.create(s, "");
 		}
+	}
+	
+	private sLogoValid leftOverCheck(ArrayList<String> args) {
+		ArrayList<String> myInputArgs = args;
+		sLogoValid tempSlogoValid = new sLogoValid();
+		if(!myInputArgs.isEmpty()) {
+			String concat = "";
+			while(!myInputArgs.isEmpty()) {
+				concat += myInputArgs.remove(0) + " ";
+			}
+			tempSlogoValid = interpret(concat);
+		}
+		return tempSlogoValid;
+		
+	}
+	
+	private sLogoValid doubleCheck(String arg) {
+		sLogoValid tempSlogoValid = new sLogoValid();
+		try {
+			tempSlogoValid.setMyDoubleValue(Double.parseDouble(arg));
+			return tempSlogoValid;
+		} catch(Exception e) {
+			//Nada, it's just not a double;
+		}
+		try {
+			tempSlogoValid = myModelModifiable.getVariable(arg);
+			return tempSlogoValid;
+		} catch (Exception e) {
+			tempSlogoValid.setMyStringValue("Variable not defined: " + arg);
+		}
+		tempSlogoValid.setError(true);
+		return tempSlogoValid;
+	}
+	
+	private  sLogoValid methodCheck(String arg) {
+		sLogoValid tempSlogoValid = new sLogoValid();
+		//Check to see if the variable is defined
+		try {
+			tempSlogoValid = myModelModifiable.getVariable(arg);		
+		} catch(Exception e) {
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("Variable not defined: " + arg);
+			return tempSlogoValid;
+		} 
+		//Check to make sure it's a method and not a variable.
+		try {
+			Double.parseDouble(tempSlogoValid.getMyStringValue());
+			tempSlogoValid.setError(true);
+			tempSlogoValid.setMyStringValue("Method not defined: " + arg);
+			return tempSlogoValid;
+		} catch (Exception e) {
+			
+		}	
+		return tempSlogoValid;
 	}
 }
