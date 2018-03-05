@@ -73,12 +73,16 @@ public class Interpreter {
 			//System.out.println("Initial String: " + s);
 		sLogoValid tempSlogoValid = new sLogoValid();
 		String[] args = s.trim().split("\\s+");
+		//check to see if its user defined
+		if(!myModelModifiable.getVariable(args[0]).getError()) {
+			args[0] = myModelModifiable.getVariable(args[0]).getMyStringValue();
+		}
 		//Check to see if the first argument is valid
 		if(!myLanguageProperties.containsKey(args[0])) {
 			tempSlogoValid.setMyStringValue("Invalid command: " + args[0]);
 			tempSlogoValid.setError(true);
 			return tempSlogoValid;
-		} 
+		} 	
 		//Convert the command to English
 		String myCommand = myLanguageProperties.getProperty(args[0]);
 		//Convert the English command to shorthand
@@ -135,11 +139,11 @@ public class Interpreter {
 		
 		//Check which VarLoop type we're using
 		if(myCommand.equals("for")) {
-		myStart =  Double.parseDouble(myInputArgs.remove(0));
-		myEnd = Double.parseDouble(myInputArgs.remove(0));
-		myIncrement = Double.parseDouble(myInputArgs.remove(0));
+		myStart =  doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();
+		myEnd = doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();
+		myIncrement = doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();
 		} else {
-		myEnd = Double.parseDouble(myInputArgs.remove(0));
+		myEnd = doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();
 		myStart = 0;
 		myIncrement = 1;
 		}
@@ -503,8 +507,7 @@ public class Interpreter {
 	private sLogoValid doubleCheck(String arg) {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		try {
-			Double.parseDouble(arg);
-			tempSlogoValid.setMyStringValue(arg);
+			tempSlogoValid.setMyDoubleValue(Double.parseDouble(arg));
 			return tempSlogoValid;
 		} catch(Exception e) {
 			//Nada, it's just not a double;
