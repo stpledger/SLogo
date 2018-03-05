@@ -1,5 +1,7 @@
 package backEnd;
 
+import java.util.Arrays;
+
 public class VariableCommand extends CommandGroup {
 	private ModelModifiable myModel;
 
@@ -25,11 +27,14 @@ public class VariableCommand extends CommandGroup {
 	private sLogoValid setVar(String[] args){
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(Double.parseDouble(args[1]));
-		if (myModel.getVariable(args[0]).getError()){
+		try {
+			myModel.getVariable(args[0]).getError();
 			myModel.deleteVariable(args[0]);
+		} catch (Exception e) {
+			//NADA, this just means the variable just doesn't exist
 		}
 		myModel.addVariable(args[0], temp);
-		return null;
+		return temp;
 	}
 	
 	
