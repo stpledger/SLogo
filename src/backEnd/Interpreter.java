@@ -165,7 +165,14 @@ public class Interpreter {
 		}
 		//Collect everything within the loop.
 		myInputArgs.remove(0);
-		while(!myInputArgs.get(0).equals("]")) {
+		int internalLoopCount = 0; 
+		while(!myInputArgs.get(0).equals("]") && internalLoopCount == 0) {
+			if(myInputArgs.get(0).equals("[")) {
+				internalLoopCount += 1;
+			}
+			if(myInputArgs.get(0).equals("]")) {
+				internalLoopCount -= 1;
+			}
 			myCommands += myInputArgs.remove(0) + " ";
 		}
 		myInputArgs.remove(0);
@@ -347,7 +354,24 @@ public class Interpreter {
 		}
 		//Parse out the commands
 		String myCommands = "";
-		while(!myInputArgs.get(0).equals("]")){
+		int internalLoopCount = 0;
+		while(true){
+			if(myInputArgs.isEmpty()) {
+				tempSlogoValid.setError(true);
+				tempSlogoValid.setMyStringValue("missing list end delimiter");
+				return tempSlogoValid;
+			}
+			if(myInputArgs.get(0).equals("]")  && internalLoopCount == 0){
+				break;
+			}
+			System.out.println(internalLoopCount + " " + myInputArgs.toString());
+			if(myInputArgs.get(0).equals("[")) {
+				internalLoopCount += 1;
+			}
+			if(myInputArgs.get(0).equals("]")) {
+				internalLoopCount -= 1;
+			}
+			
 			myCommands += myInputArgs.remove(0) + " "; 
 		}
 		myInputArgs.remove(0);
