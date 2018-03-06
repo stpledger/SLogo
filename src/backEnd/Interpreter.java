@@ -14,10 +14,9 @@ public class Interpreter {
 	private Controller myController;
 	private ModelModifiable myModel;
 	private Queue<String> myQueue;
-	private static final String[] noParamCommands = {"pu","pd","st","ht","home","cs","xcor","ycor","heading","pendownp","showingp","pi", "pc", "sh", "stamp", "clearstamps", "id", "turtles"};
-	private static final String[] oneParamCommands = {"fd", "bk", "lt", "rt", "seth", "random", "sin", "cos", "tan", "atan", "log", "not", "minus", "setbg", "setpc", "setps", "setsh", "setpalette"};
-	private static final String[] twoParamCommands = {"towards", "setxy", "sum", "difference", "product", "quotient", "remainder", "pow", "lessp","greaterp", "equal", "notequalp", "and", "set"}; 
-
+	private static final String[] NO_PARAM_COMMANDS = {"pu","pd","st","ht","home","cs","xcor","ycor","heading","pendownp","showingp","pi", "pc", "sh", "stamp", "clearstamps", "id", "turtles"};
+	private static final String[] ONE_PARAM_COMMANDS = {"fd", "bk", "lt", "rt", "seth", "random", "sin", "cos", "tan", "atan", "log", "not", "minus", "setbg", "setpc", "setps", "setsh", "setpalette"};
+	private static final String[] TWO_PARAM_COMMANDS = {"towards", "setxy", "sum", "difference", "product", "quotient", "remainder", "pow", "lessp","greaterp", "equal", "notequalp", "and", "set"}; 
 	public Interpreter(ModelModifiable m) {
 		mySlogoValid = new sLogoValid();
 		myModel = m; 
@@ -152,9 +151,9 @@ public class Interpreter {
 	}
 
 	private int getCommandSyntaxLength(String myCommand) {
-				for(String k : noParamCommands) { if(myCommand.equals(k)) return 1;}
-				for(String k : oneParamCommands) { if(myCommand.equals(k)) return 2;}
-				for(String k : twoParamCommands) { if(myCommand.equals(k))  return 3;}
+				for(String k : NO_PARAM_COMMANDS) { if(myCommand.equals(k)) return 1;}
+				for(String k : ONE_PARAM_COMMANDS) { if(myCommand.equals(k)) return 2;}
+				for(String k : TWO_PARAM_COMMANDS) { if(myCommand.equals(k))  return 3;}
 				if("MakeUserInstruction".equals(myCommand))  return 8;
 				if("Tell".equals(myCommand)) return 4;
 				if("Ask".equals(myCommand) || "AskWith".equals(myCommand))  return 7;
@@ -168,8 +167,67 @@ public class Interpreter {
 	}
 
 	private sLogoValid interpretBoolean(ArrayList<String> args) {
-		// TODO Auto-generated method stub
-		return null;
+		//Setup instance variables
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = (ArrayList<String>) args.clone();
+		ArrayList<String> myCondition = new ArrayList<String>();
+		ArrayList<String> myCommandArr = new ArrayList<String>();
+		//Determine the boolean;
+		String myCommand = myInputArgs.remove(0);
+		while(!myInputArgs.get(0).equals("[")) { myCondition.add(myInputArgs.remove(0));}
+		//remove the opening delimiter
+		myInputArgs.remove(0);
+		if(checkCondition(myCondition).getMyDoubleValue() > 0) {
+			while(!myInputArgs.get(0).equals("]")) {myCommandArr.add(myInputArgs.remove(0));}
+			tempSlogoValid = interpret(standardString(myCommandArr));
+		//check to see if there is an else statement
+		} else if(myCommand.equals("ifelse")) {
+			//Skip to the second list
+			while(!myInputArgs.remove(0).equals("]")) {}
+			if(!myInputArgs.remove(0).equals("[")) {return new sLogoValid(true, "expected second list");}
+			//Add the else commands
+			while(!myInputArgs.get(0).equals("]")) { myCommandArr.add(myInputArgs.remove(0));}
+			tempSlogoValid = interpret(standardString(myCommandArr));
+		//if not action is performed, return 0
+		} else {tempSlogoValid.setMyDoubleValue(0);}
+		return tempSlogoValid;
+	}
+
+	private sLogoValid checkCondition(ArrayList<String> myCondition) {
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs =(ArrayList<String>) myCondition.clone();
+		ArrayList<String> conditionA = new ArrayList<String>();
+		double conditionADouble;
+		String comparator = ""; 
+		ArrayList<String> conditionB = new ArrayList<String>();
+		double conditionBDouble;
+		//TODO: replace this with a lambda
+		//get all the conditions until the comparator
+		while(!myInputArgs.get(0).equals("lessp") && 
+				!myInputArgs.get(0).equals("greaterp") && 
+				!myInputArgs.get(0).equals("equalp") && 
+				!myInputArgs.get(0).equals("notEqualp"))  {
+			conditionA.add(myInputArgs.remove(0));
+		}
+		comparator = myInputArgs.remove(0);
+		//Add all of conditionB
+		while(!myInputArgs.isEmpty()) {conditionB.add(myInputArgs.remove(0));} //TODO: add in & and || statements
+		//Convert conditionA to a double
+		System.out.println("conditionA: " + conditionA.toString());
+		System.out.println("conditionB: " + conditionB.toString());
+		if(conditionA.size() > 1) {conditionADouble = doubleCheck(interpret(standardString(conditionA)).getMyStringValue()).getMyDoubleValue();}
+		else { conditionADouble = doubleCheck(conditionA.get(0)).getMyDoubleValue();}
+		//Convert conditionB to a double
+		if(conditionB.size() > 1) {conditionBDouble = doubleCheck(interpret(standardString(conditionB)).getMyStringValue()).getMyDoubleValue();}
+		else { conditionBDouble = doubleCheck(conditionB.get(0)).getMyDoubleValue();}
+		//Check which is greater
+		switch(comparator) {
+		case "lessp": return new sLogoValid(conditionADouble < conditionBDouble);
+		case "greaterp": return new sLogoValid(conditionADouble > conditionBDouble);
+		case "equalp": return new sLogoValid(conditionADouble == conditionBDouble);
+		case "notequalp": return new sLogoValid(conditionADouble != conditionBDouble);
+		default: return new sLogoValid(true, "something went wrong with boolean loop");
+		}
 	}
 
 	private sLogoValid interpretRepeat(ArrayList<String> args) {

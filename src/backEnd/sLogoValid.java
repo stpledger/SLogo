@@ -10,8 +10,14 @@ public class sLogoValid {
 	}
 	
 	public sLogoValid(Boolean e, String s) {
+		super();
 		isError = e;
 		myStringValue = s;
+	}
+	
+	public sLogoValid(Boolean b) {
+		super();
+		this.setBoolean(b);
 	}
 	
 	//Getters and Setters
