@@ -72,7 +72,6 @@ public class Interpreter {
 	 * @return
 	 */
 	private sLogoValid passToController(String s) {
-		System.out.println("Passing to Controller: " + s);
 		if(s.split(" ").length > 1) {
 			String[] args = s.split(" ", 2);
 			return myController.create(args[0], args[1]);
@@ -97,7 +96,6 @@ public class Interpreter {
 		//Handle everything after the initial command
 		while(myCommandArr.size() < expectedLength) {
 			//move the argument from output array to local variable
-			System.out.println(myInputArgs.toString());
 			String tempArg = myInputArgs.remove(0);
 			//Check if the value is a double or a variable pathed to a double
 			if(!doubleCheck(tempArg).getError()) {myCommandArr.add(doubleCheck(tempArg).getMyStringValue());}
@@ -106,7 +104,6 @@ public class Interpreter {
 			//TODO: implement the same thing for user defined commands
 			//Check if the value is another command
 			else if(myLanguageProperties.containsKey(tempArg)) { //TODO: Add check for user defined commands
-				System.out.println("Checking internal command: " + tempArg);
 				int myInternalSyntaxLength = getCommandSyntaxLength(tempArg);
 				ArrayList<String> internalCommandArray = new ArrayList<String>();
 				internalCommandArray.add(tempArg);
@@ -176,8 +173,49 @@ public class Interpreter {
 	}
 
 	private sLogoValid interpretRepeat(ArrayList<String> args) {
-		// TODO Auto-generated method stub
-		return null;
+		//Setup Instance Variables
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = (ArrayList<String>) args.clone();
+		//remove repeat
+		myInputArgs.remove(0);
+		int myTimes = 0;
+		//Parse arguments before list
+		String myNum = "";
+		int count = 0;
+		while(!myInputArgs.get(0).equals("[")) {
+			myNum += myInputArgs.remove(0) + " ";
+			count++;
+		}
+		myInputArgs.remove(0);
+		//if there is more than one argument, interpret them
+		if(count > 1 ) {myNum = interpret(myNum).getMyStringValue();}
+		//Check for valid loop numbers
+		tempSlogoValid = doubleCheck(myNum.trim());
+		if(tempSlogoValid.getError()) return tempSlogoValid;
+		myTimes = (int) tempSlogoValid.getMyDoubleValue();
+		//Parse out the commands
+		String myCommands = "";
+		int internalLoopCount = 0;
+		while(true) {
+			if(internalLoopCount == 0 && myInputArgs.get(0).equals("]")) {
+				myInputArgs.remove(0);
+				break;
+			}
+			if(myInputArgs.get(0).equals("[")) { internalLoopCount += 1; }
+			if(myInputArgs.get(0).equals("]")) { internalLoopCount -= 1; }
+			myCommands += myInputArgs.remove(0) + " ";
+		}
+		//Loop time
+		for(int i = 0; i < myTimes; i++) {
+			tempSlogoValid = interpret(myCommands);
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+		}
+		if(!myInputArgs.isEmpty()) {
+			myQueue.add(standardString(myInputArgs));
+		}
+		return tempSlogoValid;
 	}
 
 	private sLogoValid errorCheck(String s) {
