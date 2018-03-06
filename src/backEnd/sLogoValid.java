@@ -9,6 +9,11 @@ public class sLogoValid {
 		setMyStringValue("");
 	}
 	
+	public sLogoValid(Boolean e, String s) {
+		isError = e;
+		myStringValue = s;
+	}
+	
 	//Getters and Setters
 	/**
 	 * Sets the isError attribute to boolean b

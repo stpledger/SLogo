@@ -1,6 +1,6 @@
 package frontend;
 
-import backEnd.Interpreter;
+import backEnd.OldInterpreter;
 import backEnd.Model;
 import frontend.components.ComponentBuilder;
 import frontend.components.Console;
@@ -31,7 +31,7 @@ public class IDEBuilder implements SceneBuilder{
 		
 		toolbar = new ToolBar(this);
 		Model m = new Model();
-		Interpreter interpreter = new Interpreter(m);
+		OldInterpreter interpreter = new OldInterpreter(m);
 		side = new SideBar(m);
 		turtleDisplay = new TurtleDisplayer();
 		console = new Console(turtleDisplay, m, interpreter);
