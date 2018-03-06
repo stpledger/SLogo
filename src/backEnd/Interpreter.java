@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.Properties;
 import java.util.Queue;
+import java.util.function.UnaryOperator;
 
 public class Interpreter {
 	private String myLanguage = "English";
@@ -54,6 +55,7 @@ public class Interpreter {
 		case "for":
 		case "dotimes":
 			mySlogoValid = interpretVarLoop(args);
+			break;
 		default:
 			mySlogoValid = interpretBasic(args);
 		}
@@ -71,6 +73,7 @@ public class Interpreter {
 	 * @return
 	 */
 	private sLogoValid passToController(String s) {
+		System.out.println("Pass: " + s);
 		if(s.split(" ").length > 1) {
 			String[] args = s.split(" ", 2);
 			return myController.create(args[0], args[1]);
@@ -84,6 +87,7 @@ public class Interpreter {
 	 * @return
 	 */
 	private sLogoValid interpretBasic(ArrayList<String> args) {
+		System.out.println("Inpu: " + args.toString());
 		//Create input/output arraylists
 		ArrayList<String> myInputArgs = args;
 		ArrayList<String> myCommandArr = new ArrayList<String>();
@@ -92,17 +96,18 @@ public class Interpreter {
 		if(expectedLength < 1) return new sLogoValid(true, "Syntax not found: " + args.get(0));
 		//Move the initial command from input to output
 		myCommandArr.add(myInputArgs.remove(0));
+		int setNumber = 0;
 		//Handle everything after the initial command
 		while(myCommandArr.size() < expectedLength) {
 			//move the argument from output array to local variable
 			String tempArg = myInputArgs.remove(0);
-			//Check if the value is a double or a variable pathed to a double
-			if(!doubleCheck(tempArg).getError()) {myCommandArr.add(doubleCheck(tempArg).getMyStringValue());}
 			//Check if the syntax match with defining a variable 
-			if(myCommandArr.contains("set") && tempArg.contains(":")) {myCommandArr.add(tempArg);}
+			if(myCommandArr.contains("set") && tempArg.contains(":") && myCommandArr.indexOf("set") == myCommandArr.size()-1) {myCommandArr.add(tempArg); continue;}
+			//Check if the value is a double or a variable pathed to a double
+			if(!doubleCheck(tempArg).getError()) {myCommandArr.add(doubleCheck(tempArg).getMyStringValue());}	
 			//TODO: implement the same thing for user defined commands
 			//Check if the value is another command
-			else if(myLanguageProperties.containsKey(tempArg)) { //TODO: Add check for user defined commands
+			else if(myShortCommands.containsValue(tempArg)) { //TODO: Add check for user defined commands
 				int myInternalSyntaxLength = getCommandSyntaxLength(tempArg);
 				ArrayList<String> internalCommandArray = new ArrayList<String>();
 				internalCommandArray.add(tempArg);
@@ -122,6 +127,7 @@ public class Interpreter {
 				myCommandArr.add(doubleCheck(mySlogoValid.getMyStringValue()).getMyStringValue());
 			}
 		}
+		System.out.println("uhhh: " + myCommandArr.toString());
 		mySlogoValid = passToController(standardString(myCommandArr));
 		if(!myInputArgs.isEmpty())myQueue.add(standardString(myInputArgs));
 		return mySlogoValid;
@@ -162,8 +168,56 @@ public class Interpreter {
 	}
 
 	private sLogoValid interpretVarLoop(ArrayList<String> args) {
-		// TODO Auto-generated method stub
-		return null;
+		sLogoValid tempSlogoValid = new sLogoValid();
+		//Setup instance variables
+		String myVar; //TODO: add a check to make sure this isn't the same as another variable
+		String myCommand;
+		double myStart = 0;
+		double myEnd;
+		double myIncrement = 1;
+		ArrayList<String> myCommands = new ArrayList<String>(); 
+		ArrayList<String> myInputArgs = (ArrayList<String>) args.clone();
+		//remove the commands name and the opening bracket
+		myCommand = myInputArgs.remove(0);
+		//Check if there is actually a list
+		if(!myInputArgs.remove(0).equals("[")) {return new sLogoValid(true, "Command expected list");}
+		//get all the opening stuff
+		//TODO: Make this section capable of handling commands
+		myVar = myInputArgs.remove(0);
+		if(myCommand.equals("for")) {
+			myStart = doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();
+			myEnd = doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();
+			myIncrement = doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();
+		} else {myEnd = doubleCheck(myInputArgs.remove(0)).getMyDoubleValue();}
+		//Check to make sure we've hit the end of the list
+		if(!myInputArgs.remove(0).equals("]")) {return new sLogoValid(true, "Can not handle advanced arguments in for loops yet");}
+		if(!myInputArgs.remove(0).equals("[")) {return new sLogoValid(true, "Command expected second list");}
+		//Collect all the commands
+		int internalLoopCount = 0;
+		do {
+			if(myInputArgs.isEmpty()) { return new sLogoValid(true, "missing list end delimiter");}
+			if("]".equals(myInputArgs.get(0))  && internalLoopCount == 0){break;}
+			if("[".equals(myInputArgs.get(0))) { internalLoopCount += 1; }
+			if("]".equals(myInputArgs.get(0))) { internalLoopCount -= 1; }
+				myCommands.add(myInputArgs.remove(0));
+		} while (true);
+		myInputArgs.remove(0);
+		//Loop Time
+		for(Double i = myStart; i < myEnd; i += myIncrement) {
+			ArrayList<String> myTempCommands = (ArrayList<String>) myCommands.clone();
+			for(int k = 0; k < myTempCommands.size(); k++) {
+				if(myTempCommands.get(k).equals(myVar)) {
+					myTempCommands.remove(k);
+					myTempCommands.add(k, i.toString());
+				}
+			}
+			tempSlogoValid = interpret(standardString(myTempCommands));
+			if(tempSlogoValid.getError()) {
+				return tempSlogoValid;
+			}
+		}
+		if(!myInputArgs.isEmpty()) {myQueue.add(standardString(myInputArgs));}
+		return tempSlogoValid;
 	}
 
 	private sLogoValid interpretBoolean(ArrayList<String> args) {
