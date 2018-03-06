@@ -1,6 +1,7 @@
 package frontend;
 
 import backEnd.OldInterpreter;
+import backEnd.Interpreter;
 import backEnd.Model;
 import frontend.components.ComponentBuilder;
 import frontend.components.Console;
@@ -31,11 +32,10 @@ public class IDEBuilder implements SceneBuilder{
 		
 		toolbar = new ToolBar(this);
 		Model m = new Model();
-		OldInterpreter interpreter = new OldInterpreter(m);
+		Interpreter interpreter = new Interpreter(m);
 		side = new SideBar(m);
 		turtleDisplay = new TurtleDisplayer();
 		console = new Console(turtleDisplay, m, interpreter);
-		
 		layout.setRight(side.getNode());
 		layout.setTop(toolbar.getNode());
 		layout.setCenter(turtleDisplay.getNode());

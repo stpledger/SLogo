@@ -18,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import backEnd.OldInterpreter;
+import backEnd.Interpreter;
 import backEnd.Model;
 import backEnd.ModelViewable;
 import backEnd.Turtle;
@@ -36,13 +37,13 @@ public class Console implements ComponentBuilder{
 	private TextArea prompt = new TextArea();
 	private TurtleDisplayer turtleDisplayer;
 	private Model model;
-	private OldInterpreter interpreter;
+	private Interpreter interpreter;
 	private String language = "English";
 	
-	public Console (TurtleDisplayer t, Model m, OldInterpreter i) {
+	public Console (TurtleDisplayer t, Model m, Interpreter interpreter2) {
 		turtleDisplayer = t;
 		model = m;
-		interpreter = i;
+		interpreter = interpreter2;
 		box.setStyle("-fx-background-color: #7777FF;");
 		box.setPrefHeight(IDEBuilder.CONSOLE_HEIGHT);
 		

@@ -16,7 +16,7 @@ public class Interpreter {
 	private Queue<String> myQueue;
 	private static final String[] noParamCommands = {"pu","pd","st","ht","home","cs","xcor","ycor","heading","pendownp","showingp","pi", "pc", "sh", "stamp", "clearstamps", "id", "turtles"};
 	private static final String[] oneParamCommands = {"fd", "bk", "lt", "rt", "seth", "random", "sin", "cos", "tan", "atan", "log", "not", "minus", "setbg", "setpc", "setps", "setsh", "setpalette"};
-	private static final String[] twoParamCommands = {"towards", "setxy", "sum", "difference", "product", "quotient", "remainder", "pow", "lessp","greaterp", "equal", "notequalp", "And", "Or", "set", "/","*"}; 
+	private static final String[] twoParamCommands = {"towards", "setxy", "sum", "difference", "product", "quotient", "remainder", "pow", "lessp","greaterp", "equal", "notequalp", "and", "set"}; 
 
 	public Interpreter(ModelModifiable m) {
 		mySlogoValid = new sLogoValid();
@@ -60,10 +60,6 @@ public class Interpreter {
 		}
 		//Check to see if an error already occurred
 		if(mySlogoValid.getError()) {return mySlogoValid;}
-		//Execute the current low-level command
-		mySlogoValid = passToController(mySlogoValid.getMyStringValue());
-		//Check to see if an error already occurred
-		if(mySlogoValid.getError()) {return mySlogoValid;}
 		//Perform the next operation in the queue
 		if(!myQueue.isEmpty()) {mySlogoValid = interpret(myQueue.remove());}
 		}
@@ -76,22 +72,12 @@ public class Interpreter {
 	 * @return
 	 */
 	private sLogoValid passToController(String s) {
+		System.out.println("Passing to Controller: " + s);
 		if(s.split(" ").length > 1) {
 			String[] args = s.split(" ", 2);
 			return myController.create(args[0], args[1]);
 		} else {
 			return myController.create(s, "");
-		}
-	}
-	
-	private void leftOverCheck(ArrayList<String> args) {
-		ArrayList<String> myInputArgs = args;
-		if(!myInputArgs.isEmpty()) {
-			String concat = "";
-			while(!myInputArgs.isEmpty()) {
-				concat += myInputArgs.remove(0) + " ";
-			}
-			myQueue.add(concat);
 		}
 	}
 	/**
@@ -100,8 +86,72 @@ public class Interpreter {
 	 * @return
 	 */
 	private sLogoValid interpretBasic(ArrayList<String> args) {
-		int expectedLength = getCommandSyntaxLength(args.get(0));
-		if(expectedLength < 1) return new sLogoValid(true, "Command not found: " + args.get(0));
+		//Create input/output arraylists
+		ArrayList<String> myInputArgs = args;
+		ArrayList<String> myCommandArr = new ArrayList<String>();
+		//Get the expected number of arguments
+		int expectedLength = getCommandSyntaxLength(myInputArgs.get(0));
+		if(expectedLength < 1) return new sLogoValid(true, "Syntax not found: " + args.get(0));
+		//Move the initial command from input to output
+		myCommandArr.add(myInputArgs.remove(0));
+		//Handle everything after the initial command
+		while(myCommandArr.size() < expectedLength) {
+			//move the argument from output array to local variable
+			System.out.println(myInputArgs.toString());
+			String tempArg = myInputArgs.remove(0);
+			//Check if the value is a double or a variable pathed to a double
+			if(!doubleCheck(tempArg).getError()) {myCommandArr.add(doubleCheck(tempArg).getMyStringValue());}
+			//Check if the syntax match with defining a variable 
+			if(myCommandArr.contains("set") && tempArg.contains(":")) {myCommandArr.add(tempArg);}
+			//TODO: implement the same thing for user defined commands
+			//Check if the value is another command
+			else if(myLanguageProperties.containsKey(tempArg)) { //TODO: Add check for user defined commands
+				System.out.println("Checking internal command: " + tempArg);
+				int myInternalSyntaxLength = getCommandSyntaxLength(tempArg);
+				ArrayList<String> internalCommandArray = new ArrayList<String>();
+				internalCommandArray.add(tempArg);
+				//Check if there is a second internal command
+				while(internalCommandArray.size() < myInternalSyntaxLength) {
+					String internalTempArg = myInputArgs.remove(0);
+					if(myLanguageProperties.containsKey(internalTempArg)) { //TODO: Add check for user defined commands
+						myInternalSyntaxLength += getCommandSyntaxLength(internalTempArg) -1;
+					}
+					internalCommandArray.add(internalTempArg);
+				}
+				//interpret the internalCommand
+				mySlogoValid = interpret(standardString(internalCommandArray));
+				//Check if there has been an error
+				if(mySlogoValid.getError()) {return mySlogoValid;}
+				//Add the result of the internal command to the array
+				myCommandArr.add(doubleCheck(mySlogoValid.getMyStringValue()).getMyStringValue());
+			}
+		}
+		mySlogoValid = passToController(standardString(myCommandArr));
+		if(!myInputArgs.isEmpty())myQueue.add(standardString(myInputArgs));
+		return mySlogoValid;
+	}
+
+	private sLogoValid doubleCheck(String tempArg) {
+		sLogoValid tempSlogoValid = new sLogoValid();
+		String arg = tempArg.trim();
+		try {
+			tempSlogoValid.setMyDoubleValue(Double.parseDouble(arg));
+			return tempSlogoValid;
+		} catch(Exception e) {
+			//Nada, it's just not a double;
+		}
+		try {
+			tempSlogoValid = myModel.getVariable(arg);
+			if(tempSlogoValid.getError()) {return tempSlogoValid;}
+			tempSlogoValid.setMyDoubleValue(tempSlogoValid.getMyDoubleValue());
+			return tempSlogoValid;
+		} catch (Exception e) {
+			tempSlogoValid.setMyStringValue("Variable not defined: " + tempArg);
+		}
+		tempSlogoValid.setError(true);
+		return tempSlogoValid;
+		
+		
 	}
 
 	private int getCommandSyntaxLength(String myCommand) {
@@ -172,4 +222,15 @@ public class Interpreter {
 		}
 		
 	}
+	
+	private String standardString(ArrayList<String> arr) {
+		ArrayList<String>myTempArr = (ArrayList<String>) arr.clone();
+		String concat = "";
+		if(!myTempArr.isEmpty()) {
+			while(!myTempArr.isEmpty()) {
+				concat += myTempArr.remove(0) + " ";
+				}
+			}
+		return concat;
+		}
 }
