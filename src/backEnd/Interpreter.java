@@ -42,8 +42,11 @@ public class Interpreter {
 		}
 		if(!args.isEmpty()) {
 		//Check to see if the first argument is valid
-		if(!myLanguageProperties.containsKey(args.get(0))) { return new sLogoValid(false, "Invalid Command: " + args.get(0));}
+		if(!myLanguageProperties.containsKey(args.get(0))) { return new sLogoValid(false, "Invalid Command: " + args.get(0));} //TODO: Add a check for userDefined Commands
 		//Check for advanced syntax
+		if(modelContainsCommand(myModel, args.get(0))) {
+			mySlogoValid = interpretUserCommand(args);
+		}
 		switch(args.get(0)) {
 		case "repeat":
 			mySlogoValid =  interpretRepeat(args);
@@ -56,6 +59,9 @@ public class Interpreter {
 		case "dotimes":
 			mySlogoValid = interpretVarLoop(args);
 			break;
+		case "to":
+			mySlogoValid = makeUserDefinedComand(args);
+			break;
 		default:
 			mySlogoValid = interpretBasic(args);
 		}
@@ -67,6 +73,21 @@ public class Interpreter {
 		return mySlogoValid;
 	}
 	
+	private sLogoValid interpretUserCommand(ArrayList<String> args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private boolean modelContainsCommand(ModelModifiable myModel2, String string) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private sLogoValid makeUserDefinedComand(ArrayList<String> args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/**
 	 * 
 	 * @param s
@@ -86,6 +107,7 @@ public class Interpreter {
 	 * @param args
 	 * @return
 	 */
+	//TODO: Implement comment handling
 	private sLogoValid interpretBasic(ArrayList<String> args) {
 		System.out.println("Inpu: " + args.toString());
 		//Create input/output arraylists
@@ -96,7 +118,6 @@ public class Interpreter {
 		if(expectedLength < 1) return new sLogoValid(true, "Syntax not found: " + args.get(0));
 		//Move the initial command from input to output
 		myCommandArr.add(myInputArgs.remove(0));
-		int setNumber = 0;
 		//Handle everything after the initial command
 		while(myCommandArr.size() < expectedLength) {
 			//move the argument from output array to local variable
