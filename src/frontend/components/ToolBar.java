@@ -17,7 +17,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -33,13 +32,11 @@ public class ToolBar implements ComponentBuilder{
 	private ComboBox<String> languagePicker = new ComboBox<String>();
 	private ComboBox<String> turtleImagePicker = new ComboBox<String>();
 	private Button selectImage = new Button("Select Image");
-	private TextField imagePath = new TextField();
 	
 	private Button updateEnvButton = new Button("Update");
 	private Button selectColor = new Button("Select Color");
 	
 	public ToolBar(IDEBuilder b) {
-		imagePath.setPromptText("Selected Image Filepath");
 		builder = b;
 		setStyle();
 		addComponents();
@@ -50,7 +47,8 @@ public class ToolBar implements ComponentBuilder{
 	}
 	
 	public String getLanguage() {
-		return "English";
+		//return "English";
+		return languagePicker.getValue();
 	}
 	
 	public String getColor() {
@@ -78,11 +76,7 @@ public class ToolBar implements ComponentBuilder{
 		
 		selectImage.setOnAction(this::updateImagePath);
 		toAdd.add(selectImage);
-		
-//		toAdd.add(imagePath);
-//		
-		updateEnvButton.setOnAction(e -> builder.update());
-		toAdd.add(updateEnvButton);
+
 		
 		bar.getChildren().addAll(toAdd);
 	}
@@ -107,8 +101,7 @@ public class ToolBar implements ComponentBuilder{
 			// Do nothing
 		}
 		if (mimetype.contains("image")) {
-			imagePath.setText(f.getAbsolutePath());
-		    builder.update();
+		    builder.enterConsoleCommand("changeImage " + turtleImagePicker.getValue() + " " + f.getAbsolutePath());
 		} else {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Invalid Image");
@@ -129,26 +122,5 @@ public class ToolBar implements ComponentBuilder{
 				turtleImagePicker.getItems().add(s);
 			}
 		}
-	}
-	
-	/*
-	 * Get the image path currently inside imagePath
-	 */
-	public String getCurrentImageSelected() {
-		return imagePath.getText();
-	}
-	
-	/*
-	 * Returns the name of the currently selected turtle to change update 
-	 */
-	public String getTurtleNameChangeCommand() {
-		String command = "None ";
-		if (imagePath.getText().length() > 1) {
-			command = "changeTurtlePicture ";
-			command += turtleImagePicker.getValue() + " ";
-			command += imagePath.getText();
-		}
-		System.out.println(command);
-		return command;
 	}
 }

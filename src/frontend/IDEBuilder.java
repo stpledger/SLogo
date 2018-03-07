@@ -1,6 +1,5 @@
 package frontend;
 
-import backEnd.OldInterpreter;
 import backEnd.Interpreter;
 import backEnd.Model;
 import frontend.components.ComponentBuilder;
@@ -11,12 +10,12 @@ import frontend.components.TurtleDisplayer;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
-public class IDEBuilder implements SceneBuilder{
+public class IDEBuilder implements SceneBuilder, View{
 	
 	public static final double IDE_HEIGHT = 600;
 	public static final double IDE_WIDTH = 1200;
 	public static final double TOOLBAR_HEIGHT = 25;
-	public static final double CONSOLE_HEIGHT = 150;
+	public static final double CONSOLE_HEIGHT = 175;
 	public static final double SIDEBAR_WIDTH = 260;
 	public static final double DISPLAY_HEIGHT = IDE_HEIGHT - TOOLBAR_HEIGHT - CONSOLE_HEIGHT;
 	public static final double DISPLAY_WIDTH = IDE_WIDTH - SIDEBAR_WIDTH;
@@ -35,7 +34,7 @@ public class IDEBuilder implements SceneBuilder{
 		Interpreter interpreter = new Interpreter(m);
 		side = new SideBar(m);
 		turtleDisplay = new TurtleDisplayer();
-		console = new Console(turtleDisplay, m, interpreter);
+		console = new Console(turtleDisplay, m, interpreter, this);
 		layout.setRight(side.getNode());
 		layout.setTop(toolbar.getNode());
 		layout.setCenter(turtleDisplay.getNode());
@@ -53,8 +52,12 @@ public class IDEBuilder implements SceneBuilder{
 		turtleDisplay.setBackgroundColor(toolbar.getColor());
 		side.update();
 		toolbar.update(side.getModel());
-		console.enterCommand(toolbar.getTurtleNameChangeCommand()); 
-		if (toolbar.getCurrentImageSelected().length() > 0) {turtleDisplay.changeImage(toolbar.getCurrentImageSelected());}
+//		if (toolbar.getCurrentImageSelected().length() > 0) {turtleDisplay.changeImage(toolbar.getCurrentImageSelected());}
+	}
+	
+	public void enterConsoleCommand(String s) {
+		System.out.println(s);
+		console.enterCommand(s);
 	}
 
 }
