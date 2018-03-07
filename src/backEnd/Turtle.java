@@ -88,6 +88,7 @@ public class Turtle {
 		double angle = Math.atan((ypos-myYPos)/(xpos-myXPos));
 		myAngle+=angle;
 		myTurtleDisplay.setRotate(myAngle);
+		this.moveTo(myXPos, myYPos);
 		return angle;
 	}
 	
@@ -95,12 +96,14 @@ public class Turtle {
 		double degree = deg;
 		myAngle = degree;
 		myTurtleDisplay.setRotate(myAngle);
+		this.moveTo(myXPos, myYPos);
 		return deg;
 	}
 	
 	protected void rotate(double deg) {
 		myAngle += deg;
 		myTurtleDisplay.setRotate(myAngle);
+		this.moveTo(myXPos, myYPos);
 	}
 
 	protected void showTurtle(){
