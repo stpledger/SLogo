@@ -27,7 +27,7 @@ public class ToolBar implements ComponentBuilder{
 	private HBox bar = new HBox();
 	private IDEBuilder builder;
 	
-	String[] languages = {"English", "German", "French", "Spanish"};
+	String[] languages = {"English", "German", "French", "Spanish", "Portuguese", "Italian", "Russian", "Chinese"};
 	private Color turtleColor = Color.SLATEBLUE;
 	
 	private ComboBox<String> languagePicker = new ComboBox<String>();
