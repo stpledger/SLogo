@@ -95,7 +95,6 @@ public class Interpreter {
 	 * @return
 	 */
 	private sLogoValid passToController(String s) {
-		System.out.println("Pass: " + s);
 		if(s.split(" ").length > 1) {
 			String[] args = s.split(" ", 2);
 			return myController.create(args[0], args[1]);
@@ -110,7 +109,6 @@ public class Interpreter {
 	 */
 	//TODO: Implement comment handling
 	private sLogoValid interpretBasic(ArrayList<String> args) {
-		System.out.println("Inpu: " + args.toString());
 		//Create input/output arraylists
 		ArrayList<String> myInputArgs = args;
 		ArrayList<String> myCommandArr = new ArrayList<String>();
@@ -149,7 +147,6 @@ public class Interpreter {
 				myCommandArr.add(doubleCheck(mySlogoValid.getMyStringValue()).getMyStringValue());
 			}
 		}
-		System.out.println("uhhh: " + myCommandArr.toString());
 		mySlogoValid = passToController(standardString(myCommandArr));
 		if(!myInputArgs.isEmpty())myQueue.add(standardString(myInputArgs));
 		return mySlogoValid;
@@ -289,8 +286,6 @@ public class Interpreter {
 		//Add all of conditionB
 		while(!myInputArgs.isEmpty()) {conditionB.add(myInputArgs.remove(0));} //TODO: add in & and || statements
 		//Convert conditionA to a double
-		System.out.println("conditionA: " + conditionA.toString());
-		System.out.println("conditionB: " + conditionB.toString());
 		if(conditionA.size() > 1) {conditionADouble = doubleCheck(interpret(standardString(conditionA)).getMyStringValue()).getMyDoubleValue();}
 		else { conditionADouble = doubleCheck(conditionA.get(0)).getMyDoubleValue();}
 		//Convert conditionB to a double
@@ -400,7 +395,8 @@ public class Interpreter {
 		String concat = "";
 		if(!myTempArr.isEmpty()) {
 			while(!myTempArr.isEmpty()) {
-				concat += myTempArr.remove(0) + " ";
+				concat += myTempArr.remove(0);
+				if(!myTempArr.isEmpty()) concat+= " ";
 				}
 			}
 		return concat;
