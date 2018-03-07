@@ -73,10 +73,12 @@ public class Console implements ComponentBuilder{
 		Button hideButton = makeCommandButton(uiResources.getString("hide"), "ht");
 		Button homeButton = makeCommandButton(uiResources.getString("home"), "home");
 		Button csButton = makeCommandButton(uiResources.getString("clear"), "cs");
+		Button puButton = makeCommandButton(uiResources.getString("penup"), "pu fd 0");
+		Button pdButton = makeCommandButton(uiResources.getString("pendown"), "pd fd 0");
 		VBox runClearBox = new VBox(runButton, clearButton, openFileButton);
 		runClearBox.setAlignment(Pos.CENTER);
 		runClearBox.setPrefWidth(clearButton.getWidth());
-		HBox moveTurtleButtonsBox = new HBox(fdButton, bkButton, ltButton, rtButton, showButton, hideButton, homeButton, csButton);
+		HBox moveTurtleButtonsBox = new HBox(fdButton, bkButton, ltButton, rtButton, showButton, hideButton, homeButton, csButton, puButton, pdButton);
 		moveTurtleButtonsBox.setAlignment(Pos.CENTER);
 		moveTurtleButtonsBox.setPrefHeight(fdButton.getHeight());
 		HBox consoleRunClearBox = new HBox(prompt, runClearBox);
