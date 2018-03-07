@@ -29,7 +29,7 @@ public class Model implements ModelModifiable, ModelViewable {
 		if (!myModel.containsKey(name)) {
 			sLogoValid ret = new sLogoValid();
 			ret.setError(true);
-			ret.setMyStringValue("This object does not exist.");
+			ret.setMyStringValue("This object does not exist: " + name);
 			return ret;
 		}
 		else{

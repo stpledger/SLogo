@@ -44,10 +44,10 @@ public class Console implements ComponentBuilder{
 	private Interpreter interpreter;
 	private String language = "English";
 	
-	public Console (TurtleDisplayer t, Model m, Interpreter i) {
+	public Console (TurtleDisplayer t, Model m, Interpreter interpreter2) {
 		turtleDisplayer = t;
 		model = m;
-		interpreter = i;
+		interpreter = interpreter2;
 		box.setStyle("-fx-background-color: #7777FF;");
 		box.setPrefHeight(IDEBuilder.CONSOLE_HEIGHT);
 		
