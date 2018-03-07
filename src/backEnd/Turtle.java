@@ -151,7 +151,7 @@ public class Turtle {
 		String rets = "";
 		rets += "X:       " + myXPos;
 		rets += "\nY:      " + myYPos;
-		rets += "\nAngle:  " + myAngle;
+		rets += "\nAngle:  " + myAngle % 360;
 		return rets;
 	}
 }
