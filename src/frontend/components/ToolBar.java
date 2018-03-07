@@ -33,13 +33,11 @@ public class ToolBar implements ComponentBuilder{
 	private ComboBox<String> languagePicker = new ComboBox<String>();
 	private ComboBox<String> turtleImagePicker = new ComboBox<String>();
 	private Button selectImage = new Button("Select Image");
-	private TextField imagePath = new TextField();
 	
 	private Button updateEnvButton = new Button("Update");
 	private Button selectColor = new Button("Select Color");
 	
 	public ToolBar(IDEBuilder b) {
-		imagePath.setPromptText("Selected Image Filepath");
 		builder = b;
 		setStyle();
 		addComponents();
@@ -107,8 +105,7 @@ public class ToolBar implements ComponentBuilder{
 			// Do nothing
 		}
 		if (mimetype.contains("image")) {
-			imagePath.setText(f.getAbsolutePath());
-		    builder.update();
+		    builder.enterConsoleCommand("changeImage " + turtleImagePicker.getValue() + " " + f.getAbsolutePath());
 		} else {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Invalid Image");
@@ -131,25 +128,4 @@ public class ToolBar implements ComponentBuilder{
 		}
 	}
 	
-	/*
-	 * Get the image path currently inside imagePath
-	 */
-	public String getCurrentImageSelected() {
-		return imagePath.getText();
-	}
-	
-	/*
-	 * Returns the name of the currently selected turtle to change update 
-	 */
-	public String getTurtleNameChangeCommand() {
-//		String command = "None ";
-//		if (imagePath.getText().length() > 1) {
-//			command = "changeTurtlePicture ";
-//			command += turtleImagePicker.getValue() + " ";
-//			command += imagePath.getText();
-//		}
-//		System.out.println(command);
-		String command = "fd 50";
-		return command;
-	}
 }

@@ -1,6 +1,5 @@
 package frontend;
 
-import backEnd.OldInterpreter;
 import backEnd.Interpreter;
 import backEnd.Model;
 import frontend.components.ComponentBuilder;
@@ -53,8 +52,12 @@ public class IDEBuilder implements SceneBuilder, View{
 		turtleDisplay.setBackgroundColor(toolbar.getColor());
 		side.update();
 		toolbar.update(side.getModel());
-		console.enterCommand(toolbar.getTurtleNameChangeCommand()); 
-		if (toolbar.getCurrentImageSelected().length() > 0) {turtleDisplay.changeImage(toolbar.getCurrentImageSelected());}
+//		if (toolbar.getCurrentImageSelected().length() > 0) {turtleDisplay.changeImage(toolbar.getCurrentImageSelected());}
+	}
+	
+	public void enterConsoleCommand(String s) {
+		System.out.println(s);
+		console.enterCommand(s);
 	}
 
 }
