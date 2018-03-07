@@ -31,7 +31,7 @@ public class IDEBuilder implements SceneBuilder, View{
 		toolbar = new ToolBar(this);
 		Model m = new Model();
 		Interpreter interpreter = new Interpreter(m);
-		side = new SideBar(m);
+		side = new SideBar(m, this);
 		turtleDisplay = new TurtleDisplayer();
 		console = new Console(turtleDisplay, m, interpreter, this);
 		layout.setRight(side.getNode());

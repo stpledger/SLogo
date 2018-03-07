@@ -21,8 +21,10 @@ import javafx.scene.text.FontWeight;
 public class SideBar implements ComponentBuilder {
 	private VBox host = new VBox();
 	private ModelViewable displayableModel;
+	private IDEBuilder builder;
 	
-	public SideBar(ModelViewable incoming) {
+	public SideBar(ModelViewable incoming, IDEBuilder b) {
+		builder = b;
 		displayableModel = incoming;
 		host.setStyle("-fx-background-color: #FFFFFF;");
 		host.getChildren().add(new Label("Side Bar"));
@@ -45,7 +47,11 @@ public class SideBar implements ComponentBuilder {
 		
 		System.out.println(displayableModel.getPreviousCommands());
 		for (CommandGroup com: displayableModel.getPreviousCommands()) {
-			host.getChildren().add(new SideBarComponent(com.toString()).getNode());
+			Node prevCommandNode = new SideBarComponent(com.toString()).getNode();
+			prevCommandNode.setStyle(".myElement:hover {filter: brightness(10%);}");
+			prevCommandNode.setOnMouseClicked(e -> builder.enterConsoleCommand(com.toString()));
+			host.getChildren().add(prevCommandNode);
+			
 		}
 	}
 
