@@ -53,6 +53,7 @@ public class Controller{
             noCommand.setMyStringValue("No command executed");
             return noCommand;
         }
+        myModel.addCommandHistory(newCommand);
         return newCommand.execute();
     }
 
