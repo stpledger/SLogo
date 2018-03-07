@@ -394,7 +394,8 @@ public class Interpreter {
 		String concat = "";
 		if(!myTempArr.isEmpty()) {
 			while(!myTempArr.isEmpty()) {
-				concat += myTempArr.remove(0) + " ";
+				concat += myTempArr.remove(0);
+				if(!myTempArr.isEmpty()) concat+= " ";
 				}
 			}
 		return concat;
