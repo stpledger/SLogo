@@ -142,13 +142,14 @@ public class ToolBar implements ComponentBuilder{
 	 * Returns the name of the currently selected turtle to change update 
 	 */
 	public String getTurtleNameChangeCommand() {
-		String command = "None ";
-		if (imagePath.getText().length() > 1) {
-			command = "changeTurtlePicture ";
-			command += turtleImagePicker.getValue() + " ";
-			command += imagePath.getText();
-		}
-		System.out.println(command);
+//		String command = "None ";
+//		if (imagePath.getText().length() > 1) {
+//			command = "changeTurtlePicture ";
+//			command += turtleImagePicker.getValue() + " ";
+//			command += imagePath.getText();
+//		}
+//		System.out.println(command);
+		String command = "fd 50";
 		return command;
 	}
 }

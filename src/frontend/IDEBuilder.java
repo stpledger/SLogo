@@ -1,6 +1,5 @@
 package frontend;
 
-import backEnd.OldInterpreter;
 import backEnd.Interpreter;
 import backEnd.Model;
 import frontend.components.ComponentBuilder;
