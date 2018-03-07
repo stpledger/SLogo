@@ -59,5 +59,9 @@ public class IDEBuilder implements SceneBuilder, View{
 		System.out.println(s);
 		console.enterCommand(s);
 	}
+	
+//	public void updateDisplayerImage(String s){
+//		turtleDisplay.changeImage(s);
+//	}
 
 }

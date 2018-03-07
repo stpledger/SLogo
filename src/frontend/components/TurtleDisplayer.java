@@ -41,11 +41,15 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private static double center_x = DEFAULT_WINDOW_X/2;
 	private static double center_y = DEFAULT_WINDOW_Y/2;
 	private static final Paint ERROR_BOX_COLOR = Color.RED;
+	private static final Paint MESSAGE_BOX_COLOR = Color.CORNFLOWERBLUE;
+	private static final double MESSAGE_OFFSET = 3;
 	private static Pane pane = new Pane();
 	private static ArrayList<ImageView> turtles = new ArrayList<ImageView>();
 	private static HashMap<ImageView, Set<Line>> lineMap=  new HashMap<ImageView, Set<Line>>();
 	private static Text errorMessage;
 	private static Rectangle redBox;
+	private static Text dmessage;
+	private static Rectangle box;
 	private static Boolean turtleHidden = false;
 
 	/**
@@ -57,6 +61,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 		reset();
 		//changeImage("POKEturtleScaled.png");
 		//testTurtleDisplayer();
+		//displayMessage("This is an awesome test message!");
 	}
 
 	/**
@@ -82,6 +87,8 @@ public class TurtleDisplayer implements ComponentBuilder{
 	public void clearError() {
 		pane.getChildren().remove(errorMessage);
 		pane.getChildren().remove(redBox);
+		pane.getChildren().remove(dmessage);
+		pane.getChildren().remove(box);
 	}
 
 	/**
@@ -181,7 +188,6 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * Change all turtle's images
 	 */
 	public void changeImage(String path) {
-
 		try {
 			File f = new File(path);
 			BufferedImage imbuffer = ImageIO.read(f);
@@ -198,7 +204,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	/**
 	 * showTurtle - shows the turtle if hidden
 	 */
-	private void showTurtle() {
+	public void showTurtle() {
 		if(turtleHidden) {
 			for(ImageView i : turtles) {
 				pane.getChildren().add(i);
@@ -210,7 +216,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	/**
 	 * hideTurtle - hides the turtle if visible
 	 */
-	private void hideTurtle() {
+	public void hideTurtle() {
 		if(!turtleHidden) {
 			for(ImageView i : turtles) {
 				pane.getChildren().remove(i);
@@ -234,6 +240,21 @@ public class TurtleDisplayer implements ComponentBuilder{
 		pane.getChildren().add(errorMessage);	
 	}
 
+	/**
+	 * Displays given non-error message
+	 * @param message
+	 */
+	public void displayMessage(String message) {
+		dmessage = new Text(message);
+		dmessage.setX(DEFAULT_WINDOW_X - dmessage.getLayoutBounds().getWidth() - MESSAGE_OFFSET);
+		dmessage.setY(DEFAULT_WINDOW_Y - ERROR_MESSAGE_OFFSET);
+		box = new Rectangle(DEFAULT_WINDOW_X - dmessage.getLayoutBounds().getWidth() - MESSAGE_OFFSET, DEFAULT_WINDOW_Y - dmessage.getLayoutBounds().getHeight(), 
+				dmessage.getLayoutBounds().getWidth(), dmessage.getLayoutBounds().getHeight());
+		box.setFill(MESSAGE_BOX_COLOR);
+		pane.getChildren().add(box);
+		pane.getChildren().add(dmessage);	
+	}
+	
 	/**
 	 * Tests the program with other part's components
 	 */
