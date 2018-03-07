@@ -157,22 +157,24 @@ public class Console implements ComponentBuilder{
 					public void handle(final ActionEvent e) {
 						FileChooser fileChooser = new FileChooser();
 						File f = fileChooser.showOpenDialog(new Stage());
-						String mimetype = "Invalid";
-						String path = f.getAbsolutePath();
-						try {
-							mimetype = Files.probeContentType(f.toPath());
-							if (mimetype == null) mimetype = "Invalid";
-						} catch (IOException e1) {
-							// Do nothing
-						}
-						if (path.contains(".logo")) {
+						if (f != null) {
+							String mimetype = "Invalid";
+							String path = f.getAbsolutePath();
 							try {
-								runFromFile(f);
-							} catch (FileNotFoundException e1) {
+								mimetype = Files.probeContentType(f.toPath());
+								if (mimetype == null) mimetype = "Invalid";
+							} catch (IOException e1) {
+								// Do nothing
+							}
+							if (path.contains(".logo")) {
+								try {
+									runFromFile(f);
+								} catch (FileNotFoundException e1) {
+									alertUser(f);
+								}
+							} else {
 								alertUser(f);
 							}
-						} else {
-							alertUser(f);
 						}
 					}
 				});
@@ -188,7 +190,7 @@ public class Console implements ComponentBuilder{
 		alert.setContentText("The filepath you chose, " + f.getAbsolutePath() + " is not a valid logo file!");
 		alert.showAndWait();
 	}
-	
+
 	/**
 	 * scans SLOGO file and runs command
 	 * @throws FileNotFoundException 
@@ -197,10 +199,18 @@ public class Console implements ComponentBuilder{
 		Scanner sc = new Scanner(file);
 		String fileCommand = "";
 		while (sc.hasNextLine()) {
-			fileCommand = fileCommand + sc.nextLine() + "\n";
+			if(sc.hasNext()){
+				String next = sc.next();
+				if(!next.equals("#")){
+					fileCommand = fileCommand + next + sc.nextLine() + "\n";
+				}
+				else{
+					sc.nextLine();
+				}
+			}
 		}
 		run(fileCommand);
-		//System.out.println(fileCommand);
+		System.out.println(fileCommand);
 	}
 
 	/**
