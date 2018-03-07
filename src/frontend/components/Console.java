@@ -244,6 +244,7 @@ public class Console implements ComponentBuilder{
 	public void run(String com){
 		turtleDisplayer.clearError();
 		prompt.clear();
+		builder.update();
 		interpreter.setLanguage(language);
 		sLogoValid retMessage = interpreter.interpret(com);
 		if(!retMessage.getError()){

@@ -48,7 +48,8 @@ public class ToolBar implements ComponentBuilder{
 	}
 	
 	public String getLanguage() {
-		return "English";
+		//return "English";
+		return languagePicker.getValue();
 	}
 	
 	public String getColor() {
