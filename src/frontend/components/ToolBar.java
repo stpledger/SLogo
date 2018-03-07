@@ -17,7 +17,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -78,7 +77,7 @@ public class ToolBar implements ComponentBuilder{
 		toAdd.add(selectImage);
 		
 //		toAdd.add(imagePath);
-//		
+	
 		updateEnvButton.setOnAction(e -> builder.update());
 		toAdd.add(updateEnvButton);
 		
