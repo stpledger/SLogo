@@ -59,8 +59,5 @@ public class IDEBuilder implements SceneBuilder, View{
 		console.enterCommand(s);
 	}
 	
-	public void Hello() {
-		//please work
-	}
 
 }

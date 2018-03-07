@@ -30,6 +30,7 @@ public class SideBarComponent {
 	public SideBarComponent(String com) {
 		name = com;
 		description = "";
+		setStyle();
 	}
 	
 	public Node getNode() {
