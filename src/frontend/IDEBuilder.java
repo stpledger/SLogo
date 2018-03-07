@@ -24,7 +24,6 @@ public class IDEBuilder implements SceneBuilder, View{
 	private SideBar side;
 	private TurtleDisplayer turtleDisplay;
 	private Console console;
-	
 	private BorderPane layout = new BorderPane();
 	
 	public IDEBuilder() {
