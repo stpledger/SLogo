@@ -1,5 +1,6 @@
 package backEnd;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,7 +17,7 @@ public interface ModelViewable {
     /*
     * Gets a list of previously executed commands
     */
-    public Set<CommandGroup> getPreviousCommands();
+    public List<CommandGroup> getPreviousCommands();
     
     /*
     * Gets a map of current variables and their values
