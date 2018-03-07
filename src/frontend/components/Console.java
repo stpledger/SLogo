@@ -51,15 +51,17 @@ public class Console implements ComponentBuilder{
 	private String language = "English";
 	private ResourceBundle uiResources;
 	private static final String DEFAULT_RESOURCE_PACKAGE = "resources/ui/";
+	private IDEBuilder builder;
 
-	public Console (TurtleDisplayer t, Model m, Interpreter interpreter2) {
+	public Console (TurtleDisplayer t, Model m, Interpreter interpreter2, IDEBuilder b) {
 		turtleDisplayer = t;
 		model = m;
 		interpreter = interpreter2;
 		box.setStyle("-fx-background-color: #EEEEEE;");
 		box.setPrefHeight(IDEBuilder.CONSOLE_HEIGHT);
 		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
-
+		builder = b;
+		
 		Button runButton = makeRunButton();
 		Button clearButton = makeClearButton();
 		Button openFileButton = makeFileButton();
@@ -221,12 +223,12 @@ public class Console implements ComponentBuilder{
 		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 	}
 
-	/**
-	 * updates all button text
-	 */
-	private void updateButtons(){
-
-	}
+//	/**
+//	 * updates all button text
+//	 */
+//	private void updateButtons(){
+//
+//	}
 
 	/**
 	 * Custom command entered from elsewhere in program
@@ -246,6 +248,7 @@ public class Console implements ComponentBuilder{
 		sLogoValid retMessage = interpreter.interpret(com);
 		if(!retMessage.getError()){
 			Map<String, Object> variableMap = model.getCurrentVariables();
+			builder.update();
 			Set<Turtle> turtleSet = new HashSet<Turtle>();
 			for(String s : variableMap.keySet()){
 				if(variableMap.get(s) instanceof Turtle){

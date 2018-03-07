@@ -27,7 +27,7 @@ public class ToolBar implements ComponentBuilder{
 	private HBox bar = new HBox();
 	private IDEBuilder builder;
 	
-	String[] languages = {"English", "German", "French", "Spanish", "Portuguese", "Italian", "Russian", "Chinese"};
+	String[] languages = {"English", "German", "French", "Spanish"};
 	private Color turtleColor = Color.SLATEBLUE;
 	
 	private ComboBox<String> languagePicker = new ComboBox<String>();
@@ -142,14 +142,13 @@ public class ToolBar implements ComponentBuilder{
 	 * Returns the name of the currently selected turtle to change update 
 	 */
 	public String getTurtleNameChangeCommand() {
-//		String command = "None ";
-//		if (imagePath.getText().length() > 1) {
-//			command = "changeTurtlePicture ";
-//			command += turtleImagePicker.getValue() + " ";
-//			command += imagePath.getText();
-//		}
-//		System.out.println(command);
-		String command = "fd 50";
+		String command = "None ";
+		if (imagePath.getText().length() > 1) {
+			command = "changeTurtlePicture ";
+			command += turtleImagePicker.getValue() + " ";
+			command += imagePath.getText();
+		}
+		System.out.println(command);
 		return command;
 	}
 }
