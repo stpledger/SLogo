@@ -2,12 +2,16 @@ package frontend.components;
 
 
 
-import frontend.IDEBuilder;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 public class SideBarComponent {
 	
@@ -30,6 +34,7 @@ public class SideBarComponent {
 	public SideBarComponent(String com) {
 		name = com;
 		description = "";
+		setStyle();
 	}
 	
 	public Node getNode() {
@@ -37,7 +42,9 @@ public class SideBarComponent {
 		container.getChildren().add(getNameComponent());
 		container.getChildren().add(getDescriptionComponent());
 		scroller.setContent(container);
-		return scroller;
+		container.setOnMouseEntered(e -> container.setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, CornerRadii.EMPTY, Insets.EMPTY))));
+		container.setOnMouseExited(e -> container.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY))));
+		return container;
 	}
 	
 	private Node getNameComponent() {
@@ -49,11 +56,13 @@ public class SideBarComponent {
 	private void setStyle() {
 		scroller.setHbarPolicy(ScrollBarPolicy.NEVER);
 		scroller.setVbarPolicy(ScrollBarPolicy.NEVER);
+		container.setSpacing(5);
 	}
 
 	private Node getDescriptionComponent() {
 		Label l = new Label(description);
 		l.setPrefWidth(DESCRIPTION_WIDTH);
+		l.setPadding(new Insets(5));
 		return l;
 	}
 }

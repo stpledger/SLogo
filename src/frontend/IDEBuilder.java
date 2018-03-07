@@ -24,7 +24,6 @@ public class IDEBuilder implements SceneBuilder, View{
 	private SideBar side;
 	private TurtleDisplayer turtleDisplay;
 	private Console console;
-	
 	private BorderPane layout = new BorderPane();
 	
 	public IDEBuilder() {
@@ -32,7 +31,7 @@ public class IDEBuilder implements SceneBuilder, View{
 		toolbar = new ToolBar(this);
 		Model m = new Model();
 		Interpreter interpreter = new Interpreter(m);
-		side = new SideBar(m);
+		side = new SideBar(m, this);
 		turtleDisplay = new TurtleDisplayer();
 		console = new Console(turtleDisplay, m, interpreter, this);
 		layout.setRight(side.getNode());
@@ -59,5 +58,6 @@ public class IDEBuilder implements SceneBuilder, View{
 		System.out.println(s);
 		console.enterCommand(s);
 	}
+	
 
 }
