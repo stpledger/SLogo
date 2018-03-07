@@ -1,5 +1,6 @@
 package frontend;
 
+import backEnd.OldInterpreter;
 import backEnd.Interpreter;
 import backEnd.Model;
 import frontend.components.ComponentBuilder;
@@ -10,7 +11,7 @@ import frontend.components.TurtleDisplayer;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
-public class IDEBuilder implements SceneBuilder{
+public class IDEBuilder implements SceneBuilder, View{
 	
 	public static final double IDE_HEIGHT = 600;
 	public static final double IDE_WIDTH = 1200;
