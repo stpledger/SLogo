@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["c\/Ms1"]); }
+
+__d("MessengerBannerReact.bs",["Utils.bs","bs_js_boolean","ReasonReact.bs","bs_js_null_undefined","MessengerBanner.react"],(function a(b,c,d,e,f,g){"use strict";function h(i,j,k,l){return c("ReasonReact.bs").wrapJsForReason(c("MessengerBanner.react"),{showWorkchatUpsellBanner:c("bs_js_boolean").to_js_boolean(i),initialPromotionData:c("bs_js_null_undefined").from_opt(j),isFirstRedirect:c("Utils.bs").optionBoolToNullUndefinedBoolean(k)},l)}g.make=h}),null);

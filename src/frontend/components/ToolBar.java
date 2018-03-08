@@ -87,7 +87,7 @@ public class ToolBar implements ComponentBuilder{
 		Scene pickerScene = new Scene(picker);
 		pickerStage.setScene(pickerScene);
 		pickerStage.show();
-		picker.setOnAction(pe -> {turtleColor = picker.getValue(); pickerStage.close(); System.out.println(turtleColor); builder.update();});
+		picker.setOnAction(pe -> {turtleColor = picker.getValue(); pickerStage.close(); builder.update();});
 	}
 	
 	private void updateImagePath(ActionEvent e) {

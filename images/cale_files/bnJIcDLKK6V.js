@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["yP+w+"]); }
+
+__d("MessengerParticipants.bs",["bs_caml_obj","bs_js_boolean","MercuryIDs"],(function a(b,c,d,e,f,g){"use strict";__p&&__p();function h(k,l,m){var n=c("MercuryIDs").getParticipantIDFromUserID(k),o=m.participants.filter(function(p){return c("bs_caml_obj").caml_notequal(p,n)});return o.filter(function(p){return+l.has(p)})}function i(k,l,m){if(m.is_canonical)return[];else return h(k,l,m)}function j(k,l,m){return c("bs_js_boolean").to_js_boolean(+(i(k,l,m).length>0))}g.findIntersection=h;g.participantsInGroupThread=i;g.areParticipantsInGroupThread=j}),null);

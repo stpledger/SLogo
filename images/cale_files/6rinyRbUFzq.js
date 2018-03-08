@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["gmMKc"]); }
+
+__d("MessengerSharedPhotosAlbumViewContainerReact.bs",["ReasonReact.bs","MessengerSharedPhotosAlbumViewContainer.react"],(function a(b,c,d,e,f,g){"use strict";function h(i,j,k,l,m){return c("ReasonReact.bs").wrapJsForReason(c("MessengerSharedPhotosAlbumViewContainer.react"),{onClick:i,onCloseSharedPhotos:j,threadID:k,viewedPhoto:l},[])}g.make=h}),null);
