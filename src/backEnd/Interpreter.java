@@ -18,6 +18,7 @@ public class Interpreter {
 	private static final String[] NO_PARAM_COMMANDS = {"pu","pd","st","ht","home","cs","xcor","ycor","heading","pendownp","showingp","pi", "pc", "sh", "stamp", "clearstamps", "id", "turtles"};
 	private static final String[] ONE_PARAM_COMMANDS = {"fd", "bk", "lt", "rt", "seth", "random", "sin", "cos", "tan", "atan", "log", "not", "minus", "setbg", "setpc", "setps", "setsh", "setpalette"};
 	private static final String[] TWO_PARAM_COMMANDS = {"towards", "setxy", "sum", "difference", "product", "quotient", "remainder", "pow", "lessp","greaterp", "equal", "notequalp", "and", "set"}; 
+	private static final String[] MULTI_TURTLE_COMMANDS = {"tell", "ask", "askwith"};
 	public Interpreter(ModelModifiable m) {
 		mySlogoValid = new sLogoValid();
 		myModel = m; 
