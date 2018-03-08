@@ -27,6 +27,7 @@ public class Interpreter {
 	}
 	
 	public sLogoValid interpret(String s) {
+		mySlogoValid = new sLogoValid();
 		if(errorCheck(s).getError()) return mySlogoValid;
 		//Create Instance Variables
 		ArrayList<String> tempArgs = new ArrayList<String>(Arrays.asList(s.trim().split("\\s+")));
@@ -87,6 +88,8 @@ public class Interpreter {
 
 	private sLogoValid interpretMultiTurtle(ArrayList<String> args) {
 		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = args;
+		
 		return tempSlogoValid;
 	}
 
