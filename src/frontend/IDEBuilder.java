@@ -76,7 +76,7 @@ public class IDEBuilder implements SceneBuilder, View{
 	}
 
 	public void addCommandHistory(String com) {
-		//side.addToCommandHistory(com);
+		side.addToCommandHistory(com);
 	}
 	
 	public void displayError(String s){

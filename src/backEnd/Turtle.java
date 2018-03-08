@@ -56,6 +56,9 @@ public class Turtle {
 	private ImageView makeTurtle() {
 		Image img = new Image(myTurtleImage);
 		ImageView turtle = new ImageView(img);
+		if(!isVisible){
+			turtle.setImage(null);
+		}
 		turtle.setX(myXPos);
 		turtle.setY(myYPos);
 		turtle.setRotate(myAngle);
