@@ -1,9 +1,9 @@
 package backEnd;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,7 +16,7 @@ public class Model implements ModelModifiable, ModelViewable {
 	public Model() {
 		myModel = new HashMap<>();
 		myModel.put("Turtle", new Turtle(0,0,0));
-		myPreviousCommands = new ArrayList<>();
+		myPreviousCommands = new LinkedList<>();
 	}
 	
 	@Override
@@ -80,7 +80,7 @@ public class Model implements ModelModifiable, ModelViewable {
 
 	@Override
 	public void addCommandHistory(CommandGroup command) {
-		myPreviousCommands.add(command);
+		myPreviousCommands.add(0,  command);
 	}
 
 }
