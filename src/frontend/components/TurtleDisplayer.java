@@ -127,6 +127,9 @@ public class TurtleDisplayer implements ComponentBuilder{
 		if(v.getError()){
 			displayError(v.getMyStringValue());
 		}
+		else{
+			displayMessage(v.getMyStringValue());
+		}
 		for(Turtle t : s){
 			ImageView tempTurtle = t.getTurtle();
 			//System.out.println(tempTurtle.getX());
