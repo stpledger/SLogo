@@ -20,12 +20,14 @@ public class SideBarComponent {
 	public static final double NAME_WIDTH = 100;
 	public static final double DESCRIPTION_WIDTH = 200;
 	public static final double HEIGHT = 30;
+	public static final double PADDING = 5;
 	
 	private String name;
 	private String description;
 	private HBox container = new HBox();
 	private ScrollPane scroller = new ScrollPane();
 	private Double editVal;
+	
 	
 	
 	public SideBarComponent(String varName, String desc) {
@@ -52,7 +54,7 @@ public class SideBarComponent {
 	
 	private Node getNameComponent() {
 		Label l = new Label(name);
-		l.setPadding(new Insets(5));
+		l.setPadding(new Insets(PADDING));
 		l.setPrefWidth(NAME_WIDTH);
 		return l;
 	}
@@ -83,7 +85,7 @@ public class SideBarComponent {
 	private Node getDescriptionComponent() {
 		Label l = new Label(description);
 		l.setPrefWidth(DESCRIPTION_WIDTH);
-		l.setPadding(new Insets(5));
+		l.setPadding(new Insets(PADDING));
 		return l;
 	}
 }

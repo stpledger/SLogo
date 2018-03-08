@@ -79,7 +79,7 @@ public class SideBar implements ComponentBuilder {
 		//System.out.println(displayableModel.getPreviousCommands());
 		int count = 0;
 		for (String com: previousCommands) {
-			Node prevCommandNode = new SideBarComponent("  " + com.toString()).getNode();
+			Node prevCommandNode = new SideBarComponent(com.toString()).getNode();
 			prevCommandNode.setOnMouseClicked(e -> builder.enterConsoleCommand(com.toString()));
 			host.getChildren().add(prevCommandNode);
 			count += 1;
