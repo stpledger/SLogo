@@ -291,13 +291,13 @@ public class Console implements ComponentBuilder{
 	 * run - Calls controller to interpret string and then calls TurtleDisplayer to update turtle display
 	 */
 	public void run(String com){
-		System.out.println(com);
+		//System.out.println(com);
 		turtleDisplayer.clearError();
 		prompt.clear();
 		builder.update();
 		interpreter.setLanguage(language);
 		sLogoValid retMessage = interpreter.interpret(com);
-		System.out.println(retMessage.getError());
+		//System.out.println(retMessage.getError());
 		if(!retMessage.getError()){
 			builder.addCommandHistory(com);
 			Map<String, Object> variableMap = model.getCurrentVariables();

@@ -123,6 +123,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	//	        }
 	//	    }
 	//	}
+	
 	private void drawNewDisplay(Set<Turtle> s, sLogoValid v){
 		if(v.getError()){
 			displayError(v.getMyStringValue());
@@ -132,8 +133,6 @@ public class TurtleDisplayer implements ComponentBuilder{
 		}
 		for(Turtle t : s){
 			ImageView tempTurtle = t.getTurtle();
-			//System.out.println(tempTurtle.getX());
-			//System.out.println(tempTurtle.getY());
 			tempTurtle.setX(tempTurtle.getX() + center_x - TURTLE_SIZE/2);
 			tempTurtle.setY(-1 * tempTurtle.getY() + center_y - TURTLE_SIZE/2);
 			pane.getChildren().add(tempTurtle);
