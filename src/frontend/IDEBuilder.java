@@ -74,6 +74,14 @@ public class IDEBuilder implements SceneBuilder, View{
 		//System.out.println(s);
 		console.enterCommand(s);
 	}
+
+	public void addCommandHistory(String com) {
+		//side.addToCommandHistory(com);
+	}
+	
+	public void displayError(String s){
+		turtleDisplay.displayError(s);
+	}
 	
 //	public void updateDisplayerImage(String s){
 //		turtleDisplay.changeImage(s);

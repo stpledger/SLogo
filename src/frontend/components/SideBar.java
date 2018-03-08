@@ -20,7 +20,7 @@ public class SideBar implements ComponentBuilder {
 	private VBox host = new VBox();
 	private ModelViewable displayableModel;
 	private IDEBuilder builder;
-	
+
 	public SideBar(ModelViewable incoming, IDEBuilder b) {
 		builder = b;
 		displayableModel = incoming;
@@ -29,7 +29,7 @@ public class SideBar implements ComponentBuilder {
 		host.setPrefWidth(IDEBuilder.SIDEBAR_WIDTH);
 		update();
 	}
-	
+
 	public void addElement(String name, String desc) {
 		Node comp = new SideBarComponent(name, desc).getNode();
 		comp.setOnMouseClicked (e -> {
@@ -40,10 +40,14 @@ public class SideBar implements ComponentBuilder {
 			TextField t = new TextField();
 			t.setOnKeyPressed(e1 -> {
 				if (e1.getCode() == KeyCode.ENTER) {
-					Double d = Double.valueOf(t.getText());
-					if (d != null) {
-						builder.enterConsoleCommand("make " + name + " " + d);
-						tempStage.close();
+					try{
+						Double d = Double.valueOf(t.getText());
+						if (d != null) {
+							builder.enterConsoleCommand("make " + name + " " + d);
+							tempStage.close();
+						}
+					} catch (Exception e2){
+						builder.displayError("Invalid numeric value!");
 					}
 				}
 			});
@@ -53,17 +57,17 @@ public class SideBar implements ComponentBuilder {
 		});
 		host.getChildren().add(comp);
 	}
-	
+
 	public void update() {
 		host.getChildren().clear();
 		addHeader();
-		
+
 		for (String key: displayableModel.getCurrentVariables().keySet()) {
 			addElement(key, displayableModel.getCurrentVariables().get(key).toString());
 		}
-		
+
 		host.getChildren().add(formatHeaderCell(new Label("Previous Commands")));
-		
+
 		//System.out.println(displayableModel.getPreviousCommands());
 		int count = 0;
 		for (CommandGroup com: displayableModel.getPreviousCommands()) {
@@ -72,7 +76,7 @@ public class SideBar implements ComponentBuilder {
 			host.getChildren().add(prevCommandNode);
 			count += 1;
 			if (count > 50) {break;}
-			
+
 		}
 	}
 
@@ -83,7 +87,7 @@ public class SideBar implements ComponentBuilder {
 		scroller.setContent(host);
 		return scroller;
 	}
-	
+
 	private void addHeader() {
 		HBox header = new HBox();
 		header.getChildren().add(formatHeaderCell (new Label("Var Name")));
@@ -91,14 +95,14 @@ public class SideBar implements ComponentBuilder {
 		host.getChildren().add(header);
 
 	}
-	
+
 	private Label formatHeaderCell (Label l) {
 		l.setMinHeight(40);
 		l.setMinWidth(100);
 		l.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
 		return l;
 	}
-	
+
 	public ModelViewable getModel() {
 		return displayableModel;
 	}
