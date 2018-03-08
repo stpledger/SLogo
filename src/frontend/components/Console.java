@@ -3,6 +3,7 @@ package frontend.components;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Map;
@@ -65,6 +66,7 @@ public class Console implements ComponentBuilder{
 		Button runButton = makeRunButton();
 		Button clearButton = makeClearButton();
 		Button openFileButton = makeFileButton();
+		Button saveFileButton = makeSaveButton();
 		Button fdButton = makeCommandButton(uiResources.getString("forward"), "fd 20");
 		Button bkButton = makeCommandButton(uiResources.getString("backward"), "bk 20");
 		Button ltButton = makeCommandButton(uiResources.getString("left"), "lt 10");
@@ -75,7 +77,7 @@ public class Console implements ComponentBuilder{
 		Button csButton = makeCommandButton(uiResources.getString("clear"), "cs");
 		Button puButton = makeCommandButton(uiResources.getString("penup"), "pu fd 0");
 		Button pdButton = makeCommandButton(uiResources.getString("pendown"), "pd fd 0");
-		VBox runClearBox = new VBox(runButton, clearButton, openFileButton);
+		VBox runClearBox = new VBox(runButton, clearButton, openFileButton, saveFileButton);
 		runClearBox.setAlignment(Pos.CENTER);
 		runClearBox.setPrefWidth(clearButton.getWidth());
 		HBox moveTurtleButtonsBox = new HBox(fdButton, bkButton, ltButton, rtButton, showButton, hideButton, homeButton, csButton, puButton, pdButton);
@@ -183,6 +185,26 @@ public class Console implements ComponentBuilder{
 					}
 				});
 		return openButton;
+	}
+	
+	private Button makeSaveButton() {
+		Button saveButton = new Button(uiResources.getString("saveButton"));
+		saveButton.setOnAction(e -> {
+			FileChooser fc = new FileChooser();
+			File f = fc.showSaveDialog(new Stage());
+			String text = prompt.getText();
+			try {
+				PrintWriter pw = new PrintWriter(f);
+				pw.println(text);
+				pw.close();
+			} catch (Exception e1 ) {
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+				alert.setHeaderText("Cannot save to the file chosen.");
+				alert.show();
+			}
+		});
+		
+		return saveButton;
 	}
 
 	/**
