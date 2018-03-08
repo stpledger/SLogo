@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["Nakwp"]); }
+
+__d("MessengerCompositeMuteSettingsDialogBootloaderReact.bs",["ReasonReact.bs","MessengerCompositeMuteSettingsDialogBootloader.react"],(function a(b,c,d,e,f,g){"use strict";function h(i,j,k,l,m,n,o,p,q){return c("ReasonReact.bs").wrapJsForReason(c("MessengerCompositeMuteSettingsDialogBootloader.react"),{isMuted:i,mentionsMuted:j,reactionsMuted:k,showMentions:l,onMentionsMute:m,onReactionsMute:n,onMute:o,onToggle:p},q)}g.make=h}),null);

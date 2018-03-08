@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["wtTzz"]); }
+
+__d("NotificationThumbnail.react",["Image.react","React","RoundImage.react","SutroGatingConfig"],(function a(b,c,d,e,f,g){"use strict";var h=c("SutroGatingConfig").avatar;function i(j){if(h.has_rounded_avatars)return c("React").createElement(c("RoundImage.react"),j);else return c("React").createElement(c("Image.react"),j)}f.exports=i}),null);

@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["9FDNE"]); }
+
+__d("NotificationListItemReadToggle.react",["cx","fbt","React","ReadToggle.react"],(function a(b,c,d,e,f,g,h,i){"use strict";function j(k){var l=k.isRead,m=k.canMarkUnread,n=k.onToggleClick;return c("React").createElement(c("ReadToggle.react"),{className:"_55m9 _55ma",isRead:l,onClick:n,readLabel:m?i._("Mark as Unread"):i._("Read"),unreadLabel:i._("Mark as Read")})}f.exports=j}),null);

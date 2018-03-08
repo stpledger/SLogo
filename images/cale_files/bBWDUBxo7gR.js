@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["1Duum"]); }
+
+__d("SpotlightMessengerSharedMediaViewerContainerReact.bs",["bs_js_boolean","ReasonReact.bs","SpotlightMessengerSharedMediaViewerContainer.react"],(function a(b,c,d,e,f,g){"use strict";function h(i,j,k,l,m,n,o){return c("ReasonReact.bs").wrapJsForReason(c("SpotlightMessengerSharedMediaViewerContainer.react"),{onClosePhotoView:i,openAlbum:j,photoID:k,rootClassName:l,threadID:m,disableForward:c("bs_js_boolean").to_js_boolean(n)},[])}g.make=h}),null);

@@ -1,0 +1,3 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["jOnPW"]); }
+
+__d("RoundImage.react",["cx","React","joinClasses","Image.react"],(function a(b,c,d,e,f,g,h){"use strict";__p&&__p();var i,j;i=babelHelpers.inherits(k,c("React").Component);j=i&&i.prototype;k.prototype.render=function(){var l=c("joinClasses")(this.props.className,k.baseClassName);return c("React").createElement(c("Image.react"),babelHelpers["extends"]({},this.props,{className:l}))};function k(){i.apply(this,arguments)}k.baseClassName="_2qgu";f.exports=k}),null);
