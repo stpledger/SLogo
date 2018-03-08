@@ -27,7 +27,7 @@ public class Interpreter {
 	}
 	
 	public sLogoValid interpret(String s) {
-		if(errorCheck(s).getError()) return mySlogoValid;
+		if(errorCheck(s).getError()) return errorCheck(s);
 		//Create Instance Variables
 		ArrayList<String> tempArgs = new ArrayList<String>(Arrays.asList(s.trim().split("\\s+")));
 		ArrayList<String> args = new ArrayList<String>();
@@ -87,6 +87,8 @@ public class Interpreter {
 
 	private sLogoValid interpretMultiTurtle(ArrayList<String> args) {
 		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = args;
+		
 		return tempSlogoValid;
 	}
 
@@ -368,9 +370,7 @@ public class Interpreter {
 		if(mySlogoValid.getError()) return mySlogoValid;
 		//Check to make sure input isn't null
 		if(s == null || "".equals(s)) {
-			mySlogoValid.setError(true);
-			mySlogoValid.setMyStringValue("User input is missing or invalid");
-			return mySlogoValid;
+			return new sLogoValid(true, "User input is missing or invalid");
 		}
 		return mySlogoValid;
 	}
