@@ -4,25 +4,25 @@ import backEnd.CommandGroup;
 import backEnd.ModelViewable;
 import frontend.IDEBuilder;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.input.KeyCode;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 public class SideBar implements ComponentBuilder {
 	private VBox host = new VBox();
 	private ModelViewable displayableModel;
+	private IDEBuilder builder;
 	
-	public SideBar(ModelViewable incoming) {
+	public SideBar(ModelViewable incoming, IDEBuilder b) {
+		builder = b;
 		displayableModel = incoming;
 		host.setStyle("-fx-background-color: #FFFFFF;");
 		host.getChildren().add(new Label("Side Bar"));
@@ -31,21 +31,46 @@ public class SideBar implements ComponentBuilder {
 	}
 	
 	public void addElement(String name, String desc) {
-		SideBarComponent comp = new SideBarComponent(name, desc);
-		host.getChildren().add(comp.getNode());
+		Node comp = new SideBarComponent(name, desc).getNode();
+		comp.setOnMouseClicked (e -> {
+			HBox g = new HBox();
+			Stage tempStage = new Stage();
+			Scene primScene = new Scene(g);
+			g.getChildren().add(new Label("Change " + name + " to: " ));
+			TextField t = new TextField();
+			t.setOnKeyPressed(e1 -> {
+				if (e1.getCode() == KeyCode.ENTER) {
+					Double d = Double.valueOf(t.getText());
+					if (d != null) {
+						builder.enterConsoleCommand("make " + name + " " + d);
+						tempStage.close();
+					}
+				}
+			});
+			g.getChildren().add(t);
+			tempStage.setScene(primScene);
+			tempStage.show();
+		});
+		host.getChildren().add(comp);
 	}
 	
 	public void update() {
 		host.getChildren().clear();
 		addHeader();
+		
 		for (String key: displayableModel.getCurrentVariables().keySet()) {
 			addElement(key, displayableModel.getCurrentVariables().get(key).toString());
 		}
+		
 		host.getChildren().add(formatHeaderCell(new Label("Previous Commands")));
 		
 		System.out.println(displayableModel.getPreviousCommands());
 		for (CommandGroup com: displayableModel.getPreviousCommands()) {
-			host.getChildren().add(new SideBarComponent(com.toString()).getNode());
+			Node prevCommandNode = new SideBarComponent("  " + com.toString()).getNode();
+			prevCommandNode.setStyle(".myElement:hover {filter: brightness(10%);}");
+			prevCommandNode.setOnMouseClicked(e -> builder.enterConsoleCommand(com.toString()));
+			host.getChildren().add(prevCommandNode);
+			
 		}
 	}
 

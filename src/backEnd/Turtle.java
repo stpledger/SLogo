@@ -1,5 +1,7 @@
 package backEnd;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -66,20 +68,55 @@ public class Turtle {
 	}
 	
 	protected double moveTo(double xpos, double ypos) {
-		if (isPenDown) {
-			myTraces.add(myPen.draw(myXPos, myYPos, xpos, ypos));
+		double xBound = 470;
+		double yBound = 200;
+		double xPosFinal = xpos;
+		double yPosFinal = ypos;
+		double xPosPrev = xpos;
+		double yPosPrev = ypos;
+		boolean toDraw = true;
+		while(xPosFinal > xBound || xPosFinal < -xBound ||
+				yPosFinal > yBound || yPosFinal < -yBound){
+			if(xPosFinal > xBound){
+				xPosFinal = (-xBound + (xPosFinal % xBound));
+			}
+			else if(xPosFinal < -xBound){
+				xPosFinal = (xBound + (xPosFinal% -xBound));
+			}
+			else if(yPosFinal > yBound){
+				yPosFinal = (-yBound + (yPosFinal % yBound));
+			}
+			else if(yPosFinal < -yBound){
+				yPosFinal = (yBound + (yPosFinal % -yBound));
+			}
+			xPosPrev = xPosFinal;
+			yPosPrev= yPosFinal;
+			toDraw = false;
 		}
-		double dist = Math.pow(Math.pow(xpos - myXPos, 2) + Math.pow(ypos - myYPos, 2), 0.5);
-		myXPos = xpos;
-		myYPos = ypos;
+		if (isPenDown && toDraw){
+			myTraces.add(myPen.draw(myXPos, myYPos, xPosFinal, yPosFinal));
+		}
+		double dist = Math.pow(Math.pow(xPosFinal - myXPos, 2) + Math.pow(yPosFinal - myYPos, 2), 0.5);
+		myXPos = xPosFinal;
+		myYPos = yPosFinal;
 		myTurtleDisplay = makeTurtle();
 		return dist;
 	}
 	
 	protected double move(double distance) {
 		// TO-DO: account for toroidal edge
-		double xpos = myXPos + Math.sin(Math.toRadians(myAngle))*distance;
-		double ypos = myYPos + Math.cos(Math.toRadians(myAngle))*distance;
+		double modifiedDistance = distance;
+		double xpos;
+		double ypos;
+		int incr = 20;
+		for(int i = 0; i < Math.floor(distance/incr); i++){
+			xpos = myXPos + Math.sin(Math.toRadians(myAngle))*incr;
+			ypos = myYPos + Math.cos(Math.toRadians(myAngle))*incr;
+			this.moveTo(xpos, ypos);
+			modifiedDistance -= incr;
+		}
+		xpos = myXPos + Math.sin(Math.toRadians(myAngle))*modifiedDistance;
+		ypos = myYPos + Math.cos(Math.toRadians(myAngle))*modifiedDistance;
 		this.moveTo(xpos, ypos);
 		return distance;
 	}
@@ -148,10 +185,12 @@ public class Turtle {
 	}
 	
 	public String toString() {
+		DecimalFormat df = new DecimalFormat("#.###");
+		df.setRoundingMode(RoundingMode.CEILING);
 		String rets = "";
-		rets += "X:       " + myXPos;
-		rets += "\nY:      " + myYPos;
-		rets += "\nAngle:  " + myAngle % 360;
+		rets += "X:       " + df.format(myXPos);
+		rets += "\nY:      " + df.format(myYPos);
+		rets += "\nAngle:  " + df.format(myAngle % 360);
 		return rets;
 	}
 }

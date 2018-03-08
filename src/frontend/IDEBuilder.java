@@ -8,6 +8,7 @@ import frontend.components.SideBar;
 import frontend.components.ToolBar;
 import frontend.components.TurtleDisplayer;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 
 public class IDEBuilder implements SceneBuilder, View{
@@ -24,7 +25,6 @@ public class IDEBuilder implements SceneBuilder, View{
 	private SideBar side;
 	private TurtleDisplayer turtleDisplay;
 	private Console console;
-	
 	private BorderPane layout = new BorderPane();
 	
 	public IDEBuilder() {
@@ -32,7 +32,7 @@ public class IDEBuilder implements SceneBuilder, View{
 		toolbar = new ToolBar(this);
 		Model m = new Model();
 		Interpreter interpreter = new Interpreter(m);
-		side = new SideBar(m);
+		side = new SideBar(m, this);
 		turtleDisplay = new TurtleDisplayer();
 		console = new Console(turtleDisplay, m, interpreter, this);
 		layout.setRight(side.getNode());
@@ -44,7 +44,22 @@ public class IDEBuilder implements SceneBuilder, View{
 	
 	@Override
 	public Scene getScene() {
-		return new Scene(layout, IDE_WIDTH, IDE_HEIGHT);
+		Scene s = new Scene(layout, IDE_WIDTH, IDE_HEIGHT);
+		s.setOnKeyPressed(e -> {
+			if (e.getCode() == KeyCode.W) {
+				enterConsoleCommand("fd 20");
+			}
+			else if (e.getCode() == KeyCode.A) {
+				enterConsoleCommand("lt 10");
+			}
+			else if (e.getCode() == KeyCode.S) {
+				enterConsoleCommand("bk 20");
+			}
+			else if (e.getCode() == KeyCode.D) {
+				enterConsoleCommand("rt 10");
+			}
+		});
+		return s;
 	}
 	
 	public void update() {
@@ -59,5 +74,8 @@ public class IDEBuilder implements SceneBuilder, View{
 		System.out.println(s);
 		console.enterCommand(s);
 	}
-
+	
+//	public void updateDisplayerImage(String s){
+//		turtleDisplay.changeImage(s);
+//	}
 }

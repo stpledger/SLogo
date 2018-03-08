@@ -1,20 +1,22 @@
 package backEnd;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class Model implements ModelModifiable, ModelViewable {
 	
 	private Map<String, Object> myModel;
-	private Set<CommandGroup> myPreviousCommands;
+	private List<CommandGroup> myPreviousCommands;
 	
 	public Model() {
 		myModel = new HashMap<>();
 		myModel.put("Turtle", new Turtle(0,0,0));
-		myPreviousCommands = new HashSet<>();
+		myPreviousCommands = new ArrayList<>();
 	}
 	
 	@Override
@@ -45,8 +47,8 @@ public class Model implements ModelModifiable, ModelViewable {
 	}
 
 	@Override
-	public Set<CommandGroup> getPreviousCommands() {
-		return Collections.unmodifiableSet(myPreviousCommands);
+	public List<CommandGroup> getPreviousCommands() {
+		return Collections.unmodifiableList(myPreviousCommands);
 	}
 	
 	@Override

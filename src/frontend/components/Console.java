@@ -3,6 +3,7 @@ package frontend.components;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,6 +38,10 @@ import backEnd.sLogoValid;
 
 /**
  * Console allows user input for commands and will start the rest of the program when run is pressed
+ * 
+ * It also contains the button for manual control of the turtle as well as a clear prompt button, 
+ * open file button, and save file button.
+ * 
  * @author Marcus Oertle
  *
  */
@@ -61,10 +66,11 @@ public class Console implements ComponentBuilder{
 		box.setPrefHeight(IDEBuilder.CONSOLE_HEIGHT);
 		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 		builder = b;
-		
+
 		Button runButton = makeRunButton();
 		Button clearButton = makeClearButton();
 		Button openFileButton = makeFileButton();
+		Button saveFileButton = makeSaveButton();
 		Button fdButton = makeCommandButton(uiResources.getString("forward"), "fd 20");
 		Button bkButton = makeCommandButton(uiResources.getString("backward"), "bk 20");
 		Button ltButton = makeCommandButton(uiResources.getString("left"), "lt 10");
@@ -73,10 +79,12 @@ public class Console implements ComponentBuilder{
 		Button hideButton = makeCommandButton(uiResources.getString("hide"), "ht");
 		Button homeButton = makeCommandButton(uiResources.getString("home"), "home");
 		Button csButton = makeCommandButton(uiResources.getString("clear"), "cs");
-		VBox runClearBox = new VBox(runButton, clearButton, openFileButton);
+		Button puButton = makeCommandButton(uiResources.getString("penup"), "pu fd 0");
+		Button pdButton = makeCommandButton(uiResources.getString("pendown"), "pd fd 0");
+		VBox runClearBox = new VBox(runButton, clearButton, openFileButton, saveFileButton);
 		runClearBox.setAlignment(Pos.CENTER);
 		runClearBox.setPrefWidth(clearButton.getWidth());
-		HBox moveTurtleButtonsBox = new HBox(fdButton, bkButton, ltButton, rtButton, showButton, hideButton, homeButton, csButton);
+		HBox moveTurtleButtonsBox = new HBox(fdButton, bkButton, ltButton, rtButton, showButton, hideButton, homeButton, csButton, puButton, pdButton);
 		moveTurtleButtonsBox.setAlignment(Pos.CENTER);
 		moveTurtleButtonsBox.setPrefHeight(fdButton.getHeight());
 		HBox consoleRunClearBox = new HBox(prompt, runClearBox);
@@ -152,6 +160,7 @@ public class Console implements ComponentBuilder{
 	 */
 	private Button makeFileButton() {
 		Button openButton = new Button(uiResources.getString("openButton"));
+		openButton.setMinWidth(BUTTON_SIZE);
 		FileChooser fileChooser = new FileChooser();
 		openButton.setOnAction(
 				new EventHandler<ActionEvent>() {
@@ -172,10 +181,10 @@ public class Console implements ComponentBuilder{
 								try {
 									runFromFile(f);
 								} catch (FileNotFoundException e1) {
-									alertUser(f);
+									alertUserInvalidLogo(f);
 								}
 							} else {
-								alertUser(f);
+								alertUserInvalidLogo(f);
 							}
 						}
 					}
@@ -184,15 +193,53 @@ public class Console implements ComponentBuilder{
 	}
 
 	/**
+	 * Makes a button that can save the current console text to a file
+	 * (currently requires user to add extension manually)
+	 * @return saveButton
+	 */
+	private Button makeSaveButton() {
+		Button saveButton = new Button(uiResources.getString("saveButton"));
+		saveButton.setMinWidth(BUTTON_SIZE);
+		saveButton.setOnAction(e -> {
+			FileChooser fc = new FileChooser();
+			File f = fc.showSaveDialog(new Stage());
+			String text = prompt.getText();
+			try {
+				if(!f.getName().contains(".")){
+					File f2 = new File(f.getParent(), f.getName() + ".logo");
+					PrintWriter pw = new PrintWriter(f2);
+					pw.println(text);
+					pw.close();
+				}
+				else{
+					alertUserInvalidFileName("Filename cannot contain '.'");
+				}
+			} catch (Exception e1) {
+				alertUserInvalidFileName("Cannot save to the file chosen.");
+			}
+		});
+		return saveButton;
+	}
+
+	/**
 	 * throws a file not found alert
 	 */
-	private void alertUser(File f){
+	private void alertUserInvalidLogo(File f){
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Invalid SLOGO File");
 		alert.setContentText("The filepath you chose, " + f.getAbsolutePath() + " is not a valid logo file!");
 		alert.showAndWait();
 	}
-
+	
+	/**
+	 * throw a file name not valid alert
+	 */
+	private void alertUserInvalidFileName(String s){
+		Alert alert = new Alert(Alert.AlertType.WARNING);
+		alert.setHeaderText(s);
+		alert.show();
+	}
+	
 	/**
 	 * scans SLOGO file and runs command
 	 * @throws FileNotFoundException 
@@ -211,8 +258,9 @@ public class Console implements ComponentBuilder{
 				}
 			}
 		}
+		sc.close();
 		run(fileCommand);
-		System.out.println(fileCommand);
+		//System.out.println(fileCommand);
 	}
 
 	/**
@@ -223,12 +271,12 @@ public class Console implements ComponentBuilder{
 		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 	}
 
-//	/**
-//	 * updates all button text
-//	 */
-//	private void updateButtons(){
-//
-//	}
+	//	/**
+	//	 * updates all button text
+	//	 */
+	//	private void updateButtons(){
+	//
+	//	}
 
 	/**
 	 * Custom command entered from elsewhere in program
