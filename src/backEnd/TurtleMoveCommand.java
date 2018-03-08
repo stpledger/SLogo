@@ -180,6 +180,7 @@ public class TurtleMoveCommand extends CommandGroup {
 	private sLogoValid clearScreen() {
 		Set<Turtle> turtles = myModel.getTurtles();
 		sLogoValid temp = home();
+		setHeading(new String[]{"0"});
 		for (Turtle t : turtles) {
 			t.clearTraces();
 		}
