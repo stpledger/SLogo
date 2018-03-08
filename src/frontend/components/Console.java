@@ -47,7 +47,7 @@ import backEnd.sLogoValid;
  */
 public class Console implements ComponentBuilder{
 	private static final double BUTTON_SIZE = 75;
-	private VBox box = new VBox();
+	private HBox box = new HBox();
 	private String commands;
 	private TextArea prompt = new TextArea();
 	private TurtleDisplayer turtleDisplayer;
@@ -81,18 +81,19 @@ public class Console implements ComponentBuilder{
 		Button csButton = makeCommandButton(uiResources.getString("clear"), "cs");
 		Button puButton = makeCommandButton(uiResources.getString("penup"), "pu fd 0");
 		Button pdButton = makeCommandButton(uiResources.getString("pendown"), "pd fd 0");
+		
 		VBox runClearBox = new VBox(runButton, clearButton, openFileButton, saveFileButton);
 		runClearBox.setAlignment(Pos.CENTER);
 		runClearBox.setPrefWidth(clearButton.getWidth());
 		HBox moveTurtleButtonsBox = new HBox(fdButton, bkButton, ltButton, rtButton, showButton, hideButton, homeButton, csButton, puButton, pdButton);
 		moveTurtleButtonsBox.setAlignment(Pos.CENTER);
 		moveTurtleButtonsBox.setPrefHeight(fdButton.getHeight());
-		HBox consoleRunClearBox = new HBox(prompt, runClearBox);
+		VBox consoleAndButtonsBox = new VBox(moveTurtleButtonsBox, prompt);
 
 		prompt.setStyle("-fx-control-inner-background:#000000; -fx-text-fill: #FFFFFF;");
 		prompt.setPrefWidth(IDEBuilder.IDE_WIDTH - clearButton.getWidth());
 
-		box.getChildren().addAll(moveTurtleButtonsBox, consoleRunClearBox);
+		box.getChildren().addAll(consoleAndButtonsBox, runClearBox);
 
 	}
 

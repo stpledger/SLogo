@@ -71,7 +71,7 @@ public class IDEBuilder implements SceneBuilder, View{
 	}
 	
 	public void enterConsoleCommand(String s) {
-		System.out.println(s);
+		//System.out.println(s);
 		console.enterCommand(s);
 	}
 	

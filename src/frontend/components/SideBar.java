@@ -64,7 +64,7 @@ public class SideBar implements ComponentBuilder {
 		
 		host.getChildren().add(formatHeaderCell(new Label("Previous Commands")));
 		
-		System.out.println(displayableModel.getPreviousCommands());
+		//System.out.println(displayableModel.getPreviousCommands());
 		for (CommandGroup com: displayableModel.getPreviousCommands()) {
 			Node prevCommandNode = new SideBarComponent("  " + com.toString()).getNode();
 			prevCommandNode.setStyle(".myElement:hover {filter: brightness(10%);}");
