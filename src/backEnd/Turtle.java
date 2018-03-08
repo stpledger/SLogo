@@ -191,6 +191,7 @@ public class Turtle {
 		rets += "X:       " + df.format(myXPos);
 		rets += "\nY:      " + df.format(myYPos);
 		rets += "\nAngle:  " + df.format(myAngle % 360);
+		rets += "\nPen Up:  " + isPenDown;
 		return rets;
 	}
 }

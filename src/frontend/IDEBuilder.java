@@ -1,8 +1,9 @@
 package frontend;
 
+import java.util.Map;
+
 import backEnd.Interpreter;
 import backEnd.Model;
-import frontend.components.ComponentBuilder;
 import frontend.components.Console;
 import frontend.components.SideBar;
 import frontend.components.ToolBar;
@@ -10,6 +11,7 @@ import frontend.components.TurtleDisplayer;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 
 public class IDEBuilder implements SceneBuilder, View{
 	
@@ -20,7 +22,7 @@ public class IDEBuilder implements SceneBuilder, View{
 	public static final double SIDEBAR_WIDTH = 260;
 	public static final double DISPLAY_HEIGHT = IDE_HEIGHT - TOOLBAR_HEIGHT - CONSOLE_HEIGHT;
 	public static final double DISPLAY_WIDTH = IDE_WIDTH - SIDEBAR_WIDTH;
-	
+	public static Map<Double, Color> COLORMAP;
 	private ToolBar toolbar;
 	private SideBar side;
 	private TurtleDisplayer turtleDisplay;
@@ -28,7 +30,6 @@ public class IDEBuilder implements SceneBuilder, View{
 	private BorderPane layout = new BorderPane();
 	
 	public IDEBuilder() {
-		
 		toolbar = new ToolBar(this);
 		Model m = new Model();
 		Interpreter interpreter = new Interpreter(m);
@@ -60,6 +61,16 @@ public class IDEBuilder implements SceneBuilder, View{
 			}
 		});
 		return s;
+	}
+	
+	private void buildColorMap() {
+//		COLORMAP.put(0.0, Color.MEDIUMPURPLE);
+		COLORMAP.put(1.0, Color.GREEN);
+		COLORMAP.put(2.0, Color.BLUE);
+		COLORMAP.put(3.0, Color.ORANGE);
+		COLORMAP.put(4.0, Color.YELLOW);
+		COLORMAP.put(5.0, Color.RED);
+		COLORMAP.put(6.0, Color.RED);
 	}
 	
 	public void update() {
