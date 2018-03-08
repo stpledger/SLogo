@@ -18,7 +18,7 @@ public class VariableCommand extends CommandGroup {
 	}
 
 	private sLogoValid run(String command, String[] args){
-		if (command.equals("make") || command.equals("set")) {
+		if (command.equals("make") || command.equals("set") || command.equals("to")) {
 			return setVar(args);
 		}
 		return null;
@@ -27,11 +27,8 @@ public class VariableCommand extends CommandGroup {
 	private sLogoValid setVar(String[] args){
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(Double.parseDouble(args[1]));
-		try {
-			myModel.getVariable(args[0]).getError();
+		if (myModel.getVariable(args[0]).getError()){
 			myModel.deleteVariable(args[0]);
-		} catch (Exception e) {
-			//NADA, this just means the variable just doesn't exist
 		}
 		myModel.addVariable(args[0], temp);
 		return temp;

@@ -41,12 +41,12 @@ public class Controller{
         else if(BOOLEAN_COMMANDS.contains(command)){
             newCommand = new BooleanCommand(command, args);
         }
-        else if(VARIABLE_COMMANDS.contains(command)) {
+        else if(VARIABLE_COMMANDS.contains(command) || USER_DEFINED_COMMANDS.contains(command)) {
             newCommand = new VariableCommand(command, args, myModel);
         }
-        else if(USER_DEFINED_COMMANDS.contains(command)){
+        /*else if(USER_DEFINED_COMMANDS.contains(command)){
             newCommand = new UserDefinedCommand(command, args, myModel);
-        }
+        }*/
         else{
             sLogoValid noCommand = new sLogoValid();
             noCommand.setError(true);
