@@ -42,7 +42,7 @@ public class Interpreter {
 		}
 		if(!args.isEmpty()) {
 		//Check to see if the first argument is valid
-		if(!myLanguageProperties.containsKey(args.get(0))) { return new sLogoValid(false, "Invalid Command: " + args.get(0));} //TODO: Add a check for userDefined Commands
+		if(!myLanguageProperties.containsKey(args.get(0))) { return new sLogoValid(true, "Invalid Command: " + args.get(0));} //TODO: Add a check for userDefined Commands
 		//Check for advanced syntax
 		if(modelContainsCommand(myModel, args.get(0))) {
 			mySlogoValid = interpretUserCommand(args);
