@@ -75,7 +75,7 @@ public class Console implements ComponentBuilder{
 		Button bkButton = makeCommandButton(uiResources.getString("backward"), "bk 20");
 		Button ltButton = makeCommandButton(uiResources.getString("left"), "lt 10");
 		Button rtButton = makeCommandButton(uiResources.getString("right"), "rt 10");
-		Button showButton = makeCommandButton(uiResources.getString("show"), "st");
+		Button showButton = makeCommandButton(uiResources.getString("show"), "st fd 0");
 		Button hideButton = makeCommandButton(uiResources.getString("hide"), "ht");
 		Button homeButton = makeCommandButton(uiResources.getString("home"), "home");
 		Button csButton = makeCommandButton(uiResources.getString("clear"), "cs");
@@ -291,11 +291,13 @@ public class Console implements ComponentBuilder{
 	 * run - Calls controller to interpret string and then calls TurtleDisplayer to update turtle display
 	 */
 	public void run(String com){
+		System.out.println(com);
 		turtleDisplayer.clearError();
 		prompt.clear();
 		builder.update();
 		interpreter.setLanguage(language);
 		sLogoValid retMessage = interpreter.interpret(com);
+		System.out.println(retMessage.getError());
 		if(!retMessage.getError()){
 			builder.addCommandHistory(com);
 			Map<String, Object> variableMap = model.getCurrentVariables();
