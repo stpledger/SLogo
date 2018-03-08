@@ -1,6 +1,8 @@
 package frontend.components;
 
-import backEnd.CommandGroup;
+import java.util.LinkedList;
+import java.util.List;
+
 import backEnd.ModelViewable;
 import frontend.IDEBuilder;
 import javafx.scene.Node;
@@ -8,8 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.input.KeyCode;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -20,6 +22,7 @@ public class SideBar implements ComponentBuilder {
 	private VBox host = new VBox();
 	private ModelViewable displayableModel;
 	private IDEBuilder builder;
+	private List<String> previousCommands;
 	
 	public SideBar(ModelViewable incoming, IDEBuilder b) {
 		builder = b;
@@ -27,6 +30,7 @@ public class SideBar implements ComponentBuilder {
 		host.setStyle("-fx-background-color: #FFFFFF;");
 		host.getChildren().add(new Label("Side Bar"));
 		host.setPrefWidth(IDEBuilder.SIDEBAR_WIDTH);
+		previousCommands = new LinkedList<>();
 		update();
 	}
 	
@@ -66,7 +70,7 @@ public class SideBar implements ComponentBuilder {
 		
 		//System.out.println(displayableModel.getPreviousCommands());
 		int count = 0;
-		for (CommandGroup com: displayableModel.getPreviousCommands()) {
+		for (String com: previousCommands) {
 			Node prevCommandNode = new SideBarComponent("  " + com.toString()).getNode();
 			prevCommandNode.setOnMouseClicked(e -> builder.enterConsoleCommand(com.toString()));
 			host.getChildren().add(prevCommandNode);
@@ -76,6 +80,9 @@ public class SideBar implements ComponentBuilder {
 		}
 	}
 
+	public void addToCommandHistory(String com) {
+		previousCommands.add(0, com);
+	}
 	public Node getNode() {
 		ScrollPane scroller = new ScrollPane();
 		scroller.setHbarPolicy(ScrollBarPolicy.NEVER);
