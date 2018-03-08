@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import backEnd.ModelViewable;
+import backEnd.Turtle;
 import frontend.IDEBuilder;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -36,29 +37,32 @@ public class SideBar implements ComponentBuilder {
 
 	public void addElement(String name, String desc) {
 		Node comp = new SideBarComponent(name, desc).getNode();
-		comp.setOnMouseClicked (e -> {
-			HBox g = new HBox();
-			Stage tempStage = new Stage();
-			Scene primScene = new Scene(g);
-			g.getChildren().add(new Label("Change " + name + " to: " ));
-			TextField t = new TextField();
-			t.setOnKeyPressed(e1 -> {
-				if (e1.getCode() == KeyCode.ENTER) {
-					try{
-						Double d = Double.valueOf(t.getText());
-						if (d != null) {
-							builder.enterConsoleCommand("make " + name + " " + d);
-							tempStage.close();
+		if (!(displayableModel.getCurrentVariables().get(name) instanceof Turtle)) {
+			comp.setOnMouseClicked (e -> {
+				HBox g = new HBox();
+				Stage tempStage = new Stage();
+				Scene primScene = new Scene(g);
+				g.getChildren().add(new Label("Change " + name + " to: " ));
+				TextField t = new TextField();
+				t.setOnKeyPressed(e1 -> {
+					if (e1.getCode() == KeyCode.ENTER) {
+						try{
+							Double d = Double.valueOf(t.getText());
+							if (d != null) {
+								builder.enterConsoleCommand("make " + name + " " + d);
+								tempStage.close();
+							}
+						} catch (Exception e2){
+							builder.displayError("Invalid numeric value!");
 						}
-					} catch (Exception e2){
-						builder.displayError("Invalid numeric value!");
 					}
-				}
+				});
+				g.getChildren().add(t);
+				tempStage.setScene(primScene);
+				tempStage.show();
 			});
-			g.getChildren().add(t);
-			tempStage.setScene(primScene);
-			tempStage.show();
-		});
+		}
+		
 		host.getChildren().add(comp);
 	}
 
