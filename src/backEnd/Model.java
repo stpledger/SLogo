@@ -70,6 +70,17 @@ public class Model implements ModelModifiable, ModelViewable {
 		myTurtles.put(index, t);
 	}
 	
+	public void clearAllTurtles() {
+		myTurtles.clear();
+		for (String s : myModel.keySet()) {
+			if (myModel.get(s) instanceof Turtle) {
+				myModel.remove(s);
+			}
+		}
+		myModel.put("Turtle" + 0, new Turtle(0,0,0,0));
+		myTurtles.put(0, (Turtle)myModel.get("Turtle0"));
+	}
+	
 	protected void addColor(int index, ArrayList<Double> rgb) {
 		myAvailableColors.put(index, rgb);
 	}
