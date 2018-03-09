@@ -22,25 +22,19 @@ public class Turtle {
 	protected double myXPos;
 	protected double myYPos;
 	protected double myAngle;
+	protected int myID;
+	protected boolean isActive = true;
 	private Set<Line> myTraces = new HashSet<Line>();
 	private Pen myPen;
 	protected boolean isPenDown = true;
 	protected boolean isVisible = true;
 	
-	public Turtle(double xpos, double ypos, double angle) {
+	public Turtle(double xpos, double ypos, double angle, int id) {
 		myXPos = xpos;
 		myYPos = ypos;
 		myAngle = angle;
+		myID = id;
 		myPen = new Pen();
-		myTurtleDisplay = makeTurtle();
-		myTraces = new HashSet<>();
-	}
-	
-	public Turtle(double xpos, double ypos, double angle, Paint color) {
-		myXPos = xpos;
-		myYPos = ypos;
-		myAngle = angle;
-		myPen = new Pen(color);
 		myTurtleDisplay = makeTurtle();
 		myTraces = new HashSet<>();
 	}
@@ -147,6 +141,7 @@ public class Turtle {
 	}
 
 	protected void showTurtle(){
+		// TO-DO
 		myTurtleDisplay.setImage(new Image(myTurtleImage));
 		isVisible = true;
 	}
@@ -168,21 +163,35 @@ public class Turtle {
 		myTraces.clear();
 	}
 	
+	protected void setPenColor(Paint color) {
+		this.myPen.setColor(color);
+	}
+	
+	protected void setPenSize(double size) {
+		this.myPen.setSize(size);
+	}
+	
 	private class Pen {
 		
 		private Paint myPenColor;
+		private double myPenSize = 1.0;
 		
 		private Pen() {
 			myPenColor = Color.BLACK;
 		}
 		
-		private Pen(Paint color) {
+		private void setColor(Paint color) {
 			myPenColor = color;
+		}
+		
+		private void setSize(double size) {
+			myPenSize = size;
 		}
 		
 		private Line draw(double xpos1, double ypos1, double xpos2, double ypos2) {
 			Line ret = new Line(xpos1, ypos1, xpos2, ypos2);
 			ret.setStroke(myPenColor);
+			ret.setStrokeWidth(myPenSize);
 			return ret;
 		}
 	}

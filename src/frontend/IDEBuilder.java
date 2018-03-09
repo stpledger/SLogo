@@ -1,5 +1,6 @@
 package frontend;
 
+import java.util.List;
 import java.util.Map;
 
 import backEnd.Interpreter;
@@ -63,26 +64,28 @@ public class IDEBuilder implements SceneBuilder, View{
 		return s;
 	}
 	
-	private void buildColorMap() {
-//		COLORMAP.put(0.0, Color.MEDIUMPURPLE);
-		COLORMAP.put(1.0, Color.GREEN);
-		COLORMAP.put(2.0, Color.BLUE);
-		COLORMAP.put(3.0, Color.ORANGE);
-		COLORMAP.put(4.0, Color.YELLOW);
-		COLORMAP.put(5.0, Color.RED);
-		COLORMAP.put(6.0, Color.RED);
+	public Map<Integer, List<Double>> getPallete() {
+		return side.getModel().getPalette();
 	}
 	
+	public void setBackgroundColor(int i) {
+		if (getPallete().containsKey(i)) {
+			turtleDisplay.setBackgroundColor(interpretColor(getPallete().get(i)));
+		}
+
+	}
+	private String interpretColor (List<Double> rgb) {
+		return new Color(rgb.get(0) / 256, rgb.get(1) / 256, rgb.get(2) / 256, 1).toString();
+	}
 	public void update() {
 		console.updateConsoleLanguage(toolbar.getLanguage());
-		turtleDisplay.setBackgroundColor(toolbar.getColor());
+		setBackgroundColor(side.getModel().getMyCurrentColorIndex());
 		side.update();
 		toolbar.update(side.getModel());
 //		if (toolbar.getCurrentImageSelected().length() > 0) {turtleDisplay.changeImage(toolbar.getCurrentImageSelected());}
 	}
 	
 	public void enterConsoleCommand(String s) {
-		//System.out.println(s);
 		console.enterCommand(s);
 	}
 

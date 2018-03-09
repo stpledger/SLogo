@@ -23,4 +23,8 @@ public interface ModelViewable {
     * Gets a map of current variables and their values
     */
     public Map<String, Object> getCurrentVariables();
+    
+    public Map<Integer, List<Double>> getPalette();
+    
+    public int getMyCurrentColorIndex();
 }
