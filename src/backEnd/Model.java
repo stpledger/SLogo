@@ -22,7 +22,7 @@ public class Model implements ModelModifiable, ModelViewable {
 	private Map<Integer, String> myAvailableShapes;
 	private Map<Integer, ArrayList<Double>> myAvailableColors;
 	private int myCurrentShapeIndex = 0;
-	private int myCurrentColorIndex = 0;
+	private int myCurrentColorIndex = 4;
 	
 	public Model() {
 		myModel = new HashMap<>();
