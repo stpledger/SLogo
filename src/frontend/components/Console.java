@@ -103,6 +103,10 @@ public class Console implements ComponentBuilder{
 		buttonMap.put(puButton, "PenUp");
 		Button pdButton = makeCommandButton(uiResources.getString("PenDown"), "pd");
 		buttonMap.put(pdButton, "PenDown");
+		Button addTurtle = new Button("Make Turtle");
+		addTurtle.setOnAction(e -> {
+			
+		});
 		//runButton, clearButton, openFileButton, saveFileButton, fdButton, bkButton, 
 		//		ltButton, rtButton, showButton, hideButton, homeButton, csButton, puButton, pdButton);
 		
