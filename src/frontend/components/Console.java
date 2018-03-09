@@ -75,12 +75,12 @@ public class Console implements ComponentBuilder{
 		Button bkButton = makeCommandButton(uiResources.getString("backward"), "bk 20");
 		Button ltButton = makeCommandButton(uiResources.getString("left"), "lt 10");
 		Button rtButton = makeCommandButton(uiResources.getString("right"), "rt 10");
-		Button showButton = makeCommandButton(uiResources.getString("show"), "st fd 0");
+		Button showButton = makeCommandButton(uiResources.getString("show"), "st");
 		Button hideButton = makeCommandButton(uiResources.getString("hide"), "ht");
 		Button homeButton = makeCommandButton(uiResources.getString("home"), "home");
 		Button csButton = makeCommandButton(uiResources.getString("clear"), "cs");
-		Button puButton = makeCommandButton(uiResources.getString("penup"), "pu fd 0");
-		Button pdButton = makeCommandButton(uiResources.getString("pendown"), "pd fd 0");
+		Button puButton = makeCommandButton(uiResources.getString("penup"), "pu");
+		Button pdButton = makeCommandButton(uiResources.getString("pendown"), "pd");
 		
 		VBox runClearBox = new VBox(runButton, clearButton, openFileButton, saveFileButton);
 		runClearBox.setAlignment(Pos.CENTER);
@@ -290,14 +290,13 @@ public class Console implements ComponentBuilder{
 	/**
 	 * run - Calls controller to interpret string and then calls TurtleDisplayer to update turtle display
 	 */
-	public void run(String com){
+	private void run(String com){
 		//System.out.println(com);
 		turtleDisplayer.clearError();
 		prompt.clear();
 		builder.update();
 		interpreter.setLanguage(language);
 		sLogoValid retMessage = interpreter.interpret(com);
-		//System.out.println(retMessage.getError());
 		if(!retMessage.getError()){
 			builder.addCommandHistory(com);
 			Map<String, Object> variableMap = model.getCurrentVariables();
@@ -315,5 +314,23 @@ public class Console implements ComponentBuilder{
 		else{
 			turtleDisplayer.displayError(retMessage.getMyStringValue());
 		}
+		
+		fixPosition();		
+	}
+	
+	private void fixPosition() {
+		interpreter.setLanguage("English");
+		sLogoValid retMessage = interpreter.interpret("fd 0");
+		Map<String, Object> variableMap2 = model.getCurrentVariables();
+		builder.update();
+		Set<Turtle> turtleSet2 = new HashSet<Turtle>();
+		for(String s : variableMap2.keySet()){
+			if(variableMap2.get(s) instanceof Turtle){
+				turtleSet2.add((Turtle)variableMap2.get(s));
+			}
+		}
+		if(!turtleSet2.isEmpty()){
+			turtleDisplayer.draw(turtleSet2, retMessage);
+		}  
 	}
 }
