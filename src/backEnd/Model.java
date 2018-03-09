@@ -80,6 +80,7 @@ public class Model implements ModelModifiable, ModelViewable {
 	}
 	
 	protected void setPenColor(Paint color) {
+
 		for (Turtle t : myTurtles.values()) {
 			t.setPenColor(color);
 		}
@@ -122,22 +123,14 @@ public class Model implements ModelModifiable, ModelViewable {
 		}
 	}
 	
-	
-	/**
-	@Override
-	public Set<Turtle> getTurtles() {
-		Set<Turtle> ret = new HashSet<Turtle>();
-		for (Turtle t : myTurtles.values()) {
-			ret.add(t);
-		}
-		return Collections.unmodifiableSet(ret);
-	}
-	**/
-	
 	@Override
 	public Set<Turtle> getTurtles() {
 		Set<Turtle> ret = new HashSet<>();
-		ret.add((Turtle)myModel.get("Turtle"));
+		for (Object o: myModel.values()) {
+			if (o instanceof Turtle) {
+				ret.add((Turtle)o);
+			}
+		}
 		return Collections.unmodifiableSet(ret);
 	}
 
