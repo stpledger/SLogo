@@ -39,7 +39,7 @@ public class IDEBuilder implements SceneBuilder, View{
 		Model m = new Model();
 		Interpreter interpreter = new Interpreter(m);
 		side = new SideBar(m, this);
-		turtleDisplay = new TurtleDisplayer();
+		turtleDisplay = new TurtleDisplayer(this);
 		console = new Console(turtleDisplay, m, interpreter, this);
 		layout.setCenter(turtleDisplay.getNode());
 		layout.setRight(side.getNode());
@@ -124,6 +124,10 @@ public class IDEBuilder implements SceneBuilder, View{
 	
 	public void displayError(String s){
 		turtleDisplay.displayError(s);
+	}
+	
+	public void overridePenColor(Color color, Boolean override){
+		turtleDisplay.overridePenColor(color, override);
 	}
 	
 //	public void updateDisplayerImage(String s){

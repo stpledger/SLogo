@@ -362,7 +362,9 @@ public class Console implements ComponentBuilder{
 		interpreter.setLanguage(language);
 		sLogoValid retMessage = interpreter.interpret(com);
 		if(!retMessage.getError()){
-			builder.addCommandHistory(com);
+			if(!com.equals("fd 0")){
+				builder.addCommandHistory(com);
+			}
 			Map<String, Object> variableMap = model.getCurrentVariables();
 			builder.update();
 			Set<Turtle> turtleSet = new HashSet<Turtle>();

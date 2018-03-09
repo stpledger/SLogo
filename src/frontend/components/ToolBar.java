@@ -1,7 +1,9 @@
 package frontend.components;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,8 @@ public class ToolBar implements ComponentBuilder{
 	private ResourceBundle uiResources;
 
 	private Button selectColor = new Button("Select Color");
+	private Button penColorButton = new Button("Set Pen Color");
+	private Button helpButton = new Button("Help");
 
 	public ToolBar(IDEBuilder b) {
 		builder = b;
@@ -89,6 +93,24 @@ public class ToolBar implements ComponentBuilder{
 
 		selectImage.setOnAction(this::updateImagePath);
 		toAdd.add(selectImage);
+		
+		penColorButton.setOnAction(e -> {
+			createColorPickerPen();
+		});
+		toAdd.add(penColorButton);
+		
+		helpButton.setOnAction(e -> {
+			Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+			if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+		        try {
+		        	URL url = new URL("http://www2.cs.duke.edu/courses/compsci308/spring18/assign/03_slogo/commands.php");
+		            desktop.browse(url.toURI());
+		        } catch (Exception eurl) {
+		        	// Do nothing
+		        }
+		    }
+		});
+		toAdd.add(helpButton);
 
 		bar.getChildren().addAll(toAdd);
 	}
@@ -98,8 +120,23 @@ public class ToolBar implements ComponentBuilder{
 		turtleImagePicker.setValue(uiResources.getString("selectturtlename"));
 		selectColor.setText(uiResources.getString("selectcolor"));
 		selectImage.setText(uiResources.getString("selectimage"));
+		penColorButton.setText(uiResources.getString("selectpencolor"));
+		helpButton.setText(uiResources.getString("help"));
 	}
 
+	private ColorPicker createColorPickerPen(){
+		Stage pickerStage = new Stage();
+        ColorPicker penColorPicker = new ColorPicker();
+        penColorPicker.setOnAction(e -> {
+        	builder.overridePenColor(penColorPicker.getValue(), true);
+        	pickerStage.close();
+        });
+        Scene pickerScene = new Scene(penColorPicker);
+		pickerStage.setScene(pickerScene);
+		pickerStage.show();
+		return penColorPicker; 
+	}
+	
 	private void createColorPickerWindow(ActionEvent e) {
 		Stage pickerStage = new Stage();
 		VBox pallete_box = new VBox();

@@ -52,12 +52,16 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private Rectangle box;
 	private Boolean turtleHidden = false;
 	private double turtleSize = 50;
+	private Boolean overridePenColor = false;
+	private Paint penColor = Paint.valueOf("#FFFFFF");
+	private IDEBuilder builder;
  
 	/**
 	 * TurtleDisplayer
 	 * sets background color, resets turtle to starting position, starts animation keyframe
 	 */
-	public TurtleDisplayer() {
+	public TurtleDisplayer(IDEBuilder b) {
+		builder = b;
 		setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
 		reset();
 		//changeImage("POKEturtleScaled.png");
@@ -99,6 +103,17 @@ public class TurtleDisplayer implements ComponentBuilder{
 	public void setBackgroundColor(String hexColor) {
 		Color background_color = Color.valueOf(hexColor);
 		pane.setBackground(new Background(new BackgroundFill(background_color, null, null)));
+	}
+	
+	/**
+	 * override pen color
+	 */
+	public void overridePenColor(Color color, Boolean override){
+		overridePenColor = override;
+		if(overridePenColor){
+			penColor = color;
+			builder.enterConsoleCommand("fd 0");
+		}
 	}
 
 	/**
@@ -149,6 +164,9 @@ public class TurtleDisplayer implements ComponentBuilder{
 			tempLine.setStartY(-1 * l.getStartY() + center_y);
 			tempLine.setEndX(l.getEndX() + center_x);
 			tempLine.setEndY(-1 * l.getEndY() + center_y);
+			if(overridePenColor){
+				tempLine.setStroke(penColor);
+			}
 			pane.getChildren().add(tempLine);
 			pane.getChildren().get(pane.getChildren().size()-1).toBack();
 		}		
