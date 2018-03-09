@@ -26,9 +26,11 @@ public class Model implements ModelModifiable, ModelViewable {
 	public Model() {
 		myModel = new HashMap<>();
 		myPreviousCommands = new ArrayList<>();
-		//myTurtles = new HashMap<>();
-		//myTurtles.put(0, new Turtle(0,0,0,0));
-		myModel.put("Turtle", new Turtle(0,0,0,0));
+		myTurtles = new HashMap<>();
+		myModel.put("Turtle" + 0, new Turtle(0,0,0,0));
+		myModel.put("Turtle" + 1, new Turtle(100,0,0,1));
+		myTurtles.put(0, (Turtle)myModel.get("Turtle0"));
+		myTurtles.put(1, (Turtle)myModel.get("Turtle1"));
 		initializeShapeChoices();
 		initializeColorChoices();
 	}
@@ -65,24 +67,32 @@ public class Model implements ModelModifiable, ModelViewable {
 		return this.myCurrentShapeIndex;
 	}
 	
+	protected void addTurtle(int index, Turtle t) {
+		myModel.put("Turtle"+index, t);
+		myTurtles.put(index, t);
+	}
+	
 	protected void addColor(int index, ArrayList<Double> rgb) {
 		myAvailableColors.put(index, rgb);
 	}
 	
 	protected ArrayList<Integer> getActiveTurtleIDs() {
 		ArrayList<Integer> ID = new ArrayList<>();
-		for (Integer i : myTurtles.keySet()) {
-			if (myTurtles.get(i).isActive) {
-				ID.add(i);
+		for (Object o : myModel.values()) {
+			if (o instanceof Turtle) {
+				Turtle t = (Turtle)o;
+				ID.add(t.myID);
 			}
 		}
 		return ID;
 	}
 	
 	protected void setPenColor(Paint color) {
-
-		for (Turtle t : myTurtles.values()) {
-			t.setPenColor(color);
+		for (Object o : myModel.values()) {
+			if (o instanceof Turtle) {
+				Turtle t = (Turtle)o;
+				t.setPenColor(color);
+			}
 		}
 	}
 	
