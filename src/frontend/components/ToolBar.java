@@ -88,19 +88,25 @@ public class ToolBar implements ComponentBuilder{
 	}
 	
 	private void createColorPickerWindow(ActionEvent e) {
+		Stage pickerStage = new Stage();
 		VBox pallete_box = new VBox();
 		for (Integer i: builder.getPallete().keySet()) {
 			List<Double> rgb = builder.getPallete().get(i);
-			Button colorB = new Button();
-			Color c = new Color(rgb.get(0), rgb.get(1), rgb.get(2), 1);
+			Button colorB = new Button("S");
+			Color c = new Color(rgb.get(0) / 256, rgb.get(1) / 256, rgb.get(2) / 256, 1);
 			colorB.setBackground(new Background(new BackgroundFill(
                     c, CornerRadii.EMPTY, Insets.EMPTY)));
 			colorB.setOnAction(e1 -> {
 				turtleColor = c; 
+				builder.updateColorIndex(i);
 				builder.update();
+				pickerStage.close();
+//				System.out.println("HUM");
+				
 			});
+			pallete_box.getChildren().add(colorB);
 		}
-		Stage pickerStage = new Stage();
+		
 //		ColorPicker picker = new ColorPicker();
 		Scene pickerScene = new Scene(pallete_box);
 		pickerStage.setScene(pickerScene);

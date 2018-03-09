@@ -85,6 +85,9 @@ public class IDEBuilder implements SceneBuilder, View{
 //		if (toolbar.getCurrentImageSelected().length() > 0) {turtleDisplay.changeImage(toolbar.getCurrentImageSelected());}
 	}
 	
+	public void updateColorIndex(int i) {
+		side.getModel().setMyCurrentColorIndex(i);
+	}
 	public void enterConsoleCommand(String s) {
 		console.enterCommand(s);
 	}
