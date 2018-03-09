@@ -2,6 +2,7 @@ package frontend.components;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import backEnd.ModelViewable;
 import backEnd.Turtle;
@@ -24,6 +25,10 @@ public class SideBar implements ComponentBuilder {
 	private ModelViewable displayableModel;
 	private IDEBuilder builder;
 	private List<String> previousCommands;
+	private HBox header1;
+	private Label prevComsLabel;
+	private static final String DEFAULT_RESOURCE_PACKAGE_UI = "resources/ui/";
+	private ResourceBundle uiResources;
 
 	public SideBar(ModelViewable incoming, IDEBuilder b) {
 		builder = b;
@@ -33,6 +38,7 @@ public class SideBar implements ComponentBuilder {
 		host.setPrefWidth(IDEBuilder.SIDEBAR_WIDTH);
 		previousCommands = new LinkedList<>();
 		update();
+		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_UI + builder.getLanguage());
 	}
 
 	public void addElement(String name, String desc) {
@@ -74,7 +80,8 @@ public class SideBar implements ComponentBuilder {
 			addElement(key, displayableModel.getCurrentVariables().get(key).toString());
 		}
 
-		host.getChildren().add(formatHeaderCell(new Label("Previous Commands")));
+		prevComsLabel = new Label("Previous Commands");
+		host.getChildren().add(formatHeaderCell(prevComsLabel));
 
 		//System.out.println(displayableModel.getPreviousCommands());
 		int count = 0;
@@ -100,11 +107,20 @@ public class SideBar implements ComponentBuilder {
 	}
 
 	private void addHeader() {
-		HBox header = new HBox();
-		header.getChildren().add(formatHeaderCell (new Label("Var Name")));
-		header.getChildren().add(formatHeaderCell (new Label("Description")));
-		host.getChildren().add(header);
+		header1 = new HBox();
+		header1.getChildren().add(formatHeaderCell (new Label("Var Name")));
+		header1.getChildren().add(formatHeaderCell (new Label("Description")));
+		host.getChildren().add(header1);
 
+	}
+	
+	public void updateLanguageUI() {
+		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_UI + builder.getLanguage());
+		Label lab0 = (Label) header1.getChildren().get(0);
+		Label lab1 = (Label) header1.getChildren().get(1);
+		lab0.setText(uiResources.getString("varname"));
+		lab1.setText(uiResources.getString("description"));
+		prevComsLabel.setText(uiResources.getString("prevcoms"));
 	}
 
 	private Label formatHeaderCell (Label l) {

@@ -34,7 +34,6 @@ import javafx.scene.text.Text;
 public class TurtleDisplayer implements ComponentBuilder{
 	private static final String TURTLE_IMAGE = "turtleScaled.png";
 	private static final String DEFAULT_BACKGROUND_COLOR = "#9999FF";
-	private static final double TURTLE_SIZE = 50;
 	private static final double DEFAULT_WINDOW_X = IDEBuilder.DISPLAY_WIDTH;
 	private static final double DEFAULT_WINDOW_Y = IDEBuilder.DISPLAY_HEIGHT;
 	private static final double ERROR_MESSAGE_OFFSET = 5;
@@ -43,14 +42,16 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private static final Paint ERROR_BOX_COLOR = Color.RED;
 	private static final Paint MESSAGE_BOX_COLOR = Color.CORNFLOWERBLUE;
 	private static final double MESSAGE_OFFSET = 3;
-	private static Pane pane = new Pane();
-	private static ArrayList<ImageView> turtles = new ArrayList<ImageView>();
-	private static HashMap<ImageView, Set<Line>> lineMap=  new HashMap<ImageView, Set<Line>>();
-	private static Text errorMessage;
-	private static Rectangle redBox;
-	private static Text dmessage;
-	private static Rectangle box;
-	private static Boolean turtleHidden = false;
+	
+	private Pane pane = new Pane();
+	private ArrayList<ImageView> turtles = new ArrayList<ImageView>();
+	private HashMap<ImageView, Set<Line>> lineMap=  new HashMap<ImageView, Set<Line>>();
+	private Text errorMessage;
+	private Rectangle redBox;
+	private Text dmessage;
+	private Rectangle box;
+	private Boolean turtleHidden = false;
+	private double turtleSize = 50;
  
 	/**
 	 * TurtleDisplayer
@@ -122,8 +123,12 @@ public class TurtleDisplayer implements ComponentBuilder{
 		}
 		for(Turtle t : s){
 			ImageView tempTurtle = t.getTurtle();
-			tempTurtle.setX(tempTurtle.getX() + center_x - TURTLE_SIZE/2);
-			tempTurtle.setY(-1 * tempTurtle.getY() + center_y - TURTLE_SIZE/2);
+			Image tempImage = tempTurtle.getImage();
+			if(!(tempImage == null)){
+				turtleSize = tempImage.getWidth();
+			}	
+			tempTurtle.setX(tempTurtle.getX() + center_x - turtleSize/2);
+			tempTurtle.setY(-1 * tempTurtle.getY() + center_y - turtleSize/2);
 			pane.getChildren().add(tempTurtle);
 			turtles.add(tempTurtle);
 			if(!t.getTraces().isEmpty()){
@@ -159,8 +164,8 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private ImageView drawTurtle(double x, double y, double angle) {
 		Image turtleImage = new Image(getClass().getClassLoader().getResourceAsStream(TURTLE_IMAGE));
 		ImageView turtleView = new ImageView(turtleImage);
-		turtleView.setX(x-TURTLE_SIZE/2);
-		turtleView.setY(y-TURTLE_SIZE/2);
+		turtleView.setX(x-turtleSize/2);
+		turtleView.setY(y-turtleSize/2);
 		turtleView.setRotate(angle);
 		turtles.add(turtleView);
 		return turtleView;

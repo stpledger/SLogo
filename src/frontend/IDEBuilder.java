@@ -102,7 +102,13 @@ public class IDEBuilder implements SceneBuilder, View{
 		setBackgroundColor(side.getModel().getMyCurrentColorIndex());
 		side.update();
 		toolbar.update(side.getModel());
+		toolbar.updateButtonLanguages();
+		side.updateLanguageUI();
 //		if (toolbar.getCurrentImageSelected().length() > 0) {turtleDisplay.changeImage(toolbar.getCurrentImageSelected());}
+	}
+	
+	public String getLanguage() {
+		return toolbar.getLanguage();
 	}
 	
 	public void updateColorIndex(int i) {
