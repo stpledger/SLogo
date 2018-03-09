@@ -262,7 +262,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 */
 	private void testTurtleDisplayer(){
 		Turtle testTurtle = new Turtle(50,50,0,0);
-		Turtle testTurtle2 = new Turtle(-50,50,0,1);
+		Turtle testTurtle2 = new Turtle(-50,50,0,0);
 		Set<Turtle> testTurtleSet = new HashSet<Turtle>();
 		testTurtleSet.add(testTurtle);
 		testTurtleSet.add(testTurtle2);

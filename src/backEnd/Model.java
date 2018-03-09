@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javafx.scene.paint.Paint;
 
@@ -24,10 +25,11 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	public Model() {
 		myModel = new HashMap<>();
-		myTurtles = new HashMap<>();
-		myAvailableShapes = new HashMap<>();
-		myAvailableColors = new HashMap<>();
-		myTurtles.put(0, new Turtle(0,0,0,0));
+
+		myPreviousCommands = new ArrayList<>();
+		//myTurtles = new HashMap<>();
+		//myTurtles.put(0, new Turtle(0,0,0,0));
+		myModel.put("Turtle", new Turtle(0,0,0,0));
 		initializeShapeChoices();
 		initializeColorChoices();
 	}
@@ -68,11 +70,25 @@ public class Model implements ModelModifiable, ModelViewable {
 		myAvailableColors.put(index, rgb);
 	}
 	
-	public void setPenColor(Paint color) {
-		
+	protected ArrayList<Integer> getActiveTurtleIDs() {
+		ArrayList<Integer> ID = new ArrayList<>();
+		for (Integer i : myTurtles.keySet()) {
+			if (myTurtles.get(i).isActive) {
+				ID.add(i);
+			}
+		}
+		return ID;
+	}
+	
+	protected void setPenColor(Paint color) {
+
+		for (Turtle t : myTurtles.values()) {
+			t.setPenColor(color);
+		}
 	}
 	
 	private void initializeShapeChoices() {
+		myAvailableShapes = new TreeMap<>();
 		myAvailableShapes.put(0, "Turtle.png");
 		myAvailableShapes.put(1, "Rectangle.png");
 		myAvailableShapes.put(2, "Triangle.png");
@@ -80,6 +96,7 @@ public class Model implements ModelModifiable, ModelViewable {
 	}
 	
 	private void initializeColorChoices() {
+		myAvailableColors = new TreeMap<>();
 		for (int i = 0; i < 5; i++) {
 			ArrayList<Double> rgb = new ArrayList<>();
 			rgb.add(i*25.0);
@@ -90,10 +107,8 @@ public class Model implements ModelModifiable, ModelViewable {
 	}
 	
 	@Override
-	public Set<Turtle> getTurtlesToModify() {
-		Set<Turtle> ret = new HashSet<>();
-		ret.add((Turtle)myModel.get("Turtle"));
-		return ret;
+	public Map<Integer, Turtle> getTurtlesToModify() {
+		return myTurtles;
 	}
 	
 	@Override
@@ -112,7 +127,11 @@ public class Model implements ModelModifiable, ModelViewable {
 	@Override
 	public Set<Turtle> getTurtles() {
 		Set<Turtle> ret = new HashSet<>();
-		ret.add((Turtle)myModel.get("Turtle"));
+		for (Object o: myModel.values()) {
+			if (o instanceof Turtle) {
+				ret.add((Turtle)o);
+			}
+		}
 		return Collections.unmodifiableSet(ret);
 	}
 

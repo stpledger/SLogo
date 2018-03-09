@@ -1,5 +1,6 @@
 package backEnd;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -20,7 +21,7 @@ public interface ModelModifiable {
     
     public sLogoValid getVariable(String name);
     	
-	public Set<Turtle> getTurtlesToModify();
+	public Map<Integer, Turtle> getTurtlesToModify();
 
     public Set<Turtle> getTurtles();
     
