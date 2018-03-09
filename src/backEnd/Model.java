@@ -20,7 +20,6 @@ public class Model implements ModelModifiable, ModelViewable {
 	public Model() {
 		myModel = new HashMap<>();
 		myModel.put("Turtle", new Turtle(0,0,0));
-		myPreviousCommands = new ArrayList<>();
 		initializeShapeChoices();
 		initializeColorChoices();
 	}
@@ -127,7 +126,7 @@ public class Model implements ModelModifiable, ModelViewable {
 
 	@Override
 	public void addCommandHistory(CommandGroup command) {
-		myPreviousCommands.add(command);
+		myPreviousCommands.add(0,  command);
 	}
 
 }
