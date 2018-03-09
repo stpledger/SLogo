@@ -82,11 +82,6 @@ public class Model implements ModelModifiable, ModelViewable {
 		myTurtles.put(0, (Turtle)myModel.get("Turtle0"));
 	}
 	
-	public void setTurtleImage(String name, Image img) {
-		Turtle t = (Turtle)myModel.get(name);
-		t.setImage(img);
-	}
-	
 	protected void addColor(int index, ArrayList<Double> rgb) {
 		myAvailableColors.put(index, rgb);
 	}
