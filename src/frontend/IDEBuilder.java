@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import com.sun.swing.internal.plaf.metal.resources.metal;
+
 import backEnd.Interpreter;
 import backEnd.Model;
 import backEnd.Turtle;
@@ -31,12 +33,13 @@ public class IDEBuilder implements SceneBuilder, View{
 	private SideBar side;
 	private TurtleDisplayer turtleDisplay;
 	private Console console;
+	private Model m;
 	private BorderPane layout = new BorderPane();
 	private ResourceBundle commandResources;
 	
 	public IDEBuilder() {
 		toolbar = new ToolBar(this);
-		Model m = new Model();
+		m = new Model();
 		Interpreter interpreter = new Interpreter(m);
 		side = new SideBar(m, this);
 		turtleDisplay = new TurtleDisplayer(this);
@@ -128,6 +131,10 @@ public class IDEBuilder implements SceneBuilder, View{
 	
 	public void overridePenColor(Color color, Boolean override){
 		turtleDisplay.overridePenColor(color, override);
+	}
+
+	public void updatePenColor(Color value) {
+		m.setPenColor(value);
 	}
 	
 //	public void updateDisplayerImage(String s){

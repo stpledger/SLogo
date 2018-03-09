@@ -129,6 +129,7 @@ public class ToolBar implements ComponentBuilder{
         ColorPicker penColorPicker = new ColorPicker();
         penColorPicker.setOnAction(e -> {
         	builder.overridePenColor(penColorPicker.getValue(), true);
+        	//builder.updatePenColor(penColorPicker.getValue());
         	pickerStage.close();
         });
         Scene pickerScene = new Scene(penColorPicker);

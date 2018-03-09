@@ -98,7 +98,7 @@ public class Model implements ModelModifiable, ModelViewable {
 		return ID;
 	}
 	
-	protected void setPenColor(Paint color) {
+	public void setPenColor(Paint color) {
 		for (Object o : myModel.values()) {
 			if (o instanceof Turtle) {
 				Turtle t = (Turtle)o;
