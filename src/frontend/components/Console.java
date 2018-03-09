@@ -77,7 +77,7 @@ public class Console implements ComponentBuilder{
 		commandResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_COMMAND + language);
 		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_UI + language);
 		builder = b;
-
+		
 		Button runButton = makeRunButton();
 		buttonMap.put(runButton, "run");
 		Button clearButton = makeClearButton();
@@ -106,17 +106,23 @@ public class Console implements ComponentBuilder{
 		buttonMap.put(puButton, "PenUp");
 		Button pdButton = makeCommandButton(uiResources.getString("PenDown"), "pd");
 		buttonMap.put(pdButton, "PenDown");
+		
+		// BEGIN JANK "WE DON'T HAVE OUR BACKEND BUT WANT TO ADD FEATURES SECTION"
 		Button addTurtle = new Button("Make Turtle");
 		addTurtle.setOnAction(e -> {
 			m.addTurtle(index, new Turtle(etXLoc,0,0,index));
 			index++;
 			etXLoc = etXLoc + 100;
-			run("fd 0");
+			run("tell " + index);
 		});
 		Button remTurtle = new Button("Rem Turtle");
 		remTurtle.setOnAction(e -> {
-			
+			m.clearAllTurtles();
+			index = 1;
+			etXLoc = 100;
+			run("fd 0");
 		});
+		// END JANK "WE DON'T HAVE OUR BACKEND BUT WANT TO ADD FEATURES SECTION"
 		
 		VBox runClearBox = new VBox(runButton, clearButton, openFileButton, saveFileButton);
 		runClearBox.setAlignment(Pos.CENTER);
@@ -347,7 +353,6 @@ public class Console implements ComponentBuilder{
 	 * run - Calls controller to interpret string and then calls TurtleDisplayer to update turtle display
 	 */
 	private void run(String com){
-		//System.out.println(com);
 		turtleDisplayer.clearError();
 		prompt.clear();
 		builder.update();
