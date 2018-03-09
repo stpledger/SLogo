@@ -9,7 +9,7 @@ import java.util.Set;
 * 
 */
 public interface ModelModifiable {
-    /*
+    /* 
     * Adds a variable from the model's String -> Object HashMap
     */
     public double addVariable(String newVar, Object obj);
