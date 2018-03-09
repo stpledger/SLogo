@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 
 public class Model implements ModelModifiable, ModelViewable {
@@ -79,6 +80,11 @@ public class Model implements ModelModifiable, ModelViewable {
 		}
 		myModel.put("Turtle" + 0, new Turtle(0,0,0,0));
 		myTurtles.put(0, (Turtle)myModel.get("Turtle0"));
+	}
+	
+	public void setTurtleImage(String name, Image img) {
+		Turtle t = (Turtle)myModel.get(name);
+		t.setImage(img);
 	}
 	
 	protected void addColor(int index, ArrayList<Double> rgb) {
