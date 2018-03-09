@@ -41,9 +41,9 @@ public class IDEBuilder implements SceneBuilder, View{
 		side = new SideBar(m, this);
 		turtleDisplay = new TurtleDisplayer();
 		console = new Console(turtleDisplay, m, interpreter, this);
+		layout.setCenter(turtleDisplay.getNode());
 		layout.setRight(side.getNode());
 		layout.setTop(toolbar.getNode());
-		layout.setCenter(turtleDisplay.getNode());
 		layout.setBottom(console.getNode());
 		commandResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_COMMAND + toolbar.getLanguage());
 		update();
