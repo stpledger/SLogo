@@ -47,6 +47,10 @@ public class Turtle {
 		return Collections.unmodifiableSet(myTraces);
 	}
 	
+	public void setImage(Image i) {
+		this.myTurtleDisplay.setImage(i);
+	}
+	
 	private ImageView makeTurtle() {
 		Image img = new Image(myTurtleImage);
 		ImageView turtle = new ImageView(img);
@@ -59,7 +63,9 @@ public class Turtle {
 		return turtle;
 	}
 	
-	protected void setTurtleImage(String filepath) {
+	public void setTurtleImage(String filepath) {
+		System.out.println("Path:" + filepath);
+		
 		myTurtleImage = filepath;
 		makeTurtle();
 	}

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 
 public class Model implements ModelModifiable, ModelViewable {
