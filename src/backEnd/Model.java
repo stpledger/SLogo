@@ -12,11 +12,58 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	private Map<String, Object> myModel;
 	private List<CommandGroup> myPreviousCommands;
+	private Map<Integer, String> myAvailableShapes;
+	private Map<Integer, ArrayList<Double>> myAvailableColors;
+	private int myCurrentShapeIndex = 0;
+	private int myCurrentColorIndex = 0;
 	
 	public Model() {
 		myModel = new HashMap<>();
 		myModel.put("Turtle", new Turtle(0,0,0));
 		myPreviousCommands = new ArrayList<>();
+		initializeShapeChoices();
+		initializeColorChoices();
+	}
+	
+	public ArrayList<Double> getColorByIndex(int i) {
+		if (myAvailableColors.containsKey(i)) {
+			myCurrentColorIndex = i;
+			return myAvailableColors.get(i);
+		}
+		else {
+			throw new IndexOutOfBoundsException("The Palette does not recognize this index.");
+		}
+	}
+	
+	public String getShapeByIndex(int i) {
+		if (myAvailableShapes.containsKey(i)) {
+			myCurrentShapeIndex = i;
+			return myAvailableShapes.get(i);
+		}
+		else {
+			throw new IndexOutOfBoundsException("The shapes does not recognize this index.");
+		}
+	}
+	
+	protected void addColor(int index, ArrayList<Double> rgb) {
+		myAvailableColors.put(index, rgb);
+	}
+	
+	private void initializeShapeChoices() {
+		myAvailableShapes.put(0, "Turtle.png");
+		myAvailableShapes.put(1, "Rectangle.png");
+		myAvailableShapes.put(2, "Triangle.png");
+		myAvailableShapes.put(3, "Circle.png");
+	}
+	
+	private void initializeColorChoices() {
+		for (int i = 0; i < 5; i++) {
+			ArrayList<Double> rgb = new ArrayList<>();
+			rgb.add(i*25.0);
+			rgb.add(256 - i*25.0);
+			rgb.add(i*25.0);
+			myAvailableColors.put(i, rgb);
+		}
 	}
 	
 	@Override
