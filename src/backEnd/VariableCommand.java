@@ -10,7 +10,7 @@ public class VariableCommand extends CommandGroup {
 		myModel = model;
 		this.mySlogoValid = run(command, args);
 		// TODO Auto-generated constructor stub
-	}
+	} 
  
 	@Override
 	public sLogoValid execute() {
