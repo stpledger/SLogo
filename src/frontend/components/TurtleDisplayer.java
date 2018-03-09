@@ -261,8 +261,8 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * Tests the program with other part's components
 	 */
 	private void testTurtleDisplayer(){
-		Turtle testTurtle = new Turtle(50,50,0);
-		Turtle testTurtle2 = new Turtle(-50,50,0);
+		Turtle testTurtle = new Turtle(50,50,0,0);
+		Turtle testTurtle2 = new Turtle(-50,50,0,0);
 		Set<Turtle> testTurtleSet = new HashSet<Turtle>();
 		testTurtleSet.add(testTurtle);
 		testTurtleSet.add(testTurtle2);
