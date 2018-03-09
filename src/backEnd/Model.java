@@ -25,13 +25,10 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	public Model() {
 		myModel = new HashMap<>();
-
 		myPreviousCommands = new ArrayList<>();
 		myTurtles = new HashMap<>();
 		myModel.put("Turtle" + 0, new Turtle(0,0,0,0));
-		myModel.put("Turtle" + 1, new Turtle(100,0,0,1));
 		myTurtles.put(0, (Turtle)myModel.get("Turtle0"));
-		myTurtles.put(1, (Turtle)myModel.get("Turtle1"));
 		initializeShapeChoices();
 		initializeColorChoices();
 	}
@@ -68,7 +65,7 @@ public class Model implements ModelModifiable, ModelViewable {
 		return this.myCurrentShapeIndex;
 	}
 	
-	protected void addTurtle(int index, Turtle t) {
+	public void addTurtle(int index, Turtle t) {
 		myModel.put("Turtle"+index, t);
 		myTurtles.put(index, t);
 	}
