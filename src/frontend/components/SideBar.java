@@ -86,7 +86,7 @@ public class SideBar implements ComponentBuilder {
 			if (count > 50) {break;}
 
 		}
-	}
+	} 
 
 	public void addToCommandHistory(String com) {
 		previousCommands.add(0, com);

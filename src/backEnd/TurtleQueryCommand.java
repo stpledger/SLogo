@@ -24,7 +24,7 @@ public class TurtleQueryCommand extends CommandGroup {
 				return ycor();
 			case "heading":
 				return heading();
-			case "pendownp":
+			case "pendownp": 
 				return penDown();
 			case "showingp":
 				return showing();

@@ -174,7 +174,7 @@ public class Model implements ModelModifiable, ModelViewable {
 			return 0;
 		}
 		else {
-			return -1;
+			return -1; 
 		}
 	}
 

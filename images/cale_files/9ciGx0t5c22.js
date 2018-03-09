@@ -1,3 +1,0 @@
-if (self.CavalryLogger) { CavalryLogger.start_js(["pf0DT"]); }
-
-__d("MessengerWorkContextInformationWebGraphQLQuery",["WebGraphQLQueryBase"],(function a(b,c,d,e,f,g){"use strict";__p&&__p();f.exports=function(){__p&&__p();var h,i;h=babelHelpers.inherits(j,c("WebGraphQLQueryBase"));i=h&&h.prototype;j.__getDocID=function(){"use strict";return"1598945200204624"};j.getQueryID=function(){"use strict";return"2118062361761329"};function j(){"use strict";h.apply(this,arguments)}return j}()}),null);

@@ -1,3 +1,0 @@
-if (self.CavalryLogger) { CavalryLogger.start_js(["J+Equ"]); }
-
-__d("NotificationInterpolator",["Badge.react","React","TextWithEmoticons.react","WorkModeConfig"],(function a(b,c,d,e,f,g){function h(i,j){var k=null;if(!c("WorkModeConfig").is_in_solo_community&&(j.entity.is_viewer_coworker===false||j.entity.is_multi_company_group===true))k=c("React").createElement(c("Badge.react"),{type:"work_non_coworker"});if(typeof i==="string")i=c("React").createElement(c("TextWithEmoticons.react"),{text:i});return c("React").createElement("span",{className:"fwb"},i,k)}f.exports=h}),null);

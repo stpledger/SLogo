@@ -51,7 +51,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private static Text dmessage;
 	private static Rectangle box;
 	private static Boolean turtleHidden = false;
-
+ 
 	/**
 	 * TurtleDisplayer
 	 * sets background color, resets turtle to starting position, starts animation keyframe
