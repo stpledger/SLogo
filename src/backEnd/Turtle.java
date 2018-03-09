@@ -147,6 +147,7 @@ public class Turtle {
 	}
 
 	protected void showTurtle(){
+		// TO-DO
 		myTurtleDisplay.setImage(new Image(myTurtleImage));
 		isVisible = true;
 	}
@@ -171,6 +172,7 @@ public class Turtle {
 	private class Pen {
 		
 		private Paint myPenColor;
+		private double myPenSize = 1.0;
 		
 		private Pen() {
 			myPenColor = Color.BLACK;
@@ -183,6 +185,7 @@ public class Turtle {
 		private Line draw(double xpos1, double ypos1, double xpos2, double ypos2) {
 			Line ret = new Line(xpos1, ypos1, xpos2, ypos2);
 			ret.setStroke(myPenColor);
+			ret.setStrokeWidth(myPenSize);
 			return ret;
 		}
 	}
