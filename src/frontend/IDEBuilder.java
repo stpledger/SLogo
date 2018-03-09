@@ -2,6 +2,7 @@ package frontend;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import backEnd.Interpreter;
 import backEnd.Model;
@@ -23,12 +24,14 @@ public class IDEBuilder implements SceneBuilder, View{
 	public static final double SIDEBAR_WIDTH = 260;
 	public static final double DISPLAY_HEIGHT = IDE_HEIGHT - TOOLBAR_HEIGHT - CONSOLE_HEIGHT;
 	public static final double DISPLAY_WIDTH = IDE_WIDTH - SIDEBAR_WIDTH;
+	private static final String DEFAULT_RESOURCE_PACKAGE_COMMAND = "resources/languages/";
 	public static Map<Double, Color> COLORMAP;
 	private ToolBar toolbar;
 	private SideBar side;
 	private TurtleDisplayer turtleDisplay;
 	private Console console;
 	private BorderPane layout = new BorderPane();
+	private ResourceBundle commandResources;
 	
 	public IDEBuilder() {
 		toolbar = new ToolBar(this);
@@ -41,6 +44,7 @@ public class IDEBuilder implements SceneBuilder, View{
 		layout.setTop(toolbar.getNode());
 		layout.setCenter(turtleDisplay.getNode());
 		layout.setBottom(console.getNode());
+		commandResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_COMMAND + toolbar.getLanguage());
 		update();
 	}
 	
@@ -49,16 +53,16 @@ public class IDEBuilder implements SceneBuilder, View{
 		Scene s = new Scene(layout, IDE_WIDTH, IDE_HEIGHT);
 		s.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.W) {
-				enterConsoleCommand("fd 20");
+				enterConsoleCommand(commandResources.getString("Forward").split("\\|")[0] + " 20");
 			}
 			else if (e.getCode() == KeyCode.A) {
-				enterConsoleCommand("lt 10");
+				enterConsoleCommand(commandResources.getString("Left").split("\\|")[0] + " 10");
 			}
 			else if (e.getCode() == KeyCode.S) {
-				enterConsoleCommand("bk 20");
+				enterConsoleCommand(commandResources.getString("Backward").split("\\|")[0] + " 20");
 			}
 			else if (e.getCode() == KeyCode.D) {
-				enterConsoleCommand("rt 10");
+				enterConsoleCommand(commandResources.getString("Right").split("\\|")[0] + " 10");
 			}
 		});
 		return s;
@@ -78,6 +82,7 @@ public class IDEBuilder implements SceneBuilder, View{
 		return new Color(rgb.get(0) / 256, rgb.get(1) / 256, rgb.get(2) / 256, 1).toString();
 	}
 	public void update() {
+		commandResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_COMMAND + toolbar.getLanguage());
 		console.updateConsoleLanguage(toolbar.getLanguage());
 		setBackgroundColor(side.getModel().getMyCurrentColorIndex());
 		side.update();

@@ -110,20 +110,9 @@ public class TurtleDisplayer implements ComponentBuilder{
 	}
 
 	/**
-	 * drawNewDisplay - draws new display
+	 * drawNewDisplay - draws new display from set of turtles
 	 * @param Set<turtle>
 	 */
-	//	private void drawNewDisplay(Set<Turtle> s, sLogoValid v){
-	//	    for(Turtle t : s){
-	//	    	ImageView turtleView = drawTurtle(t.getX() + center_x, -1 * t.getY() + center_y, t.getAngle());
-	//	    	pane.getChildren().add(turtleView);
-	//	        if(!t.getLinesSet.isEmpty()){
-	//	        	lineMap.put(turtleView, t.getLinesSet);
-	//	            drawLines(t.getLinesSet);
-	//	        }
-	//	    }
-	//	}
-	
 	private void drawNewDisplay(Set<Turtle> s, sLogoValid v){
 		if(v.getError()){
 			displayError(v.getMyStringValue());
@@ -162,6 +151,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 
 	/**
 	 * drawTurtle - draws a single turtle at specified coordinates and angle
+	 * NOTE: ONLY USED FOR RESETTING IN BEGINNING..
 	 * @param x (x location)
 	 * @param y (y location)
 	 * @param angle (angle in degrees)

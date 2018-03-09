@@ -72,7 +72,8 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	public void clearAllTurtles() {
 		myTurtles.clear();
-		for (String s : myModel.keySet()) {
+		Set<String> tempSet = new HashSet<String>(myModel.keySet());
+		for (String s : tempSet) {
 			if (myModel.get(s) instanceof Turtle) {
 				myModel.remove(s);
 			}
