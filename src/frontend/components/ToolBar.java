@@ -127,7 +127,8 @@ public class ToolBar implements ComponentBuilder{
 		} catch (IOException e1) {
 			// Do nothing
 		}
-		if (mimetype.contains("image")) {
+		//if (mimetype.contains("image")) {
+		if (f.getPath().contains(".png") || f.getPath().contains(".jpg") || f.getPath().contains(".gif")) {
 		    builder.enterConsoleCommand("changeImage " + turtleImagePicker.getValue() + " " + f.getAbsolutePath());
 		    builder.setTurtleImage(turtleImagePicker.getValue(), f.getPath().split("/")[f.getPath().split("/").length-1]);
 		    builder.enterConsoleCommand("fd 0");
