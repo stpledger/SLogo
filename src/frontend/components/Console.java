@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -54,9 +57,13 @@ public class Console implements ComponentBuilder{
 	private Model model;
 	private Interpreter interpreter;
 	private String language = "English";
+	private ResourceBundle commandResources;
 	private ResourceBundle uiResources;
-	private static final String DEFAULT_RESOURCE_PACKAGE = "resources/ui/";
+	private static final String DEFAULT_RESOURCE_PACKAGE_COMMAND = "resources/languages/";
+	private static final String DEFAULT_RESOURCE_PACKAGE_UI = "resources/ui/";
 	private IDEBuilder builder;
+	private Map<Button, String> buttonMap = new HashMap<Button, String>();
+	private String loopCom;
 
 	public Console (TurtleDisplayer t, Model m, Interpreter interpreter2, IDEBuilder b) {
 		turtleDisplayer = t;
@@ -64,23 +71,40 @@ public class Console implements ComponentBuilder{
 		interpreter = interpreter2;
 		box.setStyle("-fx-background-color: #EEEEEE;");
 		box.setPrefHeight(IDEBuilder.CONSOLE_HEIGHT);
-		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
+		commandResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_COMMAND + language);
+		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_UI + language);
 		builder = b;
 
 		Button runButton = makeRunButton();
+		buttonMap.put(runButton, "run");
 		Button clearButton = makeClearButton();
+		buttonMap.put(clearButton, "clearButton");
 		Button openFileButton = makeFileButton();
+		buttonMap.put(openFileButton, "openButton");
 		Button saveFileButton = makeSaveButton();
-		Button fdButton = makeCommandButton(uiResources.getString("forward"), "fd 20");
-		Button bkButton = makeCommandButton(uiResources.getString("backward"), "bk 20");
-		Button ltButton = makeCommandButton(uiResources.getString("left"), "lt 10");
-		Button rtButton = makeCommandButton(uiResources.getString("right"), "rt 10");
-		Button showButton = makeCommandButton(uiResources.getString("show"), "st");
-		Button hideButton = makeCommandButton(uiResources.getString("hide"), "ht");
-		Button homeButton = makeCommandButton(uiResources.getString("home"), "home");
-		Button csButton = makeCommandButton(uiResources.getString("clear"), "cs");
-		Button puButton = makeCommandButton(uiResources.getString("penup"), "pu");
-		Button pdButton = makeCommandButton(uiResources.getString("pendown"), "pd");
+		buttonMap.put(saveFileButton, "saveButton");
+		Button fdButton = makeCommandButton(uiResources.getString("Forward"), "fd 20");
+		buttonMap.put(fdButton, "Forward");
+		Button bkButton = makeCommandButton(uiResources.getString("Backward"), "bk 20");
+		buttonMap.put(bkButton, "Backward");
+		Button ltButton = makeCommandButton(uiResources.getString("Left"), "lt 10");
+		buttonMap.put(ltButton, "Left");
+		Button rtButton = makeCommandButton(uiResources.getString("Right"), "rt 10");
+		buttonMap.put(rtButton, "Right");
+		Button showButton = makeCommandButton(uiResources.getString("ShowTurtle"), "st");
+		buttonMap.put(showButton, "ShowTurtle");
+		Button hideButton = makeCommandButton(uiResources.getString("HideTurtle"), "ht");
+		buttonMap.put(hideButton, "HideTurtle");
+		Button homeButton = makeCommandButton(uiResources.getString("Home"), "home");
+		buttonMap.put(homeButton, "Home");
+		Button csButton = makeCommandButton(uiResources.getString("ClearScreen"), "cs");
+		buttonMap.put(csButton, "ClearScreen");
+		Button puButton = makeCommandButton(uiResources.getString("PenUp"), "pu");
+		buttonMap.put(puButton, "PenUp");
+		Button pdButton = makeCommandButton(uiResources.getString("PenDown"), "pd");
+		buttonMap.put(pdButton, "PenDown");
+		//runButton, clearButton, openFileButton, saveFileButton, fdButton, bkButton, 
+		//		ltButton, rtButton, showButton, hideButton, homeButton, csButton, puButton, pdButton);
 		
 		VBox runClearBox = new VBox(runButton, clearButton, openFileButton, saveFileButton);
 		runClearBox.setAlignment(Pos.CENTER);
@@ -231,7 +255,7 @@ public class Console implements ComponentBuilder{
 		alert.setContentText("The filepath you chose, " + f.getAbsolutePath() + " is not a valid logo file!");
 		alert.showAndWait();
 	}
-	
+
 	/**
 	 * throw a file name not valid alert
 	 */
@@ -240,7 +264,7 @@ public class Console implements ComponentBuilder{
 		alert.setHeaderText(s);
 		alert.show();
 	}
-	
+
 	/**
 	 * scans SLOGO file and runs command
 	 * @throws FileNotFoundException 
@@ -268,16 +292,36 @@ public class Console implements ComponentBuilder{
 	 * updates the language that the interpreter will use to interpret commands
 	 */
 	public void updateConsoleLanguage(String lang){
+		//System.out.println(language);
 		language = lang;
-		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
+		commandResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_COMMAND + language);
+		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_UI + language);
+		updateButtons();
 	}
 
-	//	/**
-	//	 * updates all button text
-	//	 */
-	//	private void updateButtons(){
-	//
-	//	}
+	/**
+	 * updates all button text
+	 */
+	private void updateButtons(){
+		for(Button b : buttonMap.keySet()){
+			String propKey = buttonMap.get(b);
+			b.setText(uiResources.getString(propKey));
+			if(!propKey.equals("saveButton") && !propKey.equals("clearButton") 
+					&& !propKey.equals("openButton") && !propKey.equals("run")){
+				loopCom = commandResources.getString(propKey).split("\\|")[0];
+				if(propKey.equals("Forward") || propKey.equals("Backward")){
+					loopCom = loopCom + " 20";
+				}
+				if(propKey.equals("Left") || propKey.equals("Right")){
+					loopCom = loopCom + " 10";
+				}
+				String s = loopCom;
+				b.setOnAction(e -> {
+					run(s);
+				});
+			}
+		}
+	}
 
 	/**
 	 * Custom command entered from elsewhere in program
@@ -314,10 +358,10 @@ public class Console implements ComponentBuilder{
 		else{
 			turtleDisplayer.displayError(retMessage.getMyStringValue());
 		}
-		
+
 		fixPosition();		
 	}
-	
+
 	private void fixPosition() {
 		interpreter.setLanguage("English");
 		sLogoValid retMessage = interpreter.interpret("fd 0");
