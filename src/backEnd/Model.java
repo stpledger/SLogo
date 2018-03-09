@@ -24,12 +24,15 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	public Model() {
 		myModel = new HashMap<>();
+		myTurtles = new HashMap<>();
+		myAvailableShapes = new HashMap<>();
+		myAvailableColors = new HashMap<>();
 		myTurtles.put(0, new Turtle(0,0,0,0));
 		initializeShapeChoices();
 		initializeColorChoices();
 	}
 	
-	public Map<Integer, ArrayList<Double>> getPalette(){
+	public Map<Integer, List<Double>> getPalette(){
 		return Collections.unmodifiableMap(myAvailableColors);
 	}
 	
