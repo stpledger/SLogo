@@ -100,6 +100,7 @@ public class ToolBar implements ComponentBuilder{
 				turtleColor = c; 
 				builder.updateColorIndex(i);
 				builder.update();
+				builder.enterConsoleCommand("SETBG " + i);
 				pickerStage.close();
 //				System.out.println("HUM");
 				

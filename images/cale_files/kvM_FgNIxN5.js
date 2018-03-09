@@ -1,3 +1,0 @@
-if (self.CavalryLogger) { CavalryLogger.start_js(["KPQhw"]); }
-
-__d("MessengerDetailViewReact.bs",["bs_js_boolean","ReasonReact.bs","bs_js_null_undefined","MessengerDetailView.react"],(function a(b,c,d,e,f,g){"use strict";function h(i,j,k,l,m,n,o,p,q){return c("ReasonReact.bs").wrapJsForReason(c("MessengerDetailView.react"),{activeThreadID:c("bs_js_null_undefined").from_opt(i),deliveryReceipts:j,messengerState:k,mid:c("bs_js_null_undefined").from_opt(l),query:c("bs_js_null_undefined").from_opt(m),view:c("bs_js_null_undefined").from_opt(n),viewer:o,isWorkUser:c("bs_js_boolean").to_js_boolean(p)},q)}g.make=h}),null);

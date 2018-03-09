@@ -1,3 +1,0 @@
-if (self.CavalryLogger) { CavalryLogger.start_js(["DOUYz"]); }
-
-__d("sortReactionTypes",["UFIReactionTypes"],(function a(b,c,d,e,f,g){__p&&__p();var h={};c("UFIReactionTypes").ordering.forEach(function(j,k){h[j]=k});function i(j,k){return Object.keys(j).map(function(l){return Number(l)}).sort(function(l,m){if(k&&l===c("UFIReactionTypes").LIKE)return-1;if(j[l]["default"]===j[m]["default"])return h[l]-h[m];return j[m]["default"]-j[l]["default"]})}f.exports=i}),null);

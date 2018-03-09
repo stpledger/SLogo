@@ -1,3 +1,0 @@
-if (self.CavalryLogger) { CavalryLogger.start_js(["CxW21"]); }
-
-__d("MessengerBugNubReact.bs",["Utils.bs","ReasonReact.bs","bs_js_null_undefined","MessengerBugNub.react"],(function a(b,c,d,e,f,g){"use strict";function h(i,j,k){return c("ReasonReact.bs").wrapJsForReason(c("MessengerBugNub.react"),{isBetaEnabled:c("Utils.bs").optionBoolToNullUndefinedBoolean(i),unixName:c("bs_js_null_undefined").from_opt(j)},k)}g.make=h}),null);

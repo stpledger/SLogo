@@ -1,3 +1,0 @@
-if (self.CavalryLogger) { CavalryLogger.start_js(["YQ4Zs"]); }
-
-__d("getMentionableRect",["Rect"],(function a(b,c,d,e,f,g){__p&&__p();function h(k){var l=document.selection.createRange().duplicate();l.moveStart("character",-k);return l.getBoundingClientRect()}function i(k){var l=b.getSelection();if(!l.rangeCount)return null;var m=l.getRangeAt(0),n=m.cloneRange(),o=n.endContainer,p=n.endOffset,q=null;if(p>=k){n.setStart(o,p-k);q=n.getBoundingClientRect()}return q}function j(k,l){var m=document.selection?h(k):i(k);if(!m)return null;var n=new(c("Rect"))(m.top,l?m.right:m.left,m.bottom,l?m.right:m.left,"viewport");return n.convertTo("document")}f.exports=j}),null);
