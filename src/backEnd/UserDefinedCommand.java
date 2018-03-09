@@ -7,7 +7,7 @@ public class UserDefinedCommand extends CommandGroup{
 		super(command, args);
 		myModel = model;
 		//this.mySlogoValid = run(command, args);
-	} 
+	}
 /*
 	@Override
 	public sLogoValid execute() {

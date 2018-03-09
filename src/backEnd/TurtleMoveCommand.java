@@ -144,7 +144,7 @@ public class TurtleMoveCommand extends CommandGroup {
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(0);
 		return temp;
-	}
+	} 
 
 	private sLogoValid hideTurtle() {
 		Set<Turtle> turtles = myModel.getTurtles();
