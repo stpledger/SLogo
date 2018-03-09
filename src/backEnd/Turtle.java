@@ -47,7 +47,7 @@ public class Turtle {
 		return Collections.unmodifiableSet(myTraces);
 	}
 	
-	protected void setImage(Image i) {
+	public void setImage(Image i) {
 		this.myTurtleDisplay.setImage(i);
 	}
 	
