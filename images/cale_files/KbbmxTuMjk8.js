@@ -1,3 +1,0 @@
-if (self.CavalryLogger) { CavalryLogger.start_js(["iuaVR"]); }
-
-__d("MessengerThreadlistNewMessageRowReact.bs",["bs_js_boolean","ReasonReact.bs","MessengerThreadlistNewMessageRow.react"],(function a(b,c,d,e,f,g){"use strict";function h(i,j,k){return c("ReasonReact.bs").wrapJsForReason(c("MessengerThreadlistNewMessageRow.react"),{isActive:c("bs_js_boolean").to_js_boolean(i),onClose:j},k)}g.make=h}),null);

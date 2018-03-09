@@ -1,3 +1,0 @@
-if (self.CavalryLogger) { CavalryLogger.start_js(["P4Djf"]); }
-
-__d("MessengerSharedPhotoReact.bs",["bs_js_boolean","ReasonReact.bs","bs_js_null_undefined","MessengerSharedPhoto.react"],(function a(b,c,d,e,f,g){"use strict";function h(i,j,k,l,m,n,o){return c("ReasonReact.bs").wrapJsForReason(c("MessengerSharedPhoto.react"),{className:i,fbid:j,onClick:k,photoID:l,uri:c("bs_js_null_undefined").from_opt(m),isSpherical:c("bs_js_boolean").to_js_boolean(n)},[])}g.make=h}),null);
