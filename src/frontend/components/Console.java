@@ -186,7 +186,6 @@ public class Console implements ComponentBuilder{
 	private Button makeFileButton() {
 		Button openButton = new Button(uiResources.getString("openButton"));
 		openButton.setMinWidth(BUTTON_SIZE);
-		FileChooser fileChooser = new FileChooser();
 		openButton.setOnAction(
 				new EventHandler<ActionEvent>() {
 					@Override

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import backEnd.Interpreter;
 import backEnd.Model;
+import backEnd.Turtle;
 import frontend.components.Console;
 import frontend.components.SideBar;
 import frontend.components.ToolBar;
@@ -42,6 +43,9 @@ public class IDEBuilder implements SceneBuilder, View{
 		layout.setCenter(turtleDisplay.getNode());
 		layout.setBottom(console.getNode());
 		update();
+		enterConsoleCommand("SETBG 4");
+		setBackgroundColor(4);
+		
 	}
 	
 	@Override
@@ -72,10 +76,21 @@ public class IDEBuilder implements SceneBuilder, View{
 		if (getPallete().containsKey(i)) {
 			turtleDisplay.setBackgroundColor(interpretColor(getPallete().get(i)));
 		}
-
 	}
+	
 	private String interpretColor (List<Double> rgb) {
 		return new Color(rgb.get(0) / 256, rgb.get(1) / 256, rgb.get(2) / 256, 1).toString();
+	}
+	
+	public void setTurtleImage(String turtlename, String filepath) {
+		for (String s: side.getModel().getCurrentVariables().keySet()) {
+			Object temp = (side.getModel().getCurrentVariables().get(s));
+			if (temp instanceof Turtle) {
+				Turtle t = (Turtle)t;
+				t.setFilePath(filepath);
+				break;
+			}
+		}
 	}
 	public void update() {
 		console.updateConsoleLanguage(toolbar.getLanguage());

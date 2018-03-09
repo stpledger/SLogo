@@ -77,7 +77,9 @@ public class ToolBar implements ComponentBuilder{
 		
 		selectColor.setOnAction(this::createColorPickerWindow);
 		toAdd.add(selectColor);
-		
+//		builder.updateColorIndex(3);
+//		builder.enterConsoleCommand("SETBG 3");
+//		
 		turtleImagePicker.setValue("Select Turtle Name");
 		toAdd.add(turtleImagePicker);
 		
@@ -127,6 +129,7 @@ public class ToolBar implements ComponentBuilder{
 		}
 		if (mimetype.contains("image")) {
 		    builder.enterConsoleCommand("changeImage " + turtleImagePicker.getValue() + " " + f.getAbsolutePath());
+		    builder.setTurtleImage(turtleImagePicker.getValue(), f.getAbsolutePath())
 		} else {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Invalid Image");
