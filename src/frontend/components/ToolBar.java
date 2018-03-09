@@ -134,7 +134,7 @@ public class ToolBar implements ComponentBuilder{
 			alert.showAndWait();
 		}
 		
-	}
+	} 
 	
 	
 	/*
