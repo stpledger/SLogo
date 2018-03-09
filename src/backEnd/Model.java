@@ -8,10 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javafx.scene.paint.Paint;
+
 public class Model implements ModelModifiable, ModelViewable {
 	
 	private Map<String, Object> myModel;
+	private Map<Integer, Turtle> myTurtles;
+	
 	private List<CommandGroup> myPreviousCommands;
+	
 	private Map<Integer, String> myAvailableShapes;
 	private Map<Integer, ArrayList<Double>> myAvailableColors;
 	private int myCurrentShapeIndex = 0;
@@ -19,15 +24,19 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	public Model() {
 		myModel = new HashMap<>();
-		myModel.put("Turtle", new Turtle(0,0,0));
+		myTurtles.put(0, new Turtle(0,0,0,0));
 		initializeShapeChoices();
 		initializeColorChoices();
 	}
 	
-	public ArrayList<Double> getColorByIndex(int i) {
+	public Map<Integer, ArrayList<Double>> getPalette(){
+		return Collections.unmodifiableMap(myAvailableColors);
+	}
+	
+	public List<Double> getColorByIndex(int i) {
 		if (myAvailableColors.containsKey(i)) {
 			myCurrentColorIndex = i;
-			return myAvailableColors.get(i);
+			return Collections.unmodifiableList(myAvailableColors.get(i));
 		}
 		else {
 			throw new IndexOutOfBoundsException("The Palette does not recognize this index.");
@@ -44,8 +53,20 @@ public class Model implements ModelModifiable, ModelViewable {
 		}
 	}
 	
+	public int getMyCurrentColorIndex() {
+		return this.myCurrentColorIndex;
+	}
+	
+	public int getMyCurrentShapeIndex() {
+		return this.myCurrentShapeIndex;
+	}
+	
 	protected void addColor(int index, ArrayList<Double> rgb) {
 		myAvailableColors.put(index, rgb);
+	}
+	
+	public void setPenColor(Paint color) {
+		
 	}
 	
 	private void initializeShapeChoices() {
