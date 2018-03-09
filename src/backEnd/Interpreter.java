@@ -88,7 +88,25 @@ public class Interpreter {
 	private sLogoValid interpretMultiTurtle(ArrayList<String> args) {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		ArrayList<String> myInputArgs = args;
+		ArrayList<Integer> myTurtleIds = new ArrayList<Integer>();
+		ArrayList<String> myCommands = new ArrayList<String>();
+		String myCommand = myInputArgs.remove(0);
+		if(!args.remove(0).equals("[")) return new sLogoValid(true, "Command expected [");
+		while(!myInputArgs.get(0).equals("]")) {
+			myTurtleIds.add(Integer.parseInt(myInputArgs.remove(0)));
+		}
+		myInputArgs.remove(0);
+		if(myCommand.equals("ask")) {
+			if(!myInputArgs.remove(0).equals("[")) return new sLogoValid(true, "Command expected ["); 
+			while(!myInputArgs.get(0).equals("]")) {
+				myCommands.add(myInputArgs.remove(0));
+			}
+		}
+		for(int t: myTurtleIds) {
+			//TODO: Change the active turtles
+		}
 		
+		if(!myInputArgs.isEmpty())myQueue.add(standardString(myInputArgs));
 		return tempSlogoValid;
 	}
 
