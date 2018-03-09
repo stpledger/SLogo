@@ -1,8 +1,10 @@
 package frontend;
 
+import java.util.List;
+import java.util.Map;
+
 import backEnd.Interpreter;
 import backEnd.Model;
-import frontend.components.ComponentBuilder;
 import frontend.components.Console;
 import frontend.components.SideBar;
 import frontend.components.ToolBar;
@@ -10,6 +12,7 @@ import frontend.components.TurtleDisplayer;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 
 public class IDEBuilder implements SceneBuilder, View{
 	
@@ -20,7 +23,7 @@ public class IDEBuilder implements SceneBuilder, View{
 	public static final double SIDEBAR_WIDTH = 260;
 	public static final double DISPLAY_HEIGHT = IDE_HEIGHT - TOOLBAR_HEIGHT - CONSOLE_HEIGHT;
 	public static final double DISPLAY_WIDTH = IDE_WIDTH - SIDEBAR_WIDTH;
-	
+	public static Map<Double, Color> COLORMAP;
 	private ToolBar toolbar;
 	private SideBar side;
 	private TurtleDisplayer turtleDisplay;
@@ -28,7 +31,6 @@ public class IDEBuilder implements SceneBuilder, View{
 	private BorderPane layout = new BorderPane();
 	
 	public IDEBuilder() {
-		
 		toolbar = new ToolBar(this);
 		Model m = new Model();
 		Interpreter interpreter = new Interpreter(m);
@@ -62,16 +64,31 @@ public class IDEBuilder implements SceneBuilder, View{
 		return s;
 	}
 	
+	public Map<Integer, List<Double>> getPallete() {
+		return side.getModel().getPalette();
+	}
+	
+	public void setBackgroundColor(int i) {
+		if (getPallete().containsKey(i)) {
+			turtleDisplay.setBackgroundColor(interpretColor(getPallete().get(i)));
+		}
+
+	}
+	private String interpretColor (List<Double> rgb) {
+		return new Color(rgb.get(0) / 256, rgb.get(1) / 256, rgb.get(2) / 256, 1).toString();
+	}
 	public void update() {
 		console.updateConsoleLanguage(toolbar.getLanguage());
-		turtleDisplay.setBackgroundColor(toolbar.getColor());
+		setBackgroundColor(side.getModel().getMyCurrentColorIndex());
 		side.update();
 		toolbar.update(side.getModel());
 //		if (toolbar.getCurrentImageSelected().length() > 0) {turtleDisplay.changeImage(toolbar.getCurrentImageSelected());}
 	}
 	
+	public void updateColorIndex(int i) {
+		side.getModel().setMyCurrentColorIndex(i);
+	}
 	public void enterConsoleCommand(String s) {
-		//System.out.println(s);
 		console.enterCommand(s);
 	}
 

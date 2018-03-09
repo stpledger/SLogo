@@ -10,6 +10,7 @@ import backEnd.ModelViewable;
 import backEnd.Turtle;
 import frontend.IDEBuilder;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -17,7 +18,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -26,14 +31,13 @@ public class ToolBar implements ComponentBuilder{
 	private HBox bar = new HBox();
 	private IDEBuilder builder;
 	
-	String[] languages = {"English", "German", "French", "Spanish"};
+	String[] languages = {"English", "German", "French", "Spanish", "Portuguese", "Russian", "Italian", "Chinese"};
 	private Color turtleColor = Color.SLATEBLUE;
 	
 	private ComboBox<String> languagePicker = new ComboBox<String>();
 	private ComboBox<String> turtleImagePicker = new ComboBox<String>();
 	private Button selectImage = new Button("Select Image");
 	
-	private Button updateEnvButton = new Button("Update");
 	private Button selectColor = new Button("Select Color");
 	
 	public ToolBar(IDEBuilder b) {
@@ -66,6 +70,9 @@ public class ToolBar implements ComponentBuilder{
 		
 		languagePicker.getItems().addAll(languages);
 		languagePicker.setValue("English");
+		languagePicker.setOnAction(e -> {
+			builder.update();
+		});
 		toAdd.add(languagePicker);
 		
 		selectColor.setOnAction(this::createColorPickerWindow);
@@ -77,17 +84,34 @@ public class ToolBar implements ComponentBuilder{
 		selectImage.setOnAction(this::updateImagePath);
 		toAdd.add(selectImage);
 
-		
 		bar.getChildren().addAll(toAdd);
 	}
 	
 	private void createColorPickerWindow(ActionEvent e) {
 		Stage pickerStage = new Stage();
-		ColorPicker picker = new ColorPicker();
-		Scene pickerScene = new Scene(picker);
+		VBox pallete_box = new VBox();
+		for (Integer i: builder.getPallete().keySet()) {
+			List<Double> rgb = builder.getPallete().get(i);
+			Button colorB = new Button("S");
+			Color c = new Color(rgb.get(0) / 256, rgb.get(1) / 256, rgb.get(2) / 256, 1);
+			colorB.setBackground(new Background(new BackgroundFill(
+                    c, CornerRadii.EMPTY, Insets.EMPTY)));
+			colorB.setOnAction(e1 -> {
+				turtleColor = c; 
+				builder.updateColorIndex(i);
+				builder.update();
+				pickerStage.close();
+//				System.out.println("HUM");
+				
+			});
+			pallete_box.getChildren().add(colorB);
+		}
+		
+//		ColorPicker picker = new ColorPicker();
+		Scene pickerScene = new Scene(pallete_box);
 		pickerStage.setScene(pickerScene);
 		pickerStage.show();
-		picker.setOnAction(pe -> {turtleColor = picker.getValue(); pickerStage.close(); builder.update();});
+//		picker.setOnAction(pe -> {turtleColor = picker.getValue(); pickerStage.close(); builder.update();});
 	}
 	
 	private void updateImagePath(ActionEvent e) {

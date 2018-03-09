@@ -25,6 +25,7 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	public Model() {
 		myModel = new HashMap<>();
+
 		myPreviousCommands = new ArrayList<>();
 		myTurtles = new HashMap<>();
 		myModel.put("Turtle" + 0, new Turtle(0,0,0,0));
@@ -35,7 +36,7 @@ public class Model implements ModelModifiable, ModelViewable {
 		initializeColorChoices();
 	}
 	
-	public Map<Integer, ArrayList<Double>> getPalette(){
+	public Map<Integer, List<Double>> getPalette(){
 		return Collections.unmodifiableMap(myAvailableColors);
 	}
 	
@@ -179,6 +180,11 @@ public class Model implements ModelModifiable, ModelViewable {
 	@Override
 	public void addCommandHistory(CommandGroup command) {
 		myPreviousCommands.add(0,  command);
+	}
+
+	@Override
+	public void setMyCurrentColorIndex(int i) {
+		myCurrentColorIndex = i;
 	}
 
 }
