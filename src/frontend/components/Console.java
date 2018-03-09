@@ -64,6 +64,9 @@ public class Console implements ComponentBuilder{
 	private IDEBuilder builder;
 	private Map<Button, String> buttonMap = new HashMap<Button, String>();
 	private String loopCom;
+	private int index = 1;
+	private int etXLoc = 100;
+	private int etYLoc = 0;
 
 	public Console (TurtleDisplayer t, Model m, Interpreter interpreter2, IDEBuilder b) {
 		turtleDisplayer = t;
@@ -105,15 +108,21 @@ public class Console implements ComponentBuilder{
 		buttonMap.put(pdButton, "PenDown");
 		Button addTurtle = new Button("Make Turtle");
 		addTurtle.setOnAction(e -> {
+			m.addTurtle(index, new Turtle(etXLoc,0,0,index));
+			index++;
+			etXLoc = etXLoc + 100;
+			run("fd 0");
+		});
+		Button remTurtle = new Button("Rem Turtle");
+		remTurtle.setOnAction(e -> {
 			
 		});
-		//runButton, clearButton, openFileButton, saveFileButton, fdButton, bkButton, 
-		//		ltButton, rtButton, showButton, hideButton, homeButton, csButton, puButton, pdButton);
 		
 		VBox runClearBox = new VBox(runButton, clearButton, openFileButton, saveFileButton);
 		runClearBox.setAlignment(Pos.CENTER);
 		runClearBox.setPrefWidth(clearButton.getWidth());
-		HBox moveTurtleButtonsBox = new HBox(fdButton, bkButton, ltButton, rtButton, showButton, hideButton, homeButton, csButton, puButton, pdButton);
+		HBox moveTurtleButtonsBox = new HBox(fdButton, bkButton, ltButton, rtButton, showButton, hideButton, 
+				homeButton, csButton, puButton, pdButton, addTurtle, remTurtle);
 		moveTurtleButtonsBox.setAlignment(Pos.CENTER);
 		moveTurtleButtonsBox.setPrefHeight(fdButton.getHeight());
 		VBox consoleAndButtonsBox = new VBox(moveTurtleButtonsBox, prompt);
