@@ -25,7 +25,7 @@ public class TurtleMoveCommand extends CommandGroup {
 				return back(args);
 			case "lt":
 				return left(args);
-			case "rt":
+			case "rt": 
 				return right(args);
 			case "seth":
 				return setHeading(args);

@@ -20,7 +20,7 @@ public interface ModelModifiable {
     public double deleteVariable(String toDelete);
     
     public sLogoValid getVariable(String name);
-    	
+    	 
 	public Map<Integer, Turtle> getTurtlesToModify();
 
     public Set<Turtle> getTurtles();
