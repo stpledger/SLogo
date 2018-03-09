@@ -63,7 +63,9 @@ public class Turtle {
 		return turtle;
 	}
 	
-	protected void setTurtleImage(String filepath) {
+	public void setTurtleImage(String filepath) {
+		System.out.println("Path:" + filepath);
+		
 		myTurtleImage = filepath;
 		makeTurtle();
 	}

@@ -26,8 +26,6 @@ public class SideBarComponent {
 	private String description;
 	private HBox container = new HBox();
 	private ScrollPane scroller = new ScrollPane();
-	private Double editVal;
-	
 	
 	
 	public SideBarComponent(String varName, String desc) {
