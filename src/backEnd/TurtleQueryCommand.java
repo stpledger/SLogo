@@ -9,7 +9,7 @@ public class TurtleQueryCommand extends CommandGroup {
 		super(command, args);
 		myModel = model;
 		this.mySlogoValid = run(command);
-	}
+	} 
 
 	@Override
 	public sLogoValid execute() {
@@ -24,7 +24,7 @@ public class TurtleQueryCommand extends CommandGroup {
 				return ycor();
 			case "heading":
 				return heading();
-			case "pendownp":
+			case "pendownp": 
 				return penDown();
 			case "showingp":
 				return showing();

@@ -11,7 +11,7 @@ import java.util.Set;
 public interface ModelViewable {
     /*
     * Returns a set of all ImageView objects to display on the View
-    */
+    */ 
     public Set<Turtle> getTurtles();
     
     /*
@@ -23,4 +23,9 @@ public interface ModelViewable {
     * Gets a map of current variables and their values
     */
     public Map<String, Object> getCurrentVariables();
+     
+    public Map<Integer, List<Double>> getPalette();
+    
+    public int getMyCurrentColorIndex();
+    public void setMyCurrentColorIndex(int i);
 }

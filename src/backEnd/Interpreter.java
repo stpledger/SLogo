@@ -148,7 +148,7 @@ public class Interpreter {
 		//Create input/output arraylists
 		ArrayList<String> myInputArgs = args;
 		ArrayList<String> myCommandArr = new ArrayList<String>();
-		//Get the expected number of arguments
+		//Get the expected number of arguments 
 		int expectedLength = getCommandSyntaxLength(myInputArgs.get(0));
 		if(expectedLength < 1) return new sLogoValid(true, "Syntax not found: " + args.get(0));
 		//Move the initial command from input to output

@@ -34,7 +34,6 @@ import javafx.scene.text.Text;
 public class TurtleDisplayer implements ComponentBuilder{
 	private static final String TURTLE_IMAGE = "turtleScaled.png";
 	private static final String DEFAULT_BACKGROUND_COLOR = "#9999FF";
-	private static final double TURTLE_SIZE = 50;
 	private static final double DEFAULT_WINDOW_X = IDEBuilder.DISPLAY_WIDTH;
 	private static final double DEFAULT_WINDOW_Y = IDEBuilder.DISPLAY_HEIGHT;
 	private static final double ERROR_MESSAGE_OFFSET = 5;
@@ -43,20 +42,26 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private static final Paint ERROR_BOX_COLOR = Color.RED;
 	private static final Paint MESSAGE_BOX_COLOR = Color.CORNFLOWERBLUE;
 	private static final double MESSAGE_OFFSET = 3;
-	private static Pane pane = new Pane();
-	private static ArrayList<ImageView> turtles = new ArrayList<ImageView>();
-	private static HashMap<ImageView, Set<Line>> lineMap=  new HashMap<ImageView, Set<Line>>();
-	private static Text errorMessage;
-	private static Rectangle redBox;
-	private static Text dmessage;
-	private static Rectangle box;
-	private static Boolean turtleHidden = false;
-
+	
+	private Pane pane = new Pane();
+	private ArrayList<ImageView> turtles = new ArrayList<ImageView>();
+	private HashMap<ImageView, Set<Line>> lineMap=  new HashMap<ImageView, Set<Line>>();
+	private Text errorMessage;
+	private Rectangle redBox;
+	private Text dmessage;
+	private Rectangle box;
+	private Boolean turtleHidden = false;
+	private double turtleSize = 50;
+	private Boolean overridePenColor = false;
+	private Paint penColor = Paint.valueOf("#FFFFFF");
+	private IDEBuilder builder;
+ 
 	/**
 	 * TurtleDisplayer
 	 * sets background color, resets turtle to starting position, starts animation keyframe
 	 */
-	public TurtleDisplayer() {
+	public TurtleDisplayer(IDEBuilder b) {
+		builder = b;
 		setBackgroundColor(DEFAULT_BACKGROUND_COLOR);
 		reset();
 		//changeImage("POKEturtleScaled.png");
@@ -99,6 +104,17 @@ public class TurtleDisplayer implements ComponentBuilder{
 		Color background_color = Color.valueOf(hexColor);
 		pane.setBackground(new Background(new BackgroundFill(background_color, null, null)));
 	}
+	
+	/**
+	 * override pen color
+	 */
+	public void overridePenColor(Color color, Boolean override){
+		overridePenColor = override;
+		if(overridePenColor){
+			penColor = color;
+			builder.enterConsoleCommand("fd 0");
+		}
+	}
 
 	/**
 	 * eraseCurrentDisplay - erases the current display completely
@@ -110,29 +126,24 @@ public class TurtleDisplayer implements ComponentBuilder{
 	}
 
 	/**
-	 * drawNewDisplay - draws new display
+	 * drawNewDisplay - draws new display from set of turtles
 	 * @param Set<turtle>
 	 */
-	//	private void drawNewDisplay(Set<Turtle> s, sLogoValid v){
-	//	    for(Turtle t : s){
-	//	    	ImageView turtleView = drawTurtle(t.getX() + center_x, -1 * t.getY() + center_y, t.getAngle());
-	//	    	pane.getChildren().add(turtleView);
-	//	        if(!t.getLinesSet.isEmpty()){
-	//	        	lineMap.put(turtleView, t.getLinesSet);
-	//	            drawLines(t.getLinesSet);
-	//	        }
-	//	    }
-	//	}
 	private void drawNewDisplay(Set<Turtle> s, sLogoValid v){
 		if(v.getError()){
 			displayError(v.getMyStringValue());
 		}
+		else{
+			displayMessage(v.getMyStringValue());
+		}
 		for(Turtle t : s){
 			ImageView tempTurtle = t.getTurtle();
-			//System.out.println(tempTurtle.getX());
-			//System.out.println(tempTurtle.getY());
-			tempTurtle.setX(tempTurtle.getX() + center_x - TURTLE_SIZE/2);
-			tempTurtle.setY(-1 * tempTurtle.getY() + center_y - TURTLE_SIZE/2);
+			Image tempImage = tempTurtle.getImage();
+			if(!(tempImage == null)){
+				turtleSize = tempImage.getWidth();
+			}	
+			tempTurtle.setX(tempTurtle.getX() + center_x - turtleSize/2);
+			tempTurtle.setY(-1 * tempTurtle.getY() + center_y - turtleSize/2);
 			pane.getChildren().add(tempTurtle);
 			turtles.add(tempTurtle);
 			if(!t.getTraces().isEmpty()){
@@ -153,6 +164,9 @@ public class TurtleDisplayer implements ComponentBuilder{
 			tempLine.setStartY(-1 * l.getStartY() + center_y);
 			tempLine.setEndX(l.getEndX() + center_x);
 			tempLine.setEndY(-1 * l.getEndY() + center_y);
+			if(overridePenColor){
+				tempLine.setStroke(penColor);
+			}
 			pane.getChildren().add(tempLine);
 			pane.getChildren().get(pane.getChildren().size()-1).toBack();
 		}		
@@ -160,6 +174,7 @@ public class TurtleDisplayer implements ComponentBuilder{
 
 	/**
 	 * drawTurtle - draws a single turtle at specified coordinates and angle
+	 * NOTE: ONLY USED FOR RESETTING IN BEGINNING..
 	 * @param x (x location)
 	 * @param y (y location)
 	 * @param angle (angle in degrees)
@@ -167,8 +182,8 @@ public class TurtleDisplayer implements ComponentBuilder{
 	private ImageView drawTurtle(double x, double y, double angle) {
 		Image turtleImage = new Image(getClass().getClassLoader().getResourceAsStream(TURTLE_IMAGE));
 		ImageView turtleView = new ImageView(turtleImage);
-		turtleView.setX(x-TURTLE_SIZE/2);
-		turtleView.setY(y-TURTLE_SIZE/2);
+		turtleView.setX(x-turtleSize/2);
+		turtleView.setY(y-turtleSize/2);
 		turtleView.setRotate(angle);
 		turtles.add(turtleView);
 		return turtleView;
@@ -259,8 +274,8 @@ public class TurtleDisplayer implements ComponentBuilder{
 	 * Tests the program with other part's components
 	 */
 	private void testTurtleDisplayer(){
-		Turtle testTurtle = new Turtle(50,50,0);
-		Turtle testTurtle2 = new Turtle(-50,50,0);
+		Turtle testTurtle = new Turtle(50,50,0,0);
+		Turtle testTurtle2 = new Turtle(-50,50,0,0);
 		Set<Turtle> testTurtleSet = new HashSet<Turtle>();
 		testTurtleSet.add(testTurtle);
 		testTurtleSet.add(testTurtle2);
@@ -276,5 +291,5 @@ public class TurtleDisplayer implements ComponentBuilder{
 		testLineSet.add(testLine);
 		testLineSet.add(testLine2);
 		drawLines(testLineSet);
-	}
+	} 
 }

@@ -1,5 +1,6 @@
 package backEnd;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Set;
 * 
 */
 public interface ModelModifiable {
-    /*
+    /* 
     * Adds a variable from the model's String -> Object HashMap
     */
     public double addVariable(String newVar, Object obj);
@@ -19,8 +20,8 @@ public interface ModelModifiable {
     public double deleteVariable(String toDelete);
     
     public sLogoValid getVariable(String name);
-    	
-	public Set<Turtle> getTurtlesToModify();
+    	 
+	public Map<Integer, Turtle> getTurtlesToModify();
 
     public Set<Turtle> getTurtles();
     
