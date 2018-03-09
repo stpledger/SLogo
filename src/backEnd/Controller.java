@@ -26,8 +26,12 @@ public class Controller{
         myModel = model;
     }
 
-
     public sLogoValid create(String command, String[] args){
+        return create (command, args, 0);
+    }
+
+
+    public sLogoValid create(String command, String[] args, int turtleID){
         CommandGroup newCommand;
         if(TURTLE_MOVE_COMMANDS.contains(command)){
             newCommand = new TurtleMoveCommand(command, args, myModel);
