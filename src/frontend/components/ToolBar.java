@@ -66,6 +66,9 @@ public class ToolBar implements ComponentBuilder{
 		
 		languagePicker.getItems().addAll(languages);
 		languagePicker.setValue("English");
+		languagePicker.setOnAction(e -> {
+			builder.update();
+		});
 		toAdd.add(languagePicker);
 		
 		selectColor.setOnAction(this::createColorPickerWindow);
@@ -77,7 +80,6 @@ public class ToolBar implements ComponentBuilder{
 		selectImage.setOnAction(this::updateImagePath);
 		toAdd.add(selectImage);
 
-		
 		bar.getChildren().addAll(toAdd);
 	}
 	
