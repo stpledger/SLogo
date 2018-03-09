@@ -25,13 +25,14 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	public Model() {
 		myModel = new HashMap<>();
-
 		myPreviousCommands = new ArrayList<>();
 		myTurtles = new HashMap<>();
 		myModel.put("Turtle" + 0, new Turtle(0,0,0,0));
 		myModel.put("Turtle" + 1, new Turtle(100,0,0,1));
+		myModel.put("Turtle" + 2, new Turtle(200,0,0,1));
 		myTurtles.put(0, (Turtle)myModel.get("Turtle0"));
 		myTurtles.put(1, (Turtle)myModel.get("Turtle1"));
+		myTurtles.put(2, (Turtle)myModel.get("Turtle2"));
 		initializeShapeChoices();
 		initializeColorChoices();
 	}
