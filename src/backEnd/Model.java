@@ -35,7 +35,7 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	public Map<Integer, List<Double>> getPalette(){
 		return Collections.unmodifiableMap(myAvailableColors);
-	}
+	} 
 	
 	public List<Double> getColorByIndex(int i) {
 		if (myAvailableColors.containsKey(i)) {

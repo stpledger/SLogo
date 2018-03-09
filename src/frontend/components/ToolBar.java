@@ -106,7 +106,7 @@ public class ToolBar implements ComponentBuilder{
 				
 			});
 			pallete_box.getChildren().add(colorB);
-		}
+		} 
 		
 //		ColorPicker picker = new ColorPicker();
 		Scene pickerScene = new Scene(pallete_box);

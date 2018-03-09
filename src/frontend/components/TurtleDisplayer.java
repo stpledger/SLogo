@@ -278,5 +278,5 @@ public class TurtleDisplayer implements ComponentBuilder{
 		testLineSet.add(testLine);
 		testLineSet.add(testLine2);
 		drawLines(testLineSet);
-	}
+	} 
 }

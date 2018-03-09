@@ -64,7 +64,7 @@ public class SideBar implements ComponentBuilder {
 		}
 		
 		host.getChildren().add(comp);
-	}
+	} 
 
 	public void update() {
 		host.getChildren().clear();

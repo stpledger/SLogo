@@ -11,7 +11,7 @@ import java.util.Set;
 public interface ModelViewable {
     /*
     * Returns a set of all ImageView objects to display on the View
-    */
+    */ 
     public Set<Turtle> getTurtles();
     
     /*
