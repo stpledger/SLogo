@@ -86,8 +86,8 @@ public class IDEBuilder implements SceneBuilder, View{
 		for (String s: side.getModel().getCurrentVariables().keySet()) {
 			Object temp = (side.getModel().getCurrentVariables().get(s));
 			if (temp instanceof Turtle) {
-				Turtle t = (Turtle)t;
-				t.setFilePath(filepath);
+				Turtle t = (Turtle) temp;
+				t.setTurtleImage(filepath);
 				break;
 			}
 		}

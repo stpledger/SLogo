@@ -129,7 +129,8 @@ public class ToolBar implements ComponentBuilder{
 		}
 		if (mimetype.contains("image")) {
 		    builder.enterConsoleCommand("changeImage " + turtleImagePicker.getValue() + " " + f.getAbsolutePath());
-		    builder.setTurtleImage(turtleImagePicker.getValue(), f.getAbsolutePath())
+		    builder.setTurtleImage(turtleImagePicker.getValue(), f.getPath().split("/")[f.getPath().split("/").length-1]);
+		    builder.enterConsoleCommand("fd 0");
 		} else {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Invalid Image");
