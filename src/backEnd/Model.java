@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 
 public class Model implements ModelModifiable, ModelViewable {
@@ -68,6 +69,17 @@ public class Model implements ModelModifiable, ModelViewable {
 	public void addTurtle(int index, Turtle t) {
 		myModel.put("Turtle"+index, t);
 		myTurtles.put(index, t);
+	}
+	
+	public void clearAllTurtles() {
+		myTurtles.clear();
+		for (String s : myModel.keySet()) {
+			if (myModel.get(s) instanceof Turtle) {
+				myModel.remove(s);
+			}
+		}
+		myModel.put("Turtle" + 0, new Turtle(0,0,0,0));
+		myTurtles.put(0, (Turtle)myModel.get("Turtle0"));
 	}
 	
 	protected void addColor(int index, ArrayList<Double> rgb) {
