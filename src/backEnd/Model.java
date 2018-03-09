@@ -153,4 +153,9 @@ public class Model implements ModelModifiable, ModelViewable {
 		myPreviousCommands.add(0,  command);
 	}
 
+	@Override
+	public void setMyCurrentColorIndex(int i) {
+		myCurrentColorIndex = i;
+	}
+
 }

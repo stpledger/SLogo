@@ -27,4 +27,5 @@ public interface ModelViewable {
     public Map<Integer, List<Double>> getPalette();
     
     public int getMyCurrentColorIndex();
+    public void setMyCurrentColorIndex(int i);
 }
