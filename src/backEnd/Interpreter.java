@@ -2,6 +2,7 @@ package backEnd;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Properties;
 import java.util.Queue;
@@ -27,6 +28,7 @@ public class Interpreter {
 	}
 	
 	public sLogoValid interpret(String s) {
+		System.out.println("Interpret: " + s );
 		if(errorCheck(s).getError()) return errorCheck(s);
 		//Create Instance Variables
 		ArrayList<String> tempArgs = new ArrayList<String>(Arrays.asList(s.trim().split("\\s+")));
@@ -37,14 +39,13 @@ public class Interpreter {
 			if(myLanguageProperties.containsKey(tempArg)) {
 				tempArg = myShortCommands.getProperty(myLanguageProperties.getProperty(tempArg));
 			}
-			//TODO: Add check for user defined commands;
 			args.add(tempArg);
 		}
 		if(!args.isEmpty()) {
 		//Check to see if there is a user defined command
-		if(!myModel.getVariable(args.get(0)).getError()) {
+		if(checkUserDefinedCommand(args.get(0))) {
 			mySlogoValid = interpretUserCommand(args);
-			if(!myQueue.isEmpty()) interpret(myQueue.remove());
+			if(!myQueue.isEmpty()) { interpret(myQueue.remove());}
 			return mySlogoValid;
 		}
 		//Check to see if the first argument is valid
@@ -82,6 +83,23 @@ public class Interpreter {
 		return mySlogoValid;
 	}
 	
+	private boolean checkUserDefinedCommand(String arg) {
+		try {
+			sLogoValid tempSlogoValid = myModel.getVariable(arg);
+			if(tempSlogoValid.getError()) return false;
+			try {
+				Double.parseDouble(tempSlogoValid.getMyStringValue());
+				System.out.println(arg);
+				return false;
+			} catch(Exception e ) {
+				return true;
+			}
+		} catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}
+	}
+
 	private sLogoValid interpretAskWith(ArrayList<String> args) {
 		// TODO Auto-generated method stub
 		return null;
@@ -122,7 +140,9 @@ public class Interpreter {
 		//Make sure the command can be accessed from the model
 		tempSlogoValid = myModel.getVariable(myUserCommand);
 		if(tempSlogoValid.getError()) return tempSlogoValid;
-		ArrayList<String> myCommandInput = (ArrayList<String>) Arrays.asList(tempSlogoValid.getMyStringValue().trim().split("//s+"));
+		String[] t = tempSlogoValid.getMyStringValue().trim().split(" ");
+		ArrayList<String> myCommandInput = new ArrayList<String>();
+		myCommandInput.addAll(Arrays.asList(t));
 		//Get all of the variables defined in the userCommand
 		if(!myCommandInput.remove(0).equals("[")) return new sLogoValid(true, "Model Error: User Command defined incorrectly. Expected variable list");
 		while(!myCommandInput.get(0).equals("]")){
@@ -163,7 +183,9 @@ public class Interpreter {
 		//Map all of the defined variables
 		int count = 0;
 		for(String var : myCommandVariables) {
-			tempSlogoValid = interpret("set " + var + " " + myInputVariables.get(count));
+			sLogoValid temp = new sLogoValid();
+			temp.setMyDoubleValue(Double.parseDouble(myInputVariables.get(count)));
+			myModel.addVariable(var, temp);
 			count++;
 			if(tempSlogoValid.getError()) return tempSlogoValid;
 		}
@@ -179,7 +201,6 @@ public class Interpreter {
 	private sLogoValid makeUserDefinedComand(ArrayList<String> args) {
 		sLogoValid tempSlogoValid = new sLogoValid();
 		ArrayList<String> myInputArgs = args;
-		System.out.println(args);
 		myInputArgs.remove(0);
 		ArrayList<String> myCommandStructure = new ArrayList<String>();
 		String myCommand = myInputArgs.remove(0);
@@ -192,9 +213,8 @@ public class Interpreter {
 			int internalLists = -1; 
 			//Check for a variable list
 			while(true) {
-				System.out.println(i + ": " + myInputArgs.toString() + " : " + internalLists);
 				if(internalLists == 0 && myInputArgs.get(0).equals("]")) {
-					myInputArgs.remove(0);
+					myCommandStructure.add(myInputArgs.remove(0));
 					break;
 				}
 				if(myInputArgs.get(0).equals("[")) { internalLists += 1; }
@@ -203,7 +223,9 @@ public class Interpreter {
 				if(myInputArgs.isEmpty()) return new sLogoValid(true, "Expected end list delimiter" + args);
 			}
 		}
-		myModel.addVariable(myCommand, standardString(myCommandStructure));
+		sLogoValid temp = new sLogoValid();
+		temp.setMyStringValue(standardString(myCommandStructure));
+		myModel.addVariable(myCommand, temp);
 		if(!myInputArgs.isEmpty()) myQueue.add(standardString(myInputArgs));
 		return tempSlogoValid;
 		
@@ -237,15 +259,16 @@ public class Interpreter {
 		if(expectedLength < 1) return new sLogoValid(true, "Syntax not found: " + args.get(0));
 		//Move the initial command from input to output
 		myCommandArr.add(myInputArgs.remove(0));
+		System.out.println(myCommandArr.toString() + " " + myInputArgs.toString() + " " + expectedLength);
 		//Handle everything after the initial command
 		while(myCommandArr.size() < expectedLength) {
 			//move the argument from output array to local variable
 			String tempArg = myInputArgs.remove(0);
 			//Check if the syntax match with defining a variable 
 			if(myCommandArr.contains("set") && tempArg.contains(":") && myCommandArr.indexOf("set") == myCommandArr.size()-1) {myCommandArr.add(tempArg); continue;}
-			//Check if the value is a double or a variable pathed to a double
-			if(!doubleCheck(tempArg).getError()) {myCommandArr.add(doubleCheck(tempArg).getMyStringValue());}	
-			//TODO: implement the same thing for user defined commands
+			//Check if the value is a double or a variable pathed to a double 
+			System.out.println(tempArg + " " + doubleCheck(tempArg));
+			if(!doubleCheck(tempArg).getError()) {myCommandArr.add(doubleCheck(tempArg).getMyStringValue());}
 			//Check if the value is another command
 			else if(myShortCommands.containsValue(tempArg)) { //TODO: Add check for user defined commands
 				int myInternalSyntaxLength = getCommandSyntaxLength(tempArg);
