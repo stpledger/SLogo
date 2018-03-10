@@ -49,7 +49,7 @@ import backEnd.sLogoValid;
  *
  */
 public class Console implements ComponentBuilder{
-	private static final double BUTTON_SIZE = 75;
+	private static final double BUTTON_SIZE = 100;
 	private HBox box = new HBox();
 	private String commands;
 	private TextArea prompt = new TextArea();
@@ -108,14 +108,16 @@ public class Console implements ComponentBuilder{
 		buttonMap.put(pdButton, "PenDown");
 		
 		// BEGIN JANK "WE DON'T HAVE OUR BACKEND BUT WANT TO ADD FEATURES SECTION"
-		Button addTurtle = new Button("Make Turtle");
+		Button addTurtle = new Button(uiResources.getString("MakeTurtle"));
+		buttonMap.put(addTurtle, "MakeTurtle");
 		addTurtle.setOnAction(e -> {
 			m.addTurtle(index, new Turtle(etXLoc,0,0,index));
 			index++;
 			etXLoc = etXLoc + 100;
 			run("tell " + index);
 		});
-		Button remTurtle = new Button("Rem Turtle");
+		Button remTurtle = new Button(uiResources.getString("RemoveTurtle"));
+		buttonMap.put(remTurtle, "RemoveTurtle");
 		remTurtle.setOnAction(e -> {
 			m.clearAllTurtles();
 			index = 1;
@@ -314,18 +316,19 @@ public class Console implements ComponentBuilder{
 		language = lang;
 		commandResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_COMMAND + language);
 		uiResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_UI + language);
-		updateButtons();
+		updateButtonLanguage();
 	}
 
 	/**
 	 * updates all button text
 	 */
-	private void updateButtons(){
+	private void updateButtonLanguage(){
 		for(Button b : buttonMap.keySet()){
 			String propKey = buttonMap.get(b);
 			b.setText(uiResources.getString(propKey));
 			if(!propKey.equals("saveButton") && !propKey.equals("clearButton") 
-					&& !propKey.equals("openButton") && !propKey.equals("run")){
+					&& !propKey.equals("openButton") && !propKey.equals("run") 
+					&& !propKey.equals("MakeTurtle") && !propKey.equals("RemoveTurtle")){
 				loopCom = commandResources.getString(propKey).split("\\|")[0];
 				if(propKey.equals("Forward") || propKey.equals("Backward")){
 					loopCom = loopCom + " 20";
@@ -359,7 +362,9 @@ public class Console implements ComponentBuilder{
 		interpreter.setLanguage(language);
 		sLogoValid retMessage = interpreter.interpret(com);
 		if(!retMessage.getError()){
-			builder.addCommandHistory(com);
+			if(!com.equals("fd 0")){
+				builder.addCommandHistory(com);
+			}
 			Map<String, Object> variableMap = model.getCurrentVariables();
 			builder.update();
 			Set<Turtle> turtleSet = new HashSet<Turtle>();

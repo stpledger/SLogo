@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import com.sun.swing.internal.plaf.metal.resources.metal;
+
 import backEnd.Interpreter;
 import backEnd.Model;
 import backEnd.Turtle;
@@ -31,19 +33,20 @@ public class IDEBuilder implements SceneBuilder, View{
 	private SideBar side;
 	private TurtleDisplayer turtleDisplay;
 	private Console console;
+	private Model m;
 	private BorderPane layout = new BorderPane();
 	private ResourceBundle commandResources;
 	
 	public IDEBuilder() {
 		toolbar = new ToolBar(this);
-		Model m = new Model();
+		m = new Model();
 		Interpreter interpreter = new Interpreter(m);
 		side = new SideBar(m, this);
-		turtleDisplay = new TurtleDisplayer();
+		turtleDisplay = new TurtleDisplayer(this);
 		console = new Console(turtleDisplay, m, interpreter, this);
+		layout.setCenter(turtleDisplay.getNode());
 		layout.setRight(side.getNode());
 		layout.setTop(toolbar.getNode());
-		layout.setCenter(turtleDisplay.getNode());
 		layout.setBottom(console.getNode());
 		commandResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE_COMMAND + toolbar.getLanguage());
 		update();
@@ -102,7 +105,13 @@ public class IDEBuilder implements SceneBuilder, View{
 		setBackgroundColor(side.getModel().getMyCurrentColorIndex());
 		side.update();
 		toolbar.update(side.getModel());
+		toolbar.updateButtonLanguages();
+		side.updateLanguageUI();
 //		if (toolbar.getCurrentImageSelected().length() > 0) {turtleDisplay.changeImage(toolbar.getCurrentImageSelected());}
+	}
+	
+	public String getLanguage() {
+		return toolbar.getLanguage();
 	}
 	
 	public void updateColorIndex(int i) {
@@ -118,6 +127,14 @@ public class IDEBuilder implements SceneBuilder, View{
 	
 	public void displayError(String s){
 		turtleDisplay.displayError(s);
+	}
+	
+	public void overridePenColor(Color color, Boolean override){
+		turtleDisplay.overridePenColor(color, override);
+	}
+
+	public void updatePenColor(Color value) {
+		m.setPenColor(value);
 	}
 	
 //	public void updateDisplayerImage(String s){

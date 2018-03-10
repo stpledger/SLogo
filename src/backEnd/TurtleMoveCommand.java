@@ -4,12 +4,12 @@ import javafx.scene.image.Image;
 import java.util.Set;
 
 public class TurtleMoveCommand extends CommandGroup {
-	private ModelModifiable myModel;
+	private Turtle Turtle;
 
-	public TurtleMoveCommand(String command, String[] args, ModelModifiable model) {
+	public TurtleMoveCommand(String command, String[] args, Turtle turtle) {
 		super(command, args);
-		myModel = model;
-		this.mySlogoValid = run(command, args, myModel);
+		Turtle = turtle;
+		this.mySlogoValid = run(command, args);
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public class TurtleMoveCommand extends CommandGroup {
 		return this.mySlogoValid;
 	}
 
-	public sLogoValid run(String command, String[] args, ModelModifiable myModel){
+	public sLogoValid run(String command, String[] args){
 		switch (command){
 			case "fd":
 				return forward(args);
@@ -54,136 +54,97 @@ public class TurtleMoveCommand extends CommandGroup {
 	}
 
 	private sLogoValid forward(String[] args){
-		Set<Turtle> turtles = myModel.getTurtles();
-		for(Turtle t : turtles){
-			t.move(Double.parseDouble(args[0]));
-		}
+		Turtle.move(Double.parseDouble(args[0]));
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(Double.parseDouble(args[0]));
 		return temp;
 	}
 
 	private sLogoValid back(String[] args){
-		Set<Turtle> turtles = myModel.getTurtles();
-		for(Turtle t : turtles){
-			t.move(-1 * Double.parseDouble(args[0]));
-		}
+		Turtle.move(-1 * Double.parseDouble(args[0]));
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(Double.parseDouble(args[0]));
 		return temp;
 	}
 
 	private sLogoValid left(String[] args){
-		Set<Turtle> turtles = myModel.getTurtles();
-		for(Turtle t : turtles){
-			t.rotate(-1 * Double.parseDouble(args[0]));
-		}
+		Turtle.rotate(-1 * Double.parseDouble(args[0]));
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(Double.parseDouble(args[0]));
 		return temp;
 	}
 
 	private sLogoValid right(String[] args){
-		Set<Turtle> turtles = myModel.getTurtles();
-		for(Turtle t : turtles){
-			t.rotate(Double.parseDouble(args[0]));
-		}
+		Turtle.rotate(Double.parseDouble(args[0]));
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(Double.parseDouble(args[0]));
 		return temp;
 	}
 
 	private sLogoValid setHeading(String[] args){
-		Set<Turtle> turtles = myModel.getTurtles();
 		double out = 0;
-		for(Turtle t : turtles){
-			out = t.rotateTo(Double.parseDouble(args[0]));
-		}
+		out = Turtle.rotateTo(Double.parseDouble(args[0]));
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(out);
 		return temp;
 	}
 
 	private sLogoValid towards(String[] args){
-		Set<Turtle> turtles = myModel.getTurtles();
 		double out = 0;
-		for(Turtle t : turtles){
-			out = t.rotateTowards(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
-		}
+		out = Turtle.rotateTowards(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(out);
 		return temp;
 	}
 
 	private sLogoValid goTo(String[] args) {
-		Set<Turtle> turtles = myModel.getTurtles();
 		double out = 0;
-		for (Turtle t : turtles) {
-			out = t.moveTo(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
-		}
+		out = Turtle.moveTo(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(out);
 		return temp;
 	}
 
 	private sLogoValid penDown() {
-		Set<Turtle> turtles = myModel.getTurtles();
-		for (Turtle t : turtles) {
-			t.penDown();
-		}
+		Turtle.penDown();
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(1);
 		return temp;
 	}
 
 	private sLogoValid penUp() {
-		Set<Turtle> turtles = myModel.getTurtles();
-		for (Turtle t : turtles) {
-			t.penUp();
-		}
+		Turtle.penUp();
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(0);
 		return temp;
 	} 
 
 	private sLogoValid hideTurtle() {
-		Set<Turtle> turtles = myModel.getTurtles();
-		for (Turtle t : turtles) {
-			t.hideTurtle();
-		}
+		Turtle.hideTurtle();
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(0);
 		return temp;
 	}
 
 	private sLogoValid showTurtle() {
-		Set<Turtle> turtles = myModel.getTurtles();
-		for (Turtle t : turtles) {
-			t.showTurtle();
-		}
+		Turtle.showTurtle();
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(1);
 		return temp;
 	}
 
 	private sLogoValid home() {
-		Set<Turtle> turtles = myModel.getTurtles();
 		double out = 0;
-		for (Turtle t : turtles) {
-			out = t.moveTo(0,0);
-		}
+		out = Turtle.moveTo(0,0);
 		sLogoValid temp = new sLogoValid();
 		temp.setMyDoubleValue(out);
 		return temp;
 	}
 
 	private sLogoValid clearScreen() {
-		Set<Turtle> turtles = myModel.getTurtles();
 		sLogoValid temp = home();
 		setHeading(new String[]{"0"});
-		for (Turtle t : turtles) {
-			t.clearTraces();
-		}
+		Turtle.clearTraces();
 		return temp;
 	}
 }

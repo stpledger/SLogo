@@ -3,11 +3,11 @@ package backEnd;
 import java.util.Set;
 
 public class TurtleQueryCommand extends CommandGroup {
-	private ModelModifiable myModel;
+	private Turtle Turtle;
 
-	public TurtleQueryCommand(String command, String[] args, ModelModifiable model) {
+	public TurtleQueryCommand(String command, String[] args, Turtle turtle) {
 		super(command, args);
-		myModel = model;
+		Turtle = turtle;
 		this.mySlogoValid = run(command);
 	} 
 
@@ -39,10 +39,7 @@ public class TurtleQueryCommand extends CommandGroup {
 	private sLogoValid xcor(){
 		sLogoValid temp = new sLogoValid();
 		double out = 0;
-		Set<Turtle> turtles = myModel.getTurtles();
-		for(Turtle t : turtles){
-			out = t.myXPos;
-		}
+		out = Turtle.myXPos;
 		temp.setMyDoubleValue(out);
 		return temp;
 	}
@@ -50,10 +47,7 @@ public class TurtleQueryCommand extends CommandGroup {
 	private sLogoValid ycor(){
 		sLogoValid temp = new sLogoValid();
 		double out = 0;
-		Set<Turtle> turtles = myModel.getTurtles();
-		for(Turtle t : turtles){
-			out = t.myYPos;
-		}
+		out = Turtle.myYPos;
 		temp.setMyDoubleValue(out);
 		return temp;
 	}
@@ -61,10 +55,7 @@ public class TurtleQueryCommand extends CommandGroup {
 	private sLogoValid heading(){
 		sLogoValid temp = new sLogoValid();
 		double out = 0;
-		Set<Turtle> turtles = myModel.getTurtles();
-		for(Turtle t : turtles){
-			out = t.myAngle;
-		}
+		out = Turtle.myAngle;
 		temp.setMyDoubleValue(out);
 		return temp;
 	}
@@ -72,11 +63,8 @@ public class TurtleQueryCommand extends CommandGroup {
 	private sLogoValid penDown(){
 		sLogoValid temp = new sLogoValid();
 		double out = 0;
-		Set<Turtle> turtles = myModel.getTurtles();
-		for(Turtle t : turtles){
-			if(t.isPenDown){
-				out = 1;
-			}
+		if(Turtle.isPenDown){
+			out = 1;
 		}
 		temp.setMyDoubleValue(out);
 		return temp;
@@ -85,11 +73,8 @@ public class TurtleQueryCommand extends CommandGroup {
 	private sLogoValid showing(){
 		sLogoValid temp = new sLogoValid();
 		double out = 0;
-		Set<Turtle> turtles = myModel.getTurtles();
-		for(Turtle t : turtles){
-			if(t.isVisible){
-				out = 1;
-			}
+		if(Turtle.isVisible){
+			out = 1;
 		}
 		temp.setMyDoubleValue(out);
 		return temp;
