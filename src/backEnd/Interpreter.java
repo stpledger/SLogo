@@ -166,11 +166,6 @@ public class Interpreter {
 		return tempSlogoValid;
 	}
 
-	private boolean modelContainsCommand(ModelModifiable myModel2, String string) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	private sLogoValid makeUserDefinedComand(ArrayList<String> args) {
 		// TODO Auto-generated method stub
 		return null;
