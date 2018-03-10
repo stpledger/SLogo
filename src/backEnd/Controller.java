@@ -1,5 +1,6 @@
 package backEnd;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -9,12 +10,14 @@ import java.util.Arrays;
  * @author stpledger
  */
 public class Controller{
-    private final ArrayList<String> TURTLE_MOVE_COMMANDS = new ArrayList<String>(Arrays.asList("fd", "bk", "lt", "rt", "seth", "towards", "goto", "pd", "pu", "st", "ht", "home", "cs"));
-    private final ArrayList<String> TURTLE_QUERIES_COMMANDS = new ArrayList<String>(Arrays.asList("xcor", "ycor", "heading", "pendownp", "showingp"));
-    private final ArrayList<String> MATH_COMMANDS = new ArrayList<String>(Arrays.asList("sum", "difference", "product", "quotient", "remainder", "minus", "random", "sin", "cos", "tan", "atan", "log", "pow", "pi"));
-    private final ArrayList<String> BOOLEAN_COMMANDS = new ArrayList<String>(Arrays.asList("lessp", "greaterp", "equalp", "notequalp", "and", "or", "not"));
-    private final ArrayList<String> VARIABLE_COMMANDS = new ArrayList<String>(Arrays.asList("make", "set"));
-    private final ArrayList<String> USER_DEFINED_COMMANDS = new ArrayList<String>(Arrays.asList("to"));
+    private final ArrayList<String> TURTLE_MOVE_COMMANDS = new ArrayList<>(Arrays.asList("fd", "bk", "lt", "rt", "seth", "towards", "goto", "pd", "pu", "st", "ht", "home", "cs"));
+    private final ArrayList<String> TURTLE_QUERIES_COMMANDS = new ArrayList<>(Arrays.asList("xcor", "ycor", "heading", "pendownp", "showingp"));
+    private final ArrayList<String> MATH_COMMANDS = new ArrayList<>(Arrays.asList("sum", "difference", "product", "quotient", "remainder", "minus", "random", "sin", "cos", "tan", "atan", "log", "pow", "pi"));
+    private final ArrayList<String> BOOLEAN_COMMANDS = new ArrayList<>(Arrays.asList("lessp", "greaterp", "equalp", "notequalp", "and", "or", "not"));
+    private final ArrayList<String> VARIABLE_COMMANDS = new ArrayList<>(Arrays.asList("make", "set"));
+    private final ArrayList<String> USER_DEFINED_COMMANDS = new ArrayList<>(Arrays.asList("to"));
+    private final ArrayList<String> DISPLAY_COMMANDS = new ArrayList<>(Arrays.asList("setbg", "setpc", "setps", "setsh", "setpalatte", "pc", "sh"));
+    private final ArrayList<String> MULTIPLE_TURTLE_COMMANDS = new ArrayList<>(Arrays.asList("id", "turtles", "tell", "ask", "askwith"));
 
     private ModelModifiable myModel;
     		
@@ -27,17 +30,18 @@ public class Controller{
     }
 
     public sLogoValid create(String command, String[] args){
-        return create (command, args, 0);
+        return create (command, args, (int)myModel.getActiveTurtleID());
     }
 
 
     public sLogoValid create(String command, String[] args, int turtleID){
         CommandGroup newCommand;
+        Turtle turtle = myModel.getTurtlesToModify().get(turtleID);
         if(TURTLE_MOVE_COMMANDS.contains(command)){
-            newCommand = new TurtleMoveCommand(command, args, myModel);
+            newCommand = new TurtleMoveCommand(command, args, turtle);
         }
         else if(TURTLE_QUERIES_COMMANDS.contains(command)){
-            newCommand = new TurtleQueryCommand(command, args, myModel);
+            newCommand = new TurtleQueryCommand(command, args, turtle);
         }
         else if(MATH_COMMANDS.contains(command)){
             newCommand = new MathCommand(command, args);
@@ -48,9 +52,12 @@ public class Controller{
         else if(VARIABLE_COMMANDS.contains(command) || USER_DEFINED_COMMANDS.contains(command)) {
             newCommand = new VariableCommand(command, args, myModel);
         }
-        /*else if(USER_DEFINED_COMMANDS.contains(command)){
-            newCommand = new UserDefinedCommand(command, args, myModel);
-        }*/
+        else if(DISPLAY_COMMANDS.contains(command)){
+            newCommand = new DisplayCommand(command, args, myModel, turtle);
+        }
+        else if(MULTIPLE_TURTLE_COMMANDS.contains(command)){
+            newCommand = new MultipleTurtleCommand(command, args, myModel);
+        }
         else{
             sLogoValid noCommand = new sLogoValid();
             noCommand.setError(true);

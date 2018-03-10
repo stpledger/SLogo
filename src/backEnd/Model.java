@@ -16,6 +16,7 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	private Map<String, Object> myModel;
 	private Map<Integer, Turtle> myTurtles;
+	private Map<Integer, Turtle> myActiveTurtles;
 	
 	private List<CommandGroup> myPreviousCommands;
 	
@@ -28,8 +29,10 @@ public class Model implements ModelModifiable, ModelViewable {
 		myModel = new HashMap<>();
 		myPreviousCommands = new ArrayList<>();
 		myTurtles = new HashMap<>();
+		myActiveTurtles = new HashMap<>();
 		myModel.put("Turtle" + 0, new Turtle(0,0,0,0));
 		myTurtles.put(0, (Turtle)myModel.get("Turtle0"));
+		myActiveTurtles.put(0, (Turtle)myModel.get("Turtle0"));
 		initializeShapeChoices();
 		initializeColorChoices();
 	}
@@ -57,6 +60,27 @@ public class Model implements ModelModifiable, ModelViewable {
 			throw new IndexOutOfBoundsException("The shapes does not recognize this index.");
 		}
 	}
+
+	public double setActiveTurtles(int[] turtleIDs){
+		Map<Integer, Turtle> tempActiveTurtles = new HashMap<>();
+		double out = 0;
+		for(int i : turtleIDs){
+			if(myTurtles.containsKey(i)){
+				tempActiveTurtles.put(i, myTurtles.get(i));
+			}
+			else{
+				addTurtle(i, new Turtle(0,0,0,0));
+				tempActiveTurtles.put(i, myTurtles.get(i));
+			}
+			out = i;
+		}
+		myActiveTurtles = tempActiveTurtles;
+		return out;
+	}
+
+	public double numOfTurtles(){
+		return myTurtles.size();
+	}
 	
 	public int getMyCurrentColorIndex() {
 		return this.myCurrentColorIndex;
@@ -83,26 +107,32 @@ public class Model implements ModelModifiable, ModelViewable {
 		myTurtles.put(0, (Turtle)myModel.get("Turtle0"));
 	}
 	
-	protected void addColor(int index, ArrayList<Double> rgb) {
+	public void addColor(int index, ArrayList<Double> rgb) {
 		myAvailableColors.put(index, rgb);
 	}
 	
-	protected ArrayList<Integer> getActiveTurtleIDs() {
-		ArrayList<Integer> ID = new ArrayList<>();
-		for (Object o : myModel.values()) {
-			if (o instanceof Turtle) {
-				Turtle t = (Turtle)o;
-				ID.add(t.myID);
-			}
+	public double getActiveTurtleID() {
+		double ID = 0;
+		for(int i : myActiveTurtles.keySet()){
+			ID = i;
 		}
 		return ID;
 	}
 	
-	protected void setPenColor(Paint color) {
+	public void setPenColor(Paint color) {
 		for (Object o : myModel.values()) {
 			if (o instanceof Turtle) {
 				Turtle t = (Turtle)o;
 				t.setPenColor(color);
+			}
+		}
+	}
+
+	public void setPenSize(double size) {
+		for (Object o : myModel.values()) {
+			if (o instanceof Turtle) {
+				Turtle t = (Turtle)o;
+				t.setPenSize(size);
 			}
 		}
 	}
