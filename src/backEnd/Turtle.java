@@ -12,10 +12,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 
+/**
+ * Turtle object class
+ * @author Siyuan
+ *
+ */
 public class Turtle {
-	
-	public static double DISPLAY_HEIGHT = 435;
-	public static double DISPLAY_WIDTH = 1000;
 	
 	private String myTurtleImage = "turtleScaled.png";
 	private ImageView myTurtleDisplay;
@@ -39,16 +41,20 @@ public class Turtle {
 		myTraces = new HashSet<>();
 	}
 
+	/**
+	 * give the frontend the turtle to display
+	 * @return
+	 */
 	public ImageView getTurtle() {
 		return myTurtleDisplay;
 	}
 	
+	/**
+	 * give the frontend traces
+	 * @return traces of this turtle
+	 */
 	public Set<Line> getTraces() {
 		return Collections.unmodifiableSet(myTraces);
-	}
-	
-	public void setImage(Image i) {
-		this.myTurtleDisplay.setImage(i);
 	}
 	
 	private ImageView makeTurtle() {
@@ -63,6 +69,10 @@ public class Turtle {
 		return turtle;
 	}
 	
+	/**
+	 * allow UI to set a turtle image using image's filepath
+	 * @param filepath
+	 */
 	public void setTurtleImage(String filepath) {
 		System.out.println("Path:" + filepath);
 		
@@ -202,6 +212,9 @@ public class Turtle {
 		}
 	}
 	
+	/**
+	 * allow the turtle's information to be displayed by the frontend
+	 */
 	public String toString() {
 		DecimalFormat df = new DecimalFormat("#.###");
 		df.setRoundingMode(RoundingMode.CEILING);

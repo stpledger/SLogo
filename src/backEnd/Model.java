@@ -9,9 +9,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 
+/**
+ * Model class in the Model-View-Controller design pattern, used as a database to save turtles, display elements
+ * and other user saved variables.
+ * @author Siyuan
+ *
+ */
 public class Model implements ModelModifiable, ModelViewable {
 	
 	private Map<String, Object> myModel;
@@ -24,6 +29,9 @@ public class Model implements ModelModifiable, ModelViewable {
 	private int myCurrentShapeIndex = 0;
 	private int myCurrentColorIndex = 4;
 	
+	/**
+	 * default constructor for a model
+	 */
 	public Model() {
 		myModel = new HashMap<>();
 		myPreviousCommands = new ArrayList<>();
@@ -34,10 +42,18 @@ public class Model implements ModelModifiable, ModelViewable {
 		initializeColorChoices();
 	}
 	
+	/**
+	 * allow the view to get the palette, which then can be shown to the user
+	 */
 	public Map<Integer, List<Double>> getPalette(){
 		return Collections.unmodifiableMap(myAvailableColors);
 	} 
 	
+	/**
+	 * allow user to select a color using UI by index
+	 * @param i index of the color
+	 * @return the r,g,b of that color
+	 */
 	public List<Double> getColorByIndex(int i) {
 		if (myAvailableColors.containsKey(i)) {
 			myCurrentColorIndex = i;
@@ -48,6 +64,11 @@ public class Model implements ModelModifiable, ModelViewable {
 		}
 	}
 	
+	/**
+	 * allow user to select a shape using UI by index
+	 * @param i index of the shape
+	 * @return shape represented by an image
+	 */
 	public String getShapeByIndex(int i) {
 		if (myAvailableShapes.containsKey(i)) {
 			myCurrentShapeIndex = i;
@@ -58,19 +79,34 @@ public class Model implements ModelModifiable, ModelViewable {
 		}
 	}
 	
+	/**
+	 * return the index of current color
+	 */
 	public int getMyCurrentColorIndex() {
 		return this.myCurrentColorIndex;
 	}
 	
+	/**
+	 * 
+	 * @return the index of the current shape
+	 */
 	public int getMyCurrentShapeIndex() {
 		return this.myCurrentShapeIndex;
 	}
 	
+	/**
+	 * allow the user to use UI buttons to add a turtle
+	 * @param index index of the turtle
+	 * @param t turtle to be added
+	 */
 	public void addTurtle(int index, Turtle t) {
 		myModel.put("Turtle"+index, t);
 		myTurtles.put(index, t);
 	}
 	
+	/**
+	 * allow the user to use UI buttons to clear all added turtles
+	 */
 	public void clearAllTurtles() {
 		myTurtles.clear();
 		Set<String> tempSet = new HashSet<String>(myModel.keySet());
