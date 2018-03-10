@@ -28,7 +28,6 @@ public class Interpreter {
 	}
 	
 	public sLogoValid interpret(String s) {
-		System.out.println("Interpret: " + s );
 		if(errorCheck(s).getError()) return errorCheck(s);
 		//Create Instance Variables
 		ArrayList<String> tempArgs = new ArrayList<String>(Arrays.asList(s.trim().split("\\s+")));
@@ -89,20 +88,23 @@ public class Interpreter {
 			if(tempSlogoValid.getError()) return false;
 			try {
 				Double.parseDouble(tempSlogoValid.getMyStringValue());
-				System.out.println(arg);
 				return false;
 			} catch(Exception e ) {
 				return true;
 			}
 		} catch(Exception e) {
-			System.out.println(e);
 			return false;
 		}
 	}
 
 	private sLogoValid interpretAskWith(ArrayList<String> args) {
-		// TODO Auto-generated method stub
-		return null;
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = args;
+		ArrayList<String> myConditions = new ArrayList<String>();
+		ArrayList<String> myCommands = new ArrayList<String>();
+		
+		if(!myInputArgs.isEmpty()) myQueue.add(standardString(myInputArgs));
+		return tempSlogoValid;
 	}
 
 	private sLogoValid interpretMultiTurtle(ArrayList<String> args) {
@@ -260,7 +262,6 @@ public class Interpreter {
 		if(expectedLength < 1) return new sLogoValid(true, "Syntax not found: " + args.get(0));
 		//Move the initial command from input to output
 		myCommandArr.add(myInputArgs.remove(0));
-		System.out.println(myCommandArr.toString() + " " + myInputArgs.toString() + " " + expectedLength);
 		//Handle everything after the initial command
 		while(myCommandArr.size() < expectedLength) {
 			//move the argument from output array to local variable
@@ -268,7 +269,6 @@ public class Interpreter {
 			//Check if the syntax match with defining a variable 
 			if(myCommandArr.contains("set") && tempArg.contains(":") && myCommandArr.indexOf("set") == myCommandArr.size()-1) {myCommandArr.add(tempArg); continue;}
 			//Check if the value is a double or a variable pathed to a double 
-			System.out.println(tempArg + " " + doubleCheck(tempArg));
 			if(!doubleCheck(tempArg).getError()) {myCommandArr.add(doubleCheck(tempArg).getMyStringValue());}
 			//Check if the value is another command
 			else if(myShortCommands.containsValue(tempArg)) { //TODO: Add check for user defined commands
