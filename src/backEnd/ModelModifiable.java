@@ -1,5 +1,9 @@
 package backEnd;
 
+import javafx.scene.paint.Paint;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,4 +30,29 @@ public interface ModelModifiable {
     public Set<Turtle> getTurtles();
     
     public void addCommandHistory(CommandGroup command);
+
+    public void setPenColor(Paint color);
+
+    public void addColor(int index, ArrayList<Double> rgb);
+
+    public List<Double> getColorByIndex(int i);
+
+    public void setPenSize(double size);
+
+    public String getShapeByIndex(int i);
+
+    public int getMyCurrentColorIndex();
+
+    public int getMyCurrentShapeIndex();
+
+    public double setActiveTurtles(int[] turtleIDs);
+
+    public double numOfTurtles();
+
+    public double getActiveTurtleID();
+
+
+
+
+
 }
