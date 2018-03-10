@@ -151,10 +151,19 @@ public class Interpreter {
 		//Check to see if we got the right number of variables
 		if(myInputVariables.size() != myCommandVariables.size()) return new sLogoValid(true, "Expected " + myCommandVariables.size() + "arguments but recieved " + myInputVariables.size());
 		//Map all of the defined variables
+		int count = 0;
 		for(String var : myCommandVariables) {
-			
+			tempSlogoValid = interpret("set " + var + " " + myInputVariables.get(count));
+			count++;
+			if(tempSlogoValid.getError()) return tempSlogoValid;
 		}
 		
+		//execute the commands
+		tempSlogoValid = interpret(standardString(myCommands));
+		
+		//check for leftovers
+		if(!myInputArgs.isEmpty()) myQueue.add(standardString(myInputArgs));
+		return tempSlogoValid;
 	}
 
 	private boolean modelContainsCommand(ModelModifiable myModel2, String string) {
