@@ -129,6 +129,7 @@ public class ToolBar implements ComponentBuilder{
         ColorPicker penColorPicker = new ColorPicker();
         penColorPicker.setOnAction(e -> {
         	builder.overridePenColor(penColorPicker.getValue(), true);
+        	//builder.updatePenColor(penColorPicker.getValue());
         	pickerStage.close();
         });
         Scene pickerScene = new Scene(penColorPicker);
@@ -179,7 +180,13 @@ public class ToolBar implements ComponentBuilder{
 			//if (mimetype.contains("image")) {
 			if (f.getPath().contains(".png") || f.getPath().contains(".jpg") || f.getPath().contains(".gif")) {
 				builder.enterConsoleCommand("changeImage " + turtleImagePicker.getValue() + " " + f.getAbsolutePath());
-				builder.setTurtleImage(turtleImagePicker.getValue(), "file:///" + f.getPath().split("/")[f.getPath().split("/").length-1]);
+//				String osName = System.getProperty("os.name").toString();
+//				String filler = "";
+//				if(osName.contains("Windows")){
+//					filler = "file:///";
+//				}
+//				builder.setTurtleImage(turtleImagePicker.getValue(), filler + f.getPath().split("/")[f.getPath().split("/").length-1]);
+				builder.setTurtleImage(turtleImagePicker.getValue(), f.getPath().split("/")[f.getPath().split("/").length-1]);
 				builder.enterConsoleCommand("fd 0");
 			} else {
 				Alert alert = new Alert(AlertType.INFORMATION);
