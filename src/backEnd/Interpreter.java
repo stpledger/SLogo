@@ -111,8 +111,50 @@ public class Interpreter {
 	}
 
 	private sLogoValid interpretUserCommand(ArrayList<String> args) {
-		// TODO Auto-generated method stub
-		return null;
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = args;
+		ArrayList<String> myCommandVariables = new ArrayList<String>();
+		ArrayList<String> myInputVariables = new ArrayList<String>();
+		ArrayList<String> myCommands = new ArrayList<String>();
+		String myUserCommand = myInputArgs.remove(0);
+		//Make sure the command can be accessed from the model
+		tempSlogoValid = myModel.getVariable(myUserCommand);
+		if(tempSlogoValid.getError()) return tempSlogoValid;
+		ArrayList<String> myCommandInput = (ArrayList<String>) Arrays.asList(tempSlogoValid.getMyStringValue().trim().split("//s+"));
+		//Get all of the variables defined in the userCommand
+		if(!myCommandInput.remove(0).equals("[")) return new sLogoValid(true, "Model Error: User Command defined incorrectly. Expected variable list");
+		while(!myCommandInput.get(0).equals("]")){
+			myCommandVariables.add(myCommandInput.remove(0));
+			if(myCommandInput.isEmpty()) return new sLogoValid(true, "Model Error: Expected end to user defined variable command list");
+		}
+		
+		//Get all of the commands defined in the userCommand
+		myCommandInput.remove(0);
+		int internalLists = 0;
+		if(!myCommandInput.remove(0).equals("[")) return new sLogoValid(true, "Model Error: Expected user defined command command list");
+		while(!myCommandInput.get(0).equals("]") && internalLists == 0) {
+			if(myCommandInput.get(0).equals("[")) internalLists++;
+			if(myCommandInput.get(0).equals("]")) internalLists--;
+			myCommands.add(myCommandInput.remove(0));
+			if(myCommandInput.isEmpty()) return new sLogoValid(true, "Model Error: Expected end to user defined command list");
+		}
+		//Get the values of all of the variables
+		if(!myInputArgs.remove(0).equals("[")) return new sLogoValid(true, "Expected list of variables");
+		internalLists = 0;
+		//TODO: make this handle commands within the variables
+		while(!myInputArgs.get(0).equals("]")) {
+			if(myInputArgs.get(0).equals("[")) internalLists++;
+			if(myInputArgs.get(0).equals("]")) internalLists--;
+			myInputVariables.add(myInputArgs.remove(0));
+			if(myInputArgs.isEmpty()) return new sLogoValid(true, "Expected List end delimiter");
+		}
+		//Check to see if we got the right number of variables
+		if(myInputVariables.size() != myCommandVariables.size()) return new sLogoValid(true, "Expected " + myCommandVariables.size() + "arguments but recieved " + myInputVariables.size());
+		//Map all of the defined variables
+		for(String var : myCommandVariables) {
+			
+		}
+		
 	}
 
 	private boolean modelContainsCommand(ModelModifiable myModel2, String string) {
