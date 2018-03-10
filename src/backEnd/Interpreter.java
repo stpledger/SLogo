@@ -41,12 +41,14 @@ public class Interpreter {
 			args.add(tempArg);
 		}
 		if(!args.isEmpty()) {
+		//Check to see if there is a user defined command
+		if(!myModel.getVariable(args.get(0)).getError()) {
+			mySlogoValid = interpretUserCommand(args);
+			if(!myQueue.isEmpty()) interpret(myQueue.remove());
+			return mySlogoValid;
+		}
 		//Check to see if the first argument is valid
 		if(!myLanguageProperties.containsKey(args.get(0))) { return new sLogoValid(true, "Invalid Command: " + args.get(0));} //TODO: Add a check for userDefined Commands
-		//Check for advanced syntax
-		if(modelContainsCommand(myModel, args.get(0))) {
-			mySlogoValid = interpretUserCommand(args);
-		}
 		switch(args.get(0)) {
 		case "tell":
 		case "ask":
@@ -132,21 +134,29 @@ public class Interpreter {
 		myCommandInput.remove(0);
 		int internalLists = 0;
 		if(!myCommandInput.remove(0).equals("[")) return new sLogoValid(true, "Model Error: Expected user defined command command list");
-		while(!myCommandInput.get(0).equals("]") && internalLists == 0) {
-			if(myCommandInput.get(0).equals("[")) internalLists++;
-			if(myCommandInput.get(0).equals("]")) internalLists--;
+		while(true) {
+			if(internalLists == 0 && myCommandInput.get(0).equals("]")) {
+				myCommandInput.remove(0);
+				break;
+			}
+			if(myCommandInput.get(0).equals("[")) { internalLists += 1; }
+			if(myCommandInput.get(0).equals("]")) { internalLists -= 1; }
 			myCommands.add(myCommandInput.remove(0));
-			if(myCommandInput.isEmpty()) return new sLogoValid(true, "Model Error: Expected end to user defined command list");
+			if(myInputArgs.isEmpty()) return new sLogoValid(true, "Model Error: expected end to user list");
 		}
 		//Get the values of all of the variables
 		if(!myInputArgs.remove(0).equals("[")) return new sLogoValid(true, "Expected list of variables");
 		internalLists = 0;
 		//TODO: make this handle commands within the variables
-		while(!myInputArgs.get(0).equals("]")) {
-			if(myInputArgs.get(0).equals("[")) internalLists++;
-			if(myInputArgs.get(0).equals("]")) internalLists--;
+		while(true) {
+			if(internalLists == 0 && myInputArgs.get(0).equals("]")) {
+				myInputArgs.remove(0);
+				break;
+			}
+			if(myInputArgs.get(0).equals("[")) { internalLists += 1; }
+			if(myInputArgs.get(0).equals("]")) { internalLists -= 1; }
 			myInputVariables.add(myInputArgs.remove(0));
-			if(myInputArgs.isEmpty()) return new sLogoValid(true, "Expected List end delimiter");
+			if(myInputArgs.isEmpty()) return new sLogoValid(true, "Expected end list delimiter");
 		}
 		//Check to see if we got the right number of variables
 		if(myInputVariables.size() != myCommandVariables.size()) return new sLogoValid(true, "Expected " + myCommandVariables.size() + "arguments but recieved " + myInputVariables.size());
@@ -167,8 +177,36 @@ public class Interpreter {
 	}
 
 	private sLogoValid makeUserDefinedComand(ArrayList<String> args) {
-		// TODO Auto-generated method stub
-		return null;
+		sLogoValid tempSlogoValid = new sLogoValid();
+		ArrayList<String> myInputArgs = args;
+		System.out.println(args);
+		myInputArgs.remove(0);
+		ArrayList<String> myCommandStructure = new ArrayList<String>();
+		String myCommand = myInputArgs.remove(0);
+		if(myLanguageProperties.containsKey(myCommand) || myShortCommands.containsKey(myCommand)) {
+			return new sLogoValid(true, "Can not define command " + myCommand + " because command already defined");
+		}
+		for(int i = 0; i < 2; i++) {
+			if(!myInputArgs.get(0).equals("[") && i == 0) return new sLogoValid(true, "expected variable list");
+			if(!myInputArgs.get(0).equals("[") && i == 1) return new sLogoValid(true, "expected commands list");
+			int internalLists = -1; 
+			//Check for a variable list
+			while(true) {
+				System.out.println(i + ": " + myInputArgs.toString() + " : " + internalLists);
+				if(internalLists == 0 && myInputArgs.get(0).equals("]")) {
+					myInputArgs.remove(0);
+					break;
+				}
+				if(myInputArgs.get(0).equals("[")) { internalLists += 1; }
+				if(myInputArgs.get(0).equals("]")) { internalLists -= 1; }
+				myCommandStructure.add(myInputArgs.remove(0));
+				if(myInputArgs.isEmpty()) return new sLogoValid(true, "Expected end list delimiter" + args);
+			}
+		}
+		myModel.addVariable(myCommand, standardString(myCommandStructure));
+		if(!myInputArgs.isEmpty()) myQueue.add(standardString(myInputArgs));
+		return tempSlogoValid;
+		
 	}
 
 	/**
