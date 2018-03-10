@@ -116,16 +116,17 @@ public class Interpreter {
 			myTurtleIds.add(Integer.parseInt(myInputArgs.remove(0)));
 		}
 		myInputArgs.remove(0);
+		Object[] turtleArray = myModel.getTurtles().toArray();
+		for(int t: myTurtleIds) {
+			turtleArray[t]; //TODO: Set the turtles to modify
+		}
 		if(myCommand.equals("ask")) {
 			if(!myInputArgs.remove(0).equals("[")) return new sLogoValid(true, "Command expected ["); 
 			while(!myInputArgs.get(0).equals("]")) {
 				myCommands.add(myInputArgs.remove(0));
 			}
+			tempSlogoValid = interpret(standardString(myCommands));
 		}
-		for(int t: myTurtleIds) {
-			//TODO: Change the active turtles
-		}
-		
 		if(!myInputArgs.isEmpty())myQueue.add(standardString(myInputArgs));
 		return tempSlogoValid;
 	}
