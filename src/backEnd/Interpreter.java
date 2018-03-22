@@ -102,6 +102,20 @@ public class Interpreter {
 		ArrayList<String> myInputArgs = args;
 		ArrayList<String> myConditions = new ArrayList<String>();
 		ArrayList<String> myCommands = new ArrayList<String>();
+		myInputArgs.remove(0);
+		if(!myInputArgs.remove(0).equals("[")) return new sLogoValid(true, "expected condition list");
+		for(int i = 0; i < 2; i++) {
+			int internalLists = 0;
+			while(true) {
+				String tempArg = myInputArgs.remove(0);
+				if(tempArg.equals("]") && internalLists == 0)break;
+				if(tempArg.equals("[")) internalLists ++;
+				if(tempArg.equals("[")) internalLists --;
+				if(i == 0) myConditions.add(tempArg);
+				if(i == 1) myCommands.add(tempArg);
+				}
+			}
+		Turtle[] turtleArray = (Turtle[]) myModel.getTurtles().toArray();
 		
 		if(!myInputArgs.isEmpty()) myQueue.add(standardString(myInputArgs));
 		return tempSlogoValid;
@@ -120,7 +134,7 @@ public class Interpreter {
 		myInputArgs.remove(0);
 		Object[] turtleArray = myModel.getTurtles().toArray();
 		for(int t: myTurtleIds) {
-			turtleArray[t]; //TODO: Set the turtles to modify
+			// turtleArray[t]; //TODO: Set the turtles to modify
 		}
 		if(myCommand.equals("ask")) {
 			if(!myInputArgs.remove(0).equals("[")) return new sLogoValid(true, "Command expected ["); 
