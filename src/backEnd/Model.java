@@ -199,14 +199,14 @@ public class Model implements ModelModifiable, ModelViewable {
 	
 	@Override
 	public sLogoValid getVariable(String name) {
-		if (!myModel.containsKey(name)) {
 			sLogoValid ret = new sLogoValid();
+		if (!myModel.containsKey(name)) {
 			ret.setError(true);
 			ret.setMyStringValue("This object does not exist: " + name);
 			return ret;
 		}
 		else{
-			return (sLogoValid)myModel.get(name);
+			return (sLogoValid) myModel.get(name);
 		}
 	}
 	
