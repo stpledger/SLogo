@@ -1,6 +1,8 @@
 # SLOGO Design Discussion
 
-### High-Level Design Goals
+### High-level design goals of your project:
+
+The high level design goal of this project was to create a model-view-architecture system that could represent the programming environment and the IDE. The information about the state of the programming environment was stored in the back end's model class. This includes a ``Map`` of Variable names to any type of object that represents the value of the variable. Our front-end receives this model through a view-only limiting interface that allows it to display the information in the model. The front-end is the "view" part of the MVC triad. The controller in our case is the interpreter. The front end interacts with the interpreter by sending commands to it through the console. The interpreter then determines how to execute the command on the model and returns a custom object we defined called ``sLogoValid`` that contains information about succesful execution.
 
 ### How to Add New Features/Simulations
 * New language:
