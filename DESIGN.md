@@ -17,7 +17,10 @@ The high level design goal of this project was to create a model-view-architectu
 	* Each individual module in the Borderpane is within its own class and implements the "ComponentBuilder" interface. 
 	* This way, each component can be modified separately. If they need to communicate, they can use methods in the instance of the IDEBuilder class passed to them.
 * Back-end
-    * ?
+    * The back end has three major parts: the Interpreter, the Controller, and the Model.
+    * The Interpreter parses the commands to make sure there are no errors in the syntax and then passes it onto the controller
+    * The Controller determines the type of command and then instantiates it and passes the arguments to the command class. The command then runs a method to adjust the Model and calculate the return value.
+    * The Model manages the Turtles, the variables, the background color, the pen color, and a few other small things.
 * Front/back together
 	* The back-end is first called by the front-end in the Console class. When the "run" button is pressed, the interpreter's interpret method is called with the console's text as the input.
 	* After that completes, the "getCurrentVariables" in the model class is invoked to get the current turtle set. That set is sent to the TurtleDisplayer class to be displayed.
