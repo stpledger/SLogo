@@ -375,6 +375,11 @@ public class Console implements ComponentBuilder{
 			}
 			if(!turtleSet.isEmpty()){
 				turtleDisplayer.draw(turtleSet, retMessage);
+				for(Turtle t : turtleSet){
+					if(!t.getStamps().isEmpty()) {
+						turtleDisplayer.draw(t.getStamps(), retMessage);
+					}
+				}
 			}  
 		}
 		else{
@@ -397,6 +402,11 @@ public class Console implements ComponentBuilder{
 		}
 		if(!turtleSet2.isEmpty()){
 			turtleDisplayer.draw(turtleSet2, retMessage);
+			/*for(Turtle t : turtleSet2){
+				if(!t.getStamps().isEmpty()) {
+					turtleDisplayer.draw(t.getStamps(), retMessage);
+				}
+			}*/
 		}  
 	}
 }

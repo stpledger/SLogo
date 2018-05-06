@@ -15,7 +15,7 @@ public class Interpreter {
 	private Controller myController;
 	private ModelModifiable myModel;
 	private Queue<String> myQueue;
-	private static final String[] NO_PARAM_COMMANDS = {"pu","pd","st","ht","home","cs","xcor","ycor","heading","pendownp","showingp","pi", "pc", "sh", "stamp", "clearstamps", "id", "turtles"};
+	private static final String[] NO_PARAM_COMMANDS = {"pu","pd","st","ht","home","cs","xcor","ycor","heading","pendownp","showingp","pi", "pc", "sh", "stamp", "clearstamps", "id", "turtles", "stamp", "clearstamps"};
 	private static final String[] ONE_PARAM_COMMANDS = {"fd", "bk", "lt", "rt", "seth", "random", "sin", "cos", "tan", "atan", "log", "not", "minus", "setbg", "setpc", "setps", "setsh", "setpalette"};
 	private static final String[] TWO_PARAM_COMMANDS = {"towards", "setxy", "sum", "difference", "product", "quotient", "remainder", "pow", "lessp","greaterp", "equal", "notequalp", "and", "set"}; 
 	

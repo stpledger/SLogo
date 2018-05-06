@@ -16,7 +16,7 @@ public class Controller{
     private final ArrayList<String> BOOLEAN_COMMANDS = new ArrayList<>(Arrays.asList("lessp", "greaterp", "equalp", "notequalp", "and", "or", "not"));
     private final ArrayList<String> VARIABLE_COMMANDS = new ArrayList<>(Arrays.asList("make", "set"));
     private final ArrayList<String> USER_DEFINED_COMMANDS = new ArrayList<>(Arrays.asList("to"));
-    private final ArrayList<String> DISPLAY_COMMANDS = new ArrayList<>(Arrays.asList("setbg", "setpc", "setps", "setsh", "setpalatte", "pc", "sh"));
+    private final ArrayList<String> DISPLAY_COMMANDS = new ArrayList<>(Arrays.asList("setbg", "setpc", "setps", "setsh", "setpalatte", "pc", "sh", "stamp", "clearstamps"));
     private final ArrayList<String> MULTIPLE_TURTLE_COMMANDS = new ArrayList<>(Arrays.asList("id", "turtles", "tell", "ask", "askwith"));
 
     private ModelModifiable myModel;

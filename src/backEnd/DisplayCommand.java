@@ -36,12 +36,30 @@ public class DisplayCommand extends CommandGroup{
                 return pc();
             case "sh":
                 return sh();
+            case "stamp":
+                return stamp();
+            case "clearstamps":
+                return clearstamps();
             default:
                 sLogoValid noExecute = new sLogoValid();
                 noExecute.setError(true);
                 noExecute.setMyStringValue("No command run");
                 return noExecute;
         }
+    }
+
+    private sLogoValid stamp(){
+        sLogoValid temp = new sLogoValid();
+        temp.setMyDoubleValue(Turtle.myID);
+        Turtle.addStamp();
+        return temp;
+    }
+
+    private sLogoValid clearstamps(){
+        sLogoValid temp = new sLogoValid();
+        temp.setMyDoubleValue(1);
+        Turtle.clearStamps();
+        return temp;
     }
 
     private sLogoValid setbg(String[] args){

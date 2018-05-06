@@ -2,6 +2,7 @@ package backEnd;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,8 +19,9 @@ import javafx.scene.shape.Line;
  *
  */
 public class Turtle {
-	
+
 	private String myTurtleImage = "turtleScaled.png";
+	private Set<Turtle> myStamps;
 	private ImageView myTurtleDisplay;
 	protected double myXPos;
 	protected double myYPos;
@@ -39,6 +41,7 @@ public class Turtle {
 		myPen = new Pen();
 		myTurtleDisplay = makeTurtle();
 		myTraces = new HashSet<>();
+		myStamps = new HashSet<>();
 	}
 
 	/**
@@ -66,6 +69,8 @@ public class Turtle {
 		turtle.setX(myXPos);
 		turtle.setY(myYPos);
 		turtle.setRotate(myAngle);
+		System.out.println(myXPos);
+		System.out.println(myYPos + "\n");
 		return turtle;
 	}
 	
@@ -116,7 +121,7 @@ public class Turtle {
 		return dist;
 	}
 	
-	protected double move(double distance) {
+	public double move(double distance) {
 		// TO-DO: account for toroidal edge
 		double modifiedDistance = distance;
 		double xpos;
@@ -224,5 +229,21 @@ public class Turtle {
 		rets += "\nAngle:  " + df.format(myAngle % 360);
 		rets += "\nPen Down:  " + isPenDown;
 		return rets;
+	}
+
+	public Set<Turtle> getStamps(){
+		return myStamps;
+	}
+
+	public void addStamp(){
+		double x = myXPos;
+		double y = myYPos;
+		double ang = myAngle;
+		Turtle turtle = new Turtle(x, y, ang, 100);
+		myStamps.add(turtle);
+	}
+
+	public void clearStamps(){
+		myStamps.clear();
 	}
 }

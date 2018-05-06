@@ -143,19 +143,35 @@ public class TurtleDisplayer implements ComponentBuilder{
 				turtleSize = tempImage.getWidth();
 			}	
 			tempTurtle.setX(tempTurtle.getX() + center_x - turtleSize/2);
+			System.out.println("original: " + tempTurtle.getX());
 			tempTurtle.setY(-1 * tempTurtle.getY() + center_y - turtleSize/2);
 			pane.getChildren().add(tempTurtle);
 			turtles.add(tempTurtle);
+			if(!t.getStamps().isEmpty()){
+				for(Turtle turt : t.getStamps()){
+					turt.move(0);s
+					ImageView tempo = turt.getTurtle();
+					if(!(tempo.getImage() == null)){
+						turtleSize = tempImage.getWidth();
+					}
+					tempo.setX((tempo.getX() + center_x - turtleSize/2));
+					System.out.println("child: " + tempo.getX());
+					tempo.setY((-1 * tempo.getY() + center_y - turtleSize/2));
+					pane.getChildren().add(tempo);
+					turtles.add(tempo);
+				}
+			}
 			if(!t.getTraces().isEmpty()){
 				lineMap.put(tempTurtle, t.getTraces());
 				drawLines(t.getTraces());
 			}
+			System.out.println("Ran!\n");
 		}
 	}
 
 	/**
 	 * drawLines - adds the turtle's lines to the pane
-	 * @param Set<Line>
+	 * @param Set<Line> lines
 	 */
 	private void drawLines(Set<Line> lines) {
 		for(Line l : lines) {
